@@ -14,28 +14,16 @@ struct Coordinates {
 }
 
 struct PlaceInfoModel : Identifiable {
-    let id: Int
+    let id = UUID()
     let name: String
     let formattedAddress: String
     let categories: [String]
     let hours: String
     let score: Double
     let numOfScores: Int
-    var url: String?
-    
-    static var instanceCounter = 0
-    init(name:String, formattedAddress:String, categories:[String],
-         hours:String, score:Double, numOfScores:Int) {
-        self.id = PlaceInfoModel.instanceCounter
-        self.name = name
-        self.formattedAddress = formattedAddress
-        self.categories = categories
-        self.hours = hours
-        self.score = score
-        self.numOfScores = numOfScores
-        
-        PlaceInfoModel.instanceCounter += 1
-    }
+    let url: String
+    let price: Int
+    let imageUrl: String
 }
 
 struct InfoLoader : Identifiable {
@@ -90,15 +78,22 @@ let cupboard = PlaceInfoModel(
     formattedAddress:"4 Privet Drive, Little Whinging, Surrey",
     categories: ["household"],
     hours:"12-12",
-    score:5,
-    numOfScores: 4
+    score:1.1,
+    numOfScores: 4,
+    url: "https://harrypotter.fandom.com/wiki/Cupboard_Under_the_Stairs",
+    price: 1,
+    imageUrl: ""
 )
 let ootp = PlaceInfoModel(
     name:"Order of the Phoenix HQ",
     formattedAddress:"12 Grimmauld Pl, London",
     categories: ["organization"],
     hours:"9-5",
-    score:7,
-    numOfScores: 28
+    score:8.8,
+    numOfScores: 28,
+    url: "https://harrypotter.fandom.com/wiki/Order_of_the_Phoenix",
+    price: 2,
+    imageUrl: "https://vignette.wikia.nocookie.net/harrypotter/images/6/6f/HPDH1-1435.jpg"
 )
 let cupboards = PlaceHolderModel(with: cupboard, plugin: previewPlugin, activeSitePlugins: [])
+var unrated = InfoLoader(plugin: previewPlugin, place: nil)

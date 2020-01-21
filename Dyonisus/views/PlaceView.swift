@@ -8,19 +8,52 @@
 
 import SwiftUI
 
+struct Info: View {
+    let imageName : String
+    let infoString : String
+    var body: some View {
+        HStack {
+            Image(systemName: imageName).frame(width: 20.0)
+            Text(infoString)
+            Spacer()
+        }
+        .padding([.top, .leading, .trailing])
+    }
+}
+
 struct PlaceView: View {
     @ObservedObject var placeHolder : PlaceHolderModel
     var body: some View {
         NavigationView {
-            VStack {
-                List([
-                    InfoLoader(plugin: previewPlugin, place: placeHolder.defaultPlace),
-                    InfoLoader(plugin: previewPlugin, place: nil) // FIXME
-                ]) {
-                    loader in RatingCard(loader:loader)
+            GeometryReader { geometry in
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing:0) {
+                        URLImage(withURL: self.placeHolder.defaultPlace.imageUrl).frame(width: geometry.size.width, height:240)
+                        Info(
+                            imageName: "mappin.and.ellipse",
+                            infoString: self.placeHolder.defaultPlace.formattedAddress
+                        )
+                        Info(
+                            imageName: "clock",
+                            infoString: self.placeHolder.defaultPlace.hours
+                        )
+                        Info(
+                            imageName: "list.bullet.below.rectangle",
+                            infoString: self.placeHolder.defaultPlace.categories.joined(separator: ", ")
+                        )
+                        ForEach([
+                            InfoLoader(plugin: previewPlugin, place: self.placeHolder.defaultPlace),
+                            InfoLoader(plugin: previewPlugin, place: nil), // FIXME
+                        ], id: \.id) { loader in
+                            RatingCard(loader:loader)
+                        }
+                        Spacer()
+                    }.frame(width: geometry.size.width)
                 }
             }
-        }.navigationBarTitle(placeHolder.defaultPlace.name)
+        }
+        .navigationBarHidden(false)
+        .navigationBarTitle(placeHolder.defaultPlace.name)
     }
 }
 

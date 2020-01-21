@@ -72,8 +72,8 @@ struct RatingCard: View {
         HStack {
             if loader.isLoading {
                 // Loading
+                ActivityIndicator().padding(.leading, horizontalPadding)
                 Text("Loading rating from \(loader.plugin.name)...")
-                    .padding(.leading, horizontalPadding)
                 Spacer()
                 Image(loader.plugin.logo).resizable()
                     .frame(width: 25, height: 25, alignment: .bottomTrailing)

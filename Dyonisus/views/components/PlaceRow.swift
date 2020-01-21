@@ -12,11 +12,11 @@ struct PlaceRow: View {
     var place: PlaceInfoModel
     var body: some View {
         HStack {
-            Text(verbatim: place.name)
+            Text(place.name)
                 .padding(.leading)
                 .lineLimit(1)
                 .layoutPriority(1)
-            Text(verbatim: place.formattedAddress)
+            Text(place.formattedAddress)
                 .font(.footnote)
                 .foregroundColor(.gray)
                 .lineLimit(1)

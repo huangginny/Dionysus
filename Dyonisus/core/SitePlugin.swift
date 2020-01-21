@@ -14,7 +14,7 @@ import Foundation
 protocol SitePlugin {
     
     var name: String { get }
-    var logoImageName: String { get }
+    var logo: String { get }
     var totalScore: Int { get }
             
     func searchForPlaces(with name:String, location: String, callbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void)
@@ -26,7 +26,7 @@ delete later
 class MockPlugin : SitePlugin {
     
     var name = "Mock Plugin"
-    var logoImageName = "ginny.jpg"
+    var logo = "mock-plugin-logo"
     var totalScore = 10
     
     func searchForPlaces(with name:String, location: String, callbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void) {

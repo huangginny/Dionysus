@@ -9,10 +9,6 @@
 import SwiftUI
 import Combine
 
-struct MyIdentifiable: Identifiable {
-    let id: String
-}
-
 struct SearchView: View {
     @ObservedObject var state: AppState
     
@@ -27,7 +23,10 @@ struct SearchView: View {
                     onCommit: self.state.onSearchButtonClicked
                 )
                 if state.isLoading {
-                    Text("Loading, please wait")
+                    HStack {
+                        ActivityIndicator()
+                        Text("Looking up your places...")
+                    }.padding()
                     Spacer()
                 } else {
                     List(self.state.placeSearchResults) { result in
@@ -48,11 +47,6 @@ struct SearchView: View {
             .navigationBarTitle("")
             .navigationBarHidden(true)
         }
-        //.edgesIgnoringSafeArea(.top)
-    }
-    
-    func dismissKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
     }
 }
 

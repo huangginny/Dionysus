@@ -24,7 +24,7 @@ struct RootView: View {
                     }
                 }
                 .tag(0)
-            Text("Settings...")
+            /* Text("Settings...")
                 .font(.title)
                 .tabItem {
                     VStack {
@@ -32,7 +32,7 @@ struct RootView: View {
                         Text("Settings")
                     }
                 }
-                .tag(1)
+                .tag(1)*/
             Text("About Author")
                 .font(.title)
                 .tabItem {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 /*
  Abstract class that defines SitePlugin protocol
@@ -17,23 +18,50 @@ protocol SitePlugin {
     var logo: String { get }
     var totalScore: Int { get }
             
-    func searchForPlaces(with name:String, location: String, callbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void)
+    func searchForPlaces(
+        with name:String,
+        location: String,
+        successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
+        errorCallbackFunc: @escaping(SitePlugin) -> Void
+    )
+    
+    func searchForPlaces(
+        with name:String,
+        coordinate: CLLocationCoordinate2D,
+        successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
+        errorCallbackFunc: @escaping(SitePlugin) -> Void
+    )
 }
 
-/*
-delete later
-*/
 class MockPlugin : SitePlugin {
     
     var name = "Mock Plugin"
     var logo = "mock-plugin-logo"
     var totalScore = 10
     
-    func searchForPlaces(with name:String, location: String, callbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void) {
-        logMessage("Searching...")
+    func searchForPlaces(
+        with name:String,
+        location: String,
+        successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
+        errorCallbackFunc: @escaping(SitePlugin) -> Void) {
+        
+        logMessage("Searching with location: \(location)")
         let deadlineTime = DispatchTime.now() + .seconds(3)
         DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-            callbackFunc([cupboard, ootp], self);
+            successCallbackFunc([cupboard, ootp], self);
+        }
+    }
+    
+    func searchForPlaces(
+        with name: String,
+        coordinate: CLLocationCoordinate2D,
+        successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
+        errorCallbackFunc: @escaping (SitePlugin) -> Void) {
+        
+        logMessage("Searching with coordinate: \(coordinate)")
+        let deadlineTime = DispatchTime.now() + .seconds(3)
+        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+            successCallbackFunc([cupboard, ootp], self);
         }
     }
 }

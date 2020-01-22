@@ -8,11 +8,6 @@
 
 import Foundation
 
-struct Coordinates {
-    var lat: String
-    var lon: String
-}
-
 struct PlaceInfoModel : Identifiable {
     let id = UUID()
     let name: String
@@ -55,17 +50,27 @@ class PlaceHolderModel: ObservableObject, Identifiable {
         for p in activeSitePlugins {
             if p.name != plugin.name {
                 infoForSite[p.name] = InfoLoader(plugin: p, place: nil)
-                p.searchForPlaces(with: defaultPlace.name, location: defaultPlace.formattedAddress, callbackFunc: _onRatingSearchComplete);
+                p.searchForPlaces(
+                    with: defaultPlace.name,
+                    location: defaultPlace.formattedAddress,
+                    successCallbackFunc: _onRatingSearchComplete,
+                    errorCallbackFunc: {(plugin: SitePlugin) -> Void in
+                        self.infoForSite[plugin.name]!.isLoading = false
+                    }
+                );
             }
         }
     }
     
     func _onRatingSearchComplete(results: [PlaceInfoModel], for plugin: SitePlugin) {
         // select the correct rating for site, get holder on dictionary and update it
-        infoForSite[plugin.name]!.isLoading = false
-        if results.count > 0 {
-            infoForSite[plugin.name]!.place = results[0] //FIXME
+        for result in results {
+            if areSamePlaces(rating1: result, rating2: defaultPlace) {
+                infoForSite[plugin.name]!.place = result
+                break
+            }
         }
+        infoForSite[plugin.name]!.isLoading = false
     }
 }
 

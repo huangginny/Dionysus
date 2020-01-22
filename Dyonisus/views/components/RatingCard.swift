@@ -16,7 +16,7 @@ struct ScoreBar: View {
     
     func getStrokeForPercentage(cuePoint: Double) -> some View {
         if cuePoint > self.percentage {
-            return AnyView(strokeTemplate.fill(RatingCard.LIGHT_GRAY))
+            return AnyView(strokeTemplate.fill(COLOR_LIGHT_GRAY))
         } else if cuePoint + 20 <= percentage {
             return AnyView(strokeTemplate.fill(color))
         } else {
@@ -25,7 +25,7 @@ struct ScoreBar: View {
                 LinearGradient(
                     gradient: .init(stops: [
                         Gradient.Stop(color: color, location: CGFloat(location)),
-                        Gradient.Stop(color: RatingCard.LIGHT_GRAY, location: CGFloat(location))
+                        Gradient.Stop(color: COLOR_LIGHT_GRAY, location: CGFloat(location))
                     ]),
                     startPoint: .init(x: 0, y: 1),
                     endPoint: .init(x: 1, y: 1)
@@ -44,7 +44,6 @@ struct ScoreBar: View {
 }
 
 struct RatingCard: View {
-    static let LIGHT_GRAY = Color(UIColor(red:0.90, green:0.89, blue:0.89, alpha:1.0))
     let horizontalPadding = CGFloat(10)
     var loader : InfoLoader
     @State var visiblePercentage = 0.0
@@ -52,7 +51,7 @@ struct RatingCard: View {
     func getColor() -> Color {
         let actualPercentage = self.loader.place!.score / Double(self.loader.plugin.totalScore) * 100
         if loader.place == nil {
-            return RatingCard.LIGHT_GRAY
+            return COLOR_LIGHT_GRAY
         }
         switch actualPercentage {
         case 0...40:
@@ -142,7 +141,7 @@ struct RatingCard: View {
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.white)
-                .shadow(color: RatingCard.LIGHT_GRAY, radius: 10)
+                .shadow(color: COLOR_LIGHT_GRAY, radius: 10)
                 .padding()
         )
     }

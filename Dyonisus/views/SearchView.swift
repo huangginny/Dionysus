@@ -11,6 +11,7 @@ import Combine
 
 struct SearchView: View {
     @ObservedObject var state: AppState
+    @State private var showAlert = false
     
     let statusBarHeight: CGFloat
     
@@ -20,13 +21,22 @@ struct SearchView: View {
             VStack {
                 SearchBar(
                     statusBarHeight: statusBarHeight,
-                    onCommit: self.state.onSearchButtonClicked
+                    onCommit: {(name: String, location: String) -> Void in
+                        if name == "" {
+                            self.showAlert = true
+                            return
+                        }
+                        self.state.onSearchButtonClicked(with: name, location: location)
+                    }
                 )
                 if state.isLoading {
                     HStack {
                         ActivityIndicator()
                         Text("Looking up your places...")
                     }.padding()
+                    Spacer()
+                } else if state.loadError != "" {
+                    Text(state.loadError).padding()
                     Spacer()
                 } else {
                     List(self.state.placeSearchResults) { result in
@@ -46,6 +56,9 @@ struct SearchView: View {
             .edgesIgnoringSafeArea(.top)
             .navigationBarTitle("")
             .navigationBarHidden(true)
+            .alert(isPresented: $showAlert, content: {
+                Alert(title: Text("Please enter a search term to continue."))
+            })
         }
     }
 }

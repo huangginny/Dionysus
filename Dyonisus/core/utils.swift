@@ -9,7 +9,7 @@
 import Foundation
 
 func logMessage(_ message: String, fileName: String = #file, functionName: String = #function) {
-    print("\(getCurrentTimestamp()) - [\(fileName.components(separatedBy: "/").last ?? "") - \(functionName)] \(message)")
+    print("[DYONYSUS] | \(getCurrentTimestamp()) - \(fileName.components(separatedBy: "/").last ?? "") - \(functionName)  | \(message)")
 }
 
 func getCurrentTimestamp() -> String {

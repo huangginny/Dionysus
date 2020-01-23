@@ -9,51 +9,92 @@
 import SwiftUI
 
 struct Info: View {
-    let imageName : String
-    let infoString : String
+    var place: PlaceInfoModel
+    var size: CGSize
+    
     var body: some View {
-        HStack {
-            Image(systemName: imageName).frame(width: 20.0)
-            Text(infoString)
-            Spacer()
+        VStack {
+            if place.imageUrl ?? "" != "" {
+                URLImage(withURL: place.imageUrl!).frame(width: size.width, height: 240)
+            }
+            VStack {
+                if place.categories != nil && place.categories!.count > 0 {
+                    HStack {
+                        Image(systemName: "list.bullet.below.rectangle").frame(width: 20)
+                        ForEach(place.categories!, id:\.self) { category in
+                            Text(category).background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(COLOR_LIGHT_GRAY)
+                                        .padding(.horizontal, -7)
+                            ).padding(.leading, 3)
+                        }
+                        Spacer()
+                    }
+                }
+                HStack {
+                    Image(systemName: "mappin.and.ellipse").frame(width: 20)
+                    Text(place.formattedAddress)
+                    Spacer()
+                }
+                if place.phone != nil {
+                    HStack {
+                        Image(systemName: "phone.fill").frame(width: 20.0)
+                        Text(place.phone!)
+                        Spacer()
+                    }
+                }
+                HStack {
+                    if place.permanently_closed ?? false {
+                        Text("Permanently closed").fontWeight(.bold).foregroundColor(.red)
+                    } else {
+                        if place.hours != nil && place.hours != "" {
+                            Image(systemName:  "clock").frame(width: 20)
+                            Text(place.hours!)
+                        }
+                        if place.open_now != nil {
+                            if place.open_now ?? false {
+                                Text("Open").fontWeight(.bold).foregroundColor(.green)
+                            } else {
+                                Text("Closed").fontWeight(.bold).foregroundColor(.red)
+                            }
+                        }
+                    }
+                    Spacer()
+                }
+            }
+            .padding()
         }
-        .padding([.top, .leading, .trailing])
     }
 }
 
 struct PlaceView: View {
     @ObservedObject var placeHolder : PlaceHolderModel
+    @State var searched = false
+    
     var body: some View {
-        NavigationView {
+        ScrollView(.vertical, showsIndicators: false) {
             GeometryReader { geometry in
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing:0) {
-                        URLImage(withURL: self.placeHolder.defaultPlace.imageUrl).frame(width: geometry.size.width, height:240)
-                        Info(
-                            imageName: "mappin.and.ellipse",
-                            infoString: self.placeHolder.defaultPlace.formattedAddress
-                        )
-                        Info(
-                            imageName: "clock",
-                            infoString: self.placeHolder.defaultPlace.hours
-                        )
-                        Info(
-                            imageName: "list.bullet.below.rectangle",
-                            infoString: self.placeHolder.defaultPlace.categories.joined(separator: ", ")
-                        )
-                        ForEach([
-                            InfoLoader(plugin: previewPlugin, place: self.placeHolder.defaultPlace),
-                            InfoLoader(plugin: previewPlugin, place: nil), // FIXME
-                        ], id: \.id) { loader in
-                            RatingCard(loader:loader)
-                        }
-                        Spacer()
-                    }.frame(width: geometry.size.width)
+                VStack(spacing:0) {
+                    Info(place: self.placeHolder.defaultPlaceInfoLoader.place!, size: geometry.size)
+                    RatingCard(loader: self.placeHolder.defaultPlaceInfoLoader)
+                    ForEach([
+                        InfoLoader(plugin: previewPlugin, place: nil), // FIXME
+                    ], id: \.id) { loader in
+                        RatingCard(loader:loader)
+                    }
+                    Spacer()
                 }
+                .frame(width: geometry.size.width)
             }
         }
+        .onAppear {
+            if !self.searched {
+                self.placeHolder.loadPlaces()
+                self.searched = true
+            }
+        }
+        .navigationBarTitle(placeHolder.defaultPlaceInfoLoader.place!.name)
         .navigationBarHidden(false)
-        .navigationBarTitle(placeHolder.defaultPlace.name)
     }
 }
 

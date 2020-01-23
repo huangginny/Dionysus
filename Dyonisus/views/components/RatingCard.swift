@@ -45,11 +45,11 @@ struct ScoreBar: View {
 
 struct RatingCard: View {
     let horizontalPadding = CGFloat(10)
-    var loader : InfoLoader
+    let loader : InfoLoader
     @State var visiblePercentage = 0.0
     
     func getColor() -> Color {
-        let actualPercentage = self.loader.place!.score / Double(self.loader.plugin.totalScore) * 100
+        let actualPercentage = self.loader.place!.score! / Double(self.loader.plugin.totalScore) * 100
         if loader.place == nil {
             return COLOR_LIGHT_GRAY
         }
@@ -77,10 +77,9 @@ struct RatingCard: View {
                 Image(loader.plugin.logo).resizable()
                     .frame(width: 25, height: 25, alignment: .bottomTrailing)
                     .padding(.trailing, horizontalPadding)
-            } else if loader.place == nil {
+            } else if loader.message != "" {
                 // Place does not exist
-                Text("This place has not yet been rated.").padding(.leading, horizontalPadding)
-                    
+                Text(loader.message).padding(.leading, horizontalPadding)
                 Spacer()
                 Image(loader.plugin.logo).resizable()
                     .frame(width: 25, height: 25, alignment: .bottomTrailing)
@@ -88,7 +87,11 @@ struct RatingCard: View {
             } else {
                 // Exising rating with score
                 HStack(alignment: .bottom, spacing:0) {
-                    Text("\(String(format: "%.1f", loader.place!.score))").font(.init(Font.system(size: 48, weight: .regular, design: .default)))
+                    Text("\(String(format: "%.1f", loader.place!.score!))")
+                        .font(
+                            .init(Font.system(
+                                size: 48, weight: .regular, design: .default
+                        )))
                         .lineLimit(1)
                     Text("/\(String(loader.plugin.totalScore))").lineLimit(1)
                 }
@@ -103,12 +106,12 @@ struct RatingCard: View {
                         }
                         HStack(spacing:0) {
                             Spacer()
-                            Text(String(repeating: "$", count: loader.place!.price))
+                            Text(String(repeating: "$", count: loader.place!.price!))
                             .padding(0)
                         }
                         .frame(width: 60)
                     }.onAppear {
-                        let actualPercentage = self.loader.place!.score / Double(self.loader.plugin.totalScore) * 100
+                        let actualPercentage = self.loader.place!.score! / Double(self.loader.plugin.totalScore) * 100
                         Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { timer in
                             self.visiblePercentage = min(self.visiblePercentage + 1, actualPercentage)
                             if (self.visiblePercentage >= actualPercentage) {
@@ -119,7 +122,7 @@ struct RatingCard: View {
                     Spacer()
                     Divider()
                     HStack {
-                        Text("by \(loader.place!.numOfScores) user\(loader.place!.numOfScores > 1 ? "s" : "") on")
+                        Text("by \(loader.place!.numOfScores!) user\(loader.place!.numOfScores! > 1 ? "s" : "") on")
                             .font(.footnote)
                             .foregroundColor(.gray)
                         Spacer()
@@ -151,13 +154,14 @@ struct RatingCard_Previews: PreviewProvider {
     
     static var previews: some View {
         unrated.isLoading = false
+        unrated.message = "I am unrated"
         return VStack {
             RatingCard(loader: InfoLoader(plugin: previewPlugin, place: nil))
             RatingCard(loader: InfoLoader(
                 plugin: previewPlugin,
                 place: ootp)
             )
-            RatingCard(loader:unrated)
+            RatingCard(loader: unrated)
         }
         //.previewLayout(.fixed(width:375, height:100))
     }

@@ -31,6 +31,12 @@ protocol SitePlugin {
         successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping(SitePlugin) -> Void
     )
+    
+    func loadRatingAndDetails (
+        for place: PlaceInfoModel,
+        successCallbackFunc: @escaping(PlaceInfoModel, SitePlugin) -> Void,
+        errorCallbackFunc: @escaping(SitePlugin) -> Void
+    )
 }
 
 class MockPlugin : SitePlugin {
@@ -62,6 +68,18 @@ class MockPlugin : SitePlugin {
         let deadlineTime = DispatchTime.now() + .seconds(3)
         DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
             successCallbackFunc([cupboard, ootp], self);
+        }
+    }
+    
+    func loadRatingAndDetails (
+        for place: PlaceInfoModel,
+        successCallbackFunc: @escaping(PlaceInfoModel, SitePlugin) -> Void,
+        errorCallbackFunc: @escaping(SitePlugin) -> Void
+    ) {
+        logMessage("Loading defails for place: \(place.name)")
+        let deadlineTime = DispatchTime.now() + .seconds(2)
+        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+            successCallbackFunc(ootp, self);
         }
     }
 }

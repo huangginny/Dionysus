@@ -34,7 +34,6 @@ struct SearchField : UIViewRepresentable {
         field.delegate = delegate
         field.placeholder = placeholder
         field.text = text.wrappedValue
-        field.clearsOnBeginEditing = true
         field.autocorrectionType = UITextAutocorrectionType.no
         field.returnKeyType = UIReturnKeyType.search
         NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: field, queue: OperationQueue.main, using: _searchFieldDidChange)

@@ -45,7 +45,7 @@ struct SearchView: View {
                                 placeHolder: PlaceHolderModel(
                                     with: result,
                                     plugin: self.state.pluginOfPlaceSearchResults!,
-                                    activeSitePlugins: self.state.setting.activeSitePlugins
+                                    setting: self.state.setting
                             ))
                         ) {
                             PlaceRow(place: result)
@@ -56,10 +56,10 @@ struct SearchView: View {
             .edgesIgnoringSafeArea(.top)
             .navigationBarTitle("")
             .navigationBarHidden(true)
-            .alert(isPresented: $showAlert, content: {
-                Alert(title: Text("Please enter a search term to continue."))
-            })
         }
+        .alert(isPresented: $showAlert, content: {
+            Alert(title: Text("Please enter a search term to continue."))
+        })
     }
 }
 

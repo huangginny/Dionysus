@@ -13,7 +13,7 @@ import CoreLocation
 struct Setting {
     var defaultSite = "mock" // use custom setters
     var defaultSitePlugin = MockPlugin()
-    var defaultLocation = "10001"
+    var defaultLocation = "New York"
     var activeSitePlugins = [SitePlugin]()
 }
 
@@ -57,17 +57,16 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
         if name == "" {
             return
         }
+        isLoading = true
         if location == "" {
             ongoingSearchTerm = name
             if isLocationAuthorized {
                 locManager.requestLocation()
-                isLoading = true
             } else {
                 locManager.requestWhenInUseAuthorization()
             }
             return
         }
-        isLoading = true
         loadError = ""
         setting.defaultSitePlugin.searchForPlaces(
             with: name,
@@ -97,11 +96,12 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
                          didChangeAuthorization status: CLAuthorizationStatus) {
         logMessage("Authorization changed: \(status.rawValue)")
         isLocationAuthorized = status == CLAuthorizationStatus.authorizedWhenInUse
-        if isLocationAuthorized {
+        if isLocationAuthorized && isLoading == true {
             locManager.requestLocation()
-            isLoading = true
         } else {
+            // declined authorization
             ongoingSearchTerm = ""
+            isLoading = false
         }
     }
     
@@ -114,7 +114,6 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
             loadError = "Cannot retrieve location data from device. Please enter a location in search."
             return
         }
-        
         setting.defaultSitePlugin.searchForPlaces(
             with: ongoingSearchTerm,
             coordinate: coordinate,

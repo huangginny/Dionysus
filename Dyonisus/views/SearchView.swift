@@ -35,7 +35,7 @@ struct SearchView: View {
                         Text("Looking up your places...")
                     }.padding()
                     Spacer()
-                } else if state.loadError != "" {
+                } else if isNonEmptyString(state.loadError) {
                     Text(state.loadError).padding()
                     Spacer()
                 } else {

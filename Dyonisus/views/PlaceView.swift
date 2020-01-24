@@ -14,7 +14,7 @@ struct Info: View {
     
     var body: some View {
         VStack {
-            if place.imageUrl ?? "" != "" {
+            if isNonEmptyString(place.imageUrl) {
                 URLImage(withURL: place.imageUrl!).frame(width: size.width, height: 240)
             }
             VStack {
@@ -36,7 +36,7 @@ struct Info: View {
                     Text(place.formattedAddress)
                     Spacer()
                 }
-                if place.phone != nil {
+                if isNonEmptyString(place.phone!) {
                     HStack {
                         Image(systemName: "phone.fill").frame(width: 20.0)
                         Text(place.phone!)
@@ -47,7 +47,7 @@ struct Info: View {
                     if place.permanently_closed ?? false {
                         Text("Permanently closed").fontWeight(.bold).foregroundColor(.red)
                     } else {
-                        if place.hours != nil && place.hours != "" {
+                        if isNonEmptyString(place.hours) {
                             Image(systemName:  "clock").frame(width: 20)
                             Text(place.hours!)
                         }

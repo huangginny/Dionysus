@@ -30,8 +30,9 @@ func areSamePlaces(rating1: PlaceInfoModel, rating2: PlaceInfoModel) -> Bool {
 func loadUrl(
     urlString: String,
     authentication: String?,
-    completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void
-) {
+    onSuccess: @escaping(_ data: Data) -> Void,
+    onError: @escaping() -> Void
+    ) {
     let encodedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? urlString
     guard let url = URL(string: encodedUrlString) else {
         logMessage("URL \(encodedUrlString) is not a valid url")
@@ -41,6 +42,24 @@ func loadUrl(
     if isNonEmptyString(authentication) {
         request.setValue(authentication, forHTTPHeaderField: "Authorization")
     }
-    let task = URLSession.shared.dataTask(with: request, completionHandler: completionHandler)
+    let task = URLSession.shared.dataTask(with: request, completionHandler: {
+        (data:Data?, response:URLResponse?, error:Error?) -> Void in
+        if let error = error {
+            logMessage("Error when searching with 4sq: \(error)")
+            onError()
+            return
+        }
+        let httpResponse = response as? HTTPURLResponse
+        if httpResponse == nil || (200...299).contains(httpResponse!.statusCode) == false {
+            logMessage("Error when searching with 4sq" +
+                (httpResponse == nil ? "" : ": status code = \(httpResponse!.statusCode)"))
+            onError()
+            return
+        }
+        if let mimeType = httpResponse!.mimeType, mimeType == "application/json",
+            let data = data {
+            onSuccess(data)
+        }
+    })
     task.resume()
 }

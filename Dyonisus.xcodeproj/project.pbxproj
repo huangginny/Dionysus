@@ -19,6 +19,7 @@
 		F28FB14023CC0512006EE676 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FB13F23CC0512006EE676 /* SearchBar.swift */; };
 		F28FB14223CC0540006EE676 /* PlaceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FB14123CC0540006EE676 /* PlaceRow.swift */; };
 		F2D8041123DAB347005D3BCF /* apiKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D8041023DAB347005D3BCF /* apiKeys.swift */; };
+		F2D8041523DBD452005D3BCF /* FourSquarePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D8041423DBD452005D3BCF /* FourSquarePlugin.swift */; };
 		F2D9AAFD23CF1E07000FF82D /* RatingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AAFC23CF1E07000FF82D /* RatingCard.swift */; };
 		F2D9AAFF23CF1E2A000FF82D /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */; };
 		F2D9AB0123D13AA8000FF82D /* SitePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AB0023D13AA8000FF82D /* SitePlugin.swift */; };
@@ -62,6 +63,7 @@
 		F28FB13F23CC0512006EE676 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		F28FB14123CC0540006EE676 /* PlaceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceRow.swift; sourceTree = "<group>"; };
 		F2D8041023DAB347005D3BCF /* apiKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = apiKeys.swift; sourceTree = "<group>"; };
+		F2D8041423DBD452005D3BCF /* FourSquarePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourSquarePlugin.swift; sourceTree = "<group>"; };
 		F2D9AAFC23CF1E07000FF82D /* RatingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCard.swift; sourceTree = "<group>"; };
 		F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
 		F2D9AB0023D13AA8000FF82D /* SitePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SitePlugin.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				F26F237423D80E2A00B7B162 /* YelpPlugin.swift */,
+				F2D8041423DBD452005D3BCF /* FourSquarePlugin.swift */,
 			);
 			path = "site-plugins";
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2D9AAFD23CF1E07000FF82D /* RatingCard.swift in Sources */,
+				F2D8041523DBD452005D3BCF /* FourSquarePlugin.swift in Sources */,
 				F20C905A23C9C8FC00761AA8 /* AppState.swift in Sources */,
 				F20C905823C9C67B00761AA8 /* utils.swift in Sources */,
 				F28FB13D23CC0499006EE676 /* SearchView.swift in Sources */,

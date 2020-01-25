@@ -14,3 +14,4 @@ let NAME_TO_SITE_PLUGIN = [
 ]
 let COLOR_LIGHT_GRAY = Color(UIColor(red:0.90, green:0.89, blue:0.89, alpha:1.0))
 let TIMEOUT_VALUE = 10
+let PHOTO_HEIGHT = 240

@@ -15,7 +15,7 @@ struct Info: View {
     var body: some View {
         VStack {
             if isNonEmptyString(place.imageUrl) {
-                URLImage(withURL: place.imageUrl!).frame(width: size.width, height: 240)
+                URLImage(withURL: place.imageUrl!).frame(width: size.width, height: CGFloat(PHOTO_HEIGHT))
             }
             VStack {
                 if place.categories != nil && place.categories!.count > 0 {
@@ -47,16 +47,16 @@ struct Info: View {
                     if place.permanently_closed ?? false {
                         Text("Permanently closed").fontWeight(.bold).foregroundColor(.red)
                     } else {
-                        if isNonEmptyString(place.hours) {
-                            Image(systemName:  "clock").frame(width: 20)
-                            Text(place.hours!)
-                        }
                         if place.open_now != nil {
                             if place.open_now ?? false {
                                 Text("Open").fontWeight(.bold).foregroundColor(.green)
                             } else {
                                 Text("Closed").fontWeight(.bold).foregroundColor(.red)
                             }
+                        }
+                        if isNonEmptyString(place.hours) {
+                            Image(systemName:  "clock").frame(width: 20)
+                            Text(place.hours!)
                         }
                     }
                     Spacer()

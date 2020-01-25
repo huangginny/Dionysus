@@ -106,7 +106,7 @@ struct RatingCard: View {
                         }
                         HStack(spacing:0) {
                             Spacer()
-                            Text(String(repeating: "$", count: loader.place!.price!))
+                            Text(String(repeating: "$", count: loader.place!.price))
                             .padding(0)
                         }
                         .frame(width: 60)

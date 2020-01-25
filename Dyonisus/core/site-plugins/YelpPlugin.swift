@@ -57,33 +57,24 @@ class YelpPlugin : SitePlugin {
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (SitePlugin) -> Void
     ) {
-        let completionHandler = { (data:Data?, response:URLResponse?, error:Error?) -> Void in
-            if let error = error {
-                logMessage("Error when searching with Yelp: \(error)")
-                errorCallbackFunc(self)
-                return
-            }
-            let httpResponse = response as? HTTPURLResponse
-            if httpResponse == nil || (200...299).contains(httpResponse!.statusCode) == false {
-                logMessage("Error when searching with Yelp" +
-                    (httpResponse == nil ? "" : ": status code = \(httpResponse!.statusCode)"))
-                errorCallbackFunc(self)
-                return
-            }
-            if let mimeType = httpResponse!.mimeType, mimeType == "application/json",
-                let data = data,
-                let json = try? JSONSerialization.jsonObject(with: data, options: []){
-                let models = self._parseJsonToModels(json: json as! [String: Any])
-                successCallbackFunc(models, self)
-            }
-        }
-        loadUrl(urlString: url, authentication: "Bearer \(YELP_API_KEY)", completionHandler: completionHandler)
+        loadUrl(
+            urlString: url,
+            authentication: "Bearer \(YELP_API_KEY)",
+            onSuccess: {(data: Data) -> Void in
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                    let businesses = json["businesses"] as? [[String: Any]]{
+                    let models = self._parseJsonToModels(jsonList: businesses)
+                    successCallbackFunc(models, self)
+                } else {
+                    errorCallbackFunc(self)
+                }
+            },
+            onError: { errorCallbackFunc(self)}
+        )
     }
     
-    func _parseJsonToModels(json: [String: Any]) -> [PlaceInfoModel] {
-        let businesses = json["businesses"] as! [[String: Any]]
-        
-        return businesses.map { (biz: [String: Any]) -> PlaceInfoModel? in
+    func _parseJsonToModels(jsonList: [[String: Any]]) -> [PlaceInfoModel] {
+        return jsonList.map { (biz: [String: Any]) -> PlaceInfoModel? in
             guard let place_id = biz["id"] as? String,
                 let name = biz["name"] as? String,
                 let location = biz["location"] as? [String: Any],
@@ -92,12 +83,11 @@ class YelpPlugin : SitePlugin {
                 let lat = coordinate["latitude"],
                 let addr = location["display_address"] as? [String],
                 let score = biz["rating"] as? Double,
-                let num = biz["review_count"] as? Int,
-                let priceStr = biz["price"] as? String else {
+                let num = biz["review_count"] as? Int else {
                     print("fails to denormalize")
                     return nil
             }
-            let categories = biz["categories"] as? [[String: String?]] ?? [[String: String?]]()
+            let categoryList = biz["categories"] as? [[String: String?]] ?? [[String: String?]]()
             return PlaceInfoModel(
                 place_id: place_id,
                 name: name,
@@ -106,10 +96,10 @@ class YelpPlugin : SitePlugin {
                 score: score,
                 numOfScores: num,
                 url: biz["url"] as? String,
-                price: priceStr.count,
+                price: (biz["price"] as? String)?.count ?? 0,
                 
                 imageUrl: biz["image_url"] as? String,
-                categories: categories.map{ $0["title"] as? String }.compactMap{$0},
+                categories: categoryList.map{ $0["title"] as? String }.compactMap{$0},
                 phone: biz["display_phone"] as? String,
                 permanently_closed: biz["is_closed"] as? Bool
             )

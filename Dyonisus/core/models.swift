@@ -21,7 +21,7 @@ struct PlaceInfoModel : Identifiable {
     var score: Double?
     var numOfScores: Int?
     var url: String?
-    var price: Int?
+    var price = 0 // default value
     
     // Optional
     var imageUrl: String?

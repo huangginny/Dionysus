@@ -11,15 +11,28 @@ import Combine
 import CoreLocation
 
 struct Setting {
-    var defaultSite = "mock" // use custom setters
-    var defaultSitePlugin = MockPlugin()
-    var defaultLocation = "New York"
+    var defaultSite : String
+    var defaultSitePlugin : SitePlugin
     var activeSitePlugins = [SitePlugin]()
+    
+    init(defaultSite : String, activeSites: [String]) {
+        self.defaultSite = defaultSite
+        self.defaultSitePlugin = NAME_TO_SITE_PLUGIN[defaultSite]!.init()
+        
+        var updatedSitePlugins = [self.defaultSitePlugin]
+        for name in activeSites {
+            if name != defaultSite {
+                let plugin = NAME_TO_SITE_PLUGIN[name]!.init()
+                updatedSitePlugins.append(plugin)
+            }
+        }
+        self.activeSitePlugins = updatedSitePlugins
+    }
 }
 
 class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     
-    @Published var setting = Setting()
+    @Published var setting : Setting
     @Published var placeSearchResults: [PlaceInfoModel] = []
     @Published var isLoading = false
     @Published var loadError = ""
@@ -31,8 +44,10 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     var ongoingSearchTerm = ""
     
     override init() {
-        super.init()
         // read settings from json file
+        //self.setting = Setting(defaultSite: "yelp", activeSites: ["4sq", "mock"])
+        self.setting = Setting(defaultSite: "4sq", activeSites: [])
+        super.init()
         locManager.delegate = self
     }
     
@@ -41,15 +56,7 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func onSubmitSettingChange(defaultSite: String, activeSites: [String]) {
-        var updatedSitePlugins = [SitePlugin]()
-        for name in activeSites {
-            let plugin = NAME_TO_SITE_PLUGIN[name]!()
-            updatedSitePlugins.append(plugin)
-            if name == defaultSite {
-                setting.defaultSitePlugin = plugin
-            }
-        }
-        setting.activeSitePlugins = updatedSitePlugins
+        setting = Setting(defaultSite: defaultSite, activeSites: activeSites)
     }
     
     func onSearchButtonClicked(with name:String, location:String) {
@@ -78,15 +85,19 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     func _onPlaceSearchComplete(places: [PlaceInfoModel], plugin: SitePlugin) {
         logMessage("Searching completed with \(places)")
-        placeSearchResults = places
-        pluginOfPlaceSearchResults = plugin
-        isLoading = false
+        DispatchQueue.main.async {
+            self.placeSearchResults = places
+            self.pluginOfPlaceSearchResults = plugin
+            self.isLoading = false
+        }
     }
     
-    func _onPlaceSearchError(plugin: SitePlugin) {
-        logMessage("")
-        isLoading = false
-        loadError = "Error encountered when searching with \(plugin.name). Please check your network connections."
+    func _onPlaceSearchError(errorMessage: String, plugin: SitePlugin) {
+        logMessage(errorMessage)
+        DispatchQueue.main.async {
+            self.isLoading = false
+            self.loadError = errorMessage
+        }
     }
     
 /**

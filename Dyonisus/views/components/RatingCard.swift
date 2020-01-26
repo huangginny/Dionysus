@@ -54,16 +54,16 @@ struct RatingCard: View {
             return COLOR_LIGHT_GRAY
         }
         switch actualPercentage {
-        case 0...40:
+        case 0..<40:
             return Color.red
-        case 40...60:
+        case 40..<60:
             return Color.orange
-        case 60...80:
+        case 60..<80:
             return Color.yellow
-        case 80...100:
+        case 80..<100:
             fallthrough
         default:
-            return Color.green
+            return Color.init(red: 0, green: 0.6, blue: 0)
         }
     }
     
@@ -122,10 +122,10 @@ struct RatingCard: View {
                     Spacer()
                     Divider()
                     HStack {
-                        Text("by \(loader.place!.numOfScores!) user\(loader.place!.numOfScores! > 1 ? "s" : "") on")
+                        Spacer()
+                        Text("by \(loader.place!.numOfScores!) user\(loader.place!.numOfScores! > 1 ? "s" : "") on ")
                             .font(.footnote)
                             .foregroundColor(.gray)
-                        Spacer()
                         Image(loader.plugin.logo).resizable().frame(width: 25, height: 25, alignment: .bottomTrailing)
                     }
                     .padding(.bottom, 10)
@@ -156,9 +156,9 @@ struct RatingCard_Previews: PreviewProvider {
         unrated.isLoading = false
         unrated.message = "I am unrated"
         return VStack {
-            RatingCard(loader: InfoLoader(plugin: previewPlugin, place: nil))
+            RatingCard(loader: InfoLoader(plugin: mockSetting.defaultSitePlugin, place: nil))
             RatingCard(loader: InfoLoader(
-                plugin: previewPlugin,
+                plugin: mockSetting.defaultSitePlugin,
                 place: ootp)
             )
             RatingCard(loader: unrated)

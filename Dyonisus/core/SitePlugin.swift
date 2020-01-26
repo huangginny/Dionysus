@@ -17,39 +17,47 @@ protocol SitePlugin {
     var name: String { get }
     var logo: String { get }
     var totalScore: Int { get }
+    
+    init()
             
     func searchForPlaces(
         with name:String,
         location: String,
         successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
-        errorCallbackFunc: @escaping(SitePlugin) -> Void
+        errorCallbackFunc: @escaping(String, SitePlugin) -> Void
     )
     
     func searchForPlaces(
         with name:String,
         coordinate: CLLocationCoordinate2D,
         successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
-        errorCallbackFunc: @escaping(SitePlugin) -> Void
+        errorCallbackFunc: @escaping(String, SitePlugin) -> Void
     )
     
     func loadRatingAndDetails (
         for place: PlaceInfoModel,
         successCallbackFunc: @escaping(PlaceInfoModel, SitePlugin) -> Void,
-        errorCallbackFunc: @escaping(SitePlugin) -> Void
+        errorCallbackFunc: @escaping(String, SitePlugin) -> Void
     )
 }
 
 class MockPlugin : SitePlugin {
     
-    var name = "Mock Plugin"
-    var logo = "mock-plugin-logo"
-    var totalScore = 10
+    var name: String
+    var logo: String
+    var totalScore: Int
+    
+    required init() {
+        name = "Mock Plugin"
+        logo = "mock-plugin-logo"
+        totalScore = 10
+    }
     
     func searchForPlaces(
         with name:String,
         location: String,
         successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
-        errorCallbackFunc: @escaping(SitePlugin) -> Void) {
+        errorCallbackFunc: @escaping(String, SitePlugin) -> Void) {
         
         logMessage("Searching with location: \(location)")
         let deadlineTime = DispatchTime.now() + .seconds(3)
@@ -62,7 +70,7 @@ class MockPlugin : SitePlugin {
         with name: String,
         coordinate: CLLocationCoordinate2D,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
-        errorCallbackFunc: @escaping (SitePlugin) -> Void) {
+        errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
         
         logMessage("Searching with coordinate: \(coordinate)")
         let deadlineTime = DispatchTime.now() + .seconds(3)
@@ -74,7 +82,7 @@ class MockPlugin : SitePlugin {
     func loadRatingAndDetails (
         for place: PlaceInfoModel,
         successCallbackFunc: @escaping(PlaceInfoModel, SitePlugin) -> Void,
-        errorCallbackFunc: @escaping(SitePlugin) -> Void
+        errorCallbackFunc: @escaping(String, SitePlugin) -> Void
     ) {
         logMessage("Loading defails for place: \(place.name)")
         let deadlineTime = DispatchTime.now() + .seconds(2)

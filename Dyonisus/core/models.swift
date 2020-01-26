@@ -14,7 +14,7 @@ struct PlaceInfoModel : Identifiable {
     let id = UUID()
     let place_id: String
     let name: String
-    let formattedAddress: String
+    let formattedAddress: [String]
     let coordinate: CLLocationCoordinate2D
     
     // On rating card
@@ -74,10 +74,10 @@ class PlaceHolderModel: ObservableObject, Identifiable {
                 infoForSite[p.name] = InfoLoader(plugin: p, place: nil)
                 p.searchForPlaces(
                     with: defaultPlace!.name,
-                    location: defaultPlace!.formattedAddress,
+                    coordinate: defaultPlace!.coordinate,
                     successCallbackFunc: _onPlaceFound,
-                    errorCallbackFunc: {(plugin: SitePlugin) -> Void in
-                        self.infoForSite[plugin.name]!.message = "Unable to find this place on \(plugin.name)."
+                    errorCallbackFunc: {(errorMessage: String, plugin: SitePlugin) -> Void in
+                        self.infoForSite[plugin.name]!.message = errorMessage
                         self.infoForSite[plugin.name]!.isLoading = false
                     }
                 );
@@ -90,50 +90,56 @@ class PlaceHolderModel: ObservableObject, Identifiable {
         // select the correct rating for site, get holder on dictionary and update it
         for result in results {
             if areSamePlaces(rating1: result, rating2: defaultPlaceInfoLoader.place!) {
-                infoForSite[plugin.name]!.place = result
-                plugin.loadRatingAndDetails(
-                    for: result,
-                    successCallbackFunc: _onLoadRatingComplete,
-                    errorCallbackFunc: _onLoadRatingError
-                )
+                DispatchQueue.main.async {
+                    self.infoForSite[plugin.name]!.place = result
+                    plugin.loadRatingAndDetails(
+                        for: result,
+                        successCallbackFunc: self._onLoadRatingComplete,
+                        errorCallbackFunc: self._onLoadRatingError
+                    )
+                }
                 return
             }
         }
-        infoForSite[plugin.name]!.message = "Unable to find this place on \(plugin.name)."
+        _onLoadRatingError(errorMessage: "Unable to find this place on \(plugin.name).", plugin: plugin)
     }
     
     func _onLoadRatingComplete(result: PlaceInfoModel, with plugin: SitePlugin) {
         logMessage("Found place \(result.name) for plugin \(plugin.name)")
-        if plugin.name == defaultPlaceInfoLoader.plugin.name {
-            defaultPlaceInfoLoader.place = result
-            defaultPlaceInfoLoader.isLoading = false
-            return
+        DispatchQueue.main.async {
+            if plugin.name == self.defaultPlaceInfoLoader.plugin.name {
+                self.defaultPlaceInfoLoader.place = result
+                self.defaultPlaceInfoLoader.isLoading = false
+                return
+            }
+            self.infoForSite[plugin.name]!.place = result
+            self.infoForSite[plugin.name]!.isLoading = false
         }
-        infoForSite[plugin.name]!.place = result
-        infoForSite[plugin.name]!.isLoading = false
     }
     
-    func _onLoadRatingError(with plugin: SitePlugin) {
-        logMessage("Cannot retrieve rating for \(defaultPlaceInfoLoader.place!.name) with plugin \(plugin.name)")
-        let msg = "This place is not yet rated."
-        if plugin.name == defaultPlaceInfoLoader.plugin.name {
-            defaultPlaceInfoLoader.message = msg
-            defaultPlaceInfoLoader.isLoading = false
-            return
+    func _onLoadRatingError(errorMessage: String, plugin: SitePlugin) {
+        logMessage("Cannot retrieve rating for \(defaultPlaceInfoLoader.place!.name) with plugin \(plugin.name)." +
+            "Error: \(errorMessage)")
+        DispatchQueue.main.async {
+            if plugin.name == self.defaultPlaceInfoLoader.plugin.name {
+                self.defaultPlaceInfoLoader.message = errorMessage
+                self.defaultPlaceInfoLoader.isLoading = false
+                return
+            }
+            self.infoForSite[plugin.name]!.message = errorMessage
+            self.infoForSite[plugin.name]!.isLoading = false
         }
-        infoForSite[plugin.name]!.message = msg
-        infoForSite[plugin.name]!.isLoading = false
     }
 }
 
 /**
  Preview and debug helpers
  */
-let previewPlugin = MockPlugin()
+let mockSetting = Setting(defaultSite: "mock", activeSites: [])
 let cupboard = PlaceInfoModel(
     place_id: "Cupboard_Under_the_Stairs",
     name:"The Cupboard Under the Stairs",
-    formattedAddress:"4 Privet Drive, Little Whinging, Surrey",
+    formattedAddress: ["4 Privet Drive", "Little Whinging","Surrey","United Kingdom"],
     coordinate: CLLocationCoordinate2D(latitude: 23.70870, longitude: -23.4567889),
     score:1.1,
     numOfScores: 4,
@@ -144,7 +150,7 @@ let cupboard = PlaceInfoModel(
 let ootp = PlaceInfoModel(
     place_id: "Order_of_the_Phoenix",
     name:"Order of the Phoenix HQ",
-    formattedAddress:"12 Grimmauld Pl, London",
+    formattedAddress: ["12 Grimmauld Pl", "London"],
     coordinate: CLLocationCoordinate2D(latitude: 23.70870, longitude: -23.4567889),
     score:8.8,
     numOfScores: 28,
@@ -153,5 +159,5 @@ let ootp = PlaceInfoModel(
     imageUrl: "https://vignette.wikia.nocookie.net/harrypotter/images/6/6f/HPDH1-1435.jpg", categories: ["organization"],
     hours:"9AM - 5PM, Mon - Fri"
 )
-let cupboards = PlaceHolderModel(with: cupboard, plugin: previewPlugin, setting: Setting())
-var unrated = InfoLoader(plugin: previewPlugin, place: nil)
+let cupboards = PlaceHolderModel(with: cupboard, plugin: mockSetting.defaultSitePlugin, setting: mockSetting)
+var unrated = InfoLoader(plugin: mockSetting.defaultSitePlugin, place: nil)

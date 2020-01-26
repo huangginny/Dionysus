@@ -11,17 +11,23 @@ import CoreLocation
 
 class YelpPlugin : SitePlugin {
     
-    var name = "Yelp"
-    var logo = "yelp-icon"
-    var totalScore = 5
+    var name: String
+    var logo: String
+    var totalScore: Int
     
     let baseUrl = "https://api.yelp.com/v3/businesses/search?"
+    
+    required init() {
+        name = "Yelp"
+        logo = "yelp-icon"
+        totalScore = 5
+    }
     
     func searchForPlaces(
         with name: String,
         location: String,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
-        errorCallbackFunc: @escaping (SitePlugin) -> Void
+        errorCallbackFunc: @escaping (String, SitePlugin) -> Void
     ) {
         let urlString = baseUrl + "&term=\(name)&location=\(location)"
         self._searchForPlacesHelper(
@@ -35,7 +41,7 @@ class YelpPlugin : SitePlugin {
         with name: String,
         coordinate: CLLocationCoordinate2D,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
-        errorCallbackFunc: @escaping (SitePlugin) -> Void
+        errorCallbackFunc: @escaping (String, SitePlugin) -> Void
     ) {
         let urlString = baseUrl + "&term=\(name)&latitude=\(coordinate.latitude)&longitude=\(coordinate.longitude)"
         self._searchForPlacesHelper(
@@ -48,14 +54,14 @@ class YelpPlugin : SitePlugin {
     func loadRatingAndDetails(
         for place: PlaceInfoModel,
         successCallbackFunc: @escaping (PlaceInfoModel, SitePlugin) -> Void,
-        errorCallbackFunc: @escaping (SitePlugin) -> Void) {
+        errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
         successCallbackFunc(place, self)
     }
     
     func _searchForPlacesHelper(
         with url: String,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
-        errorCallbackFunc: @escaping (SitePlugin) -> Void
+        errorCallbackFunc: @escaping (String, SitePlugin) -> Void
     ) {
         loadUrl(
             urlString: url,
@@ -66,10 +72,10 @@ class YelpPlugin : SitePlugin {
                     let models = self._parseJsonToModels(jsonList: businesses)
                     successCallbackFunc(models, self)
                 } else {
-                    errorCallbackFunc(self)
+                    errorCallbackFunc("An error occurred when retrieving places from Yelp.", self) // fixme
                 }
             },
-            onError: { errorCallbackFunc(self)}
+            onError: {(errorMsg: String) -> Void in errorCallbackFunc(errorMsg, self)}
         )
     }
     
@@ -78,20 +84,20 @@ class YelpPlugin : SitePlugin {
             guard let place_id = biz["id"] as? String,
                 let name = biz["name"] as? String,
                 let location = biz["location"] as? [String: Any],
-                let coordinate = biz["coordinate"] as? [String: Double],
-                let lon = coordinate["longtitude"],
+                let coordinate = biz["coordinates"] as? [String: Double],
+                let lon = coordinate["longitude"],
                 let lat = coordinate["latitude"],
                 let addr = location["display_address"] as? [String],
                 let score = biz["rating"] as? Double,
                 let num = biz["review_count"] as? Int else {
-                    print("fails to denormalize")
+                    logMessage("Fails to denormalize basic information")
                     return nil
             }
             let categoryList = biz["categories"] as? [[String: String?]] ?? [[String: String?]]()
             return PlaceInfoModel(
                 place_id: place_id,
                 name: name,
-                formattedAddress: addr.joined(separator: ", "),
+                formattedAddress: addr,
                 coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
                 score: score,
                 numOfScores: num,

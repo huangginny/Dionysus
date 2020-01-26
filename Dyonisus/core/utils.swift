@@ -31,11 +31,12 @@ func loadUrl(
     urlString: String,
     authentication: String?,
     onSuccess: @escaping(_ data: Data) -> Void,
-    onError: @escaping() -> Void
+    onError: @escaping(_ errorMessage: String) -> Void
     ) {
     let encodedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? urlString
     guard let url = URL(string: encodedUrlString) else {
         logMessage("URL \(encodedUrlString) is not a valid url")
+        onError("The inputs are invalid. Maybe remove from gibberish from your search term?")
         return
     }
     var request = URLRequest(url: url)
@@ -45,15 +46,18 @@ func loadUrl(
     let task = URLSession.shared.dataTask(with: request, completionHandler: {
         (data:Data?, response:URLResponse?, error:Error?) -> Void in
         if let error = error {
-            logMessage("Error when searching with 4sq: \(error)")
-            onError()
+            logMessage("\(error)")
+            onError("Oops! A network error occurred on search.")
             return
         }
         let httpResponse = response as? HTTPURLResponse
         if httpResponse == nil || (200...299).contains(httpResponse!.statusCode) == false {
-            logMessage("Error when searching with 4sq" +
-                (httpResponse == nil ? "" : ": status code = \(httpResponse!.statusCode)"))
-            onError()
+            logMessage("A network error occurred when loading URL. Status code: \(httpResponse!.statusCode)")
+            if (400...499).contains(httpResponse!.statusCode) {
+                onError("Oops! A network error occurred on search... Can you check if you're online?")
+            } else { // 500+
+                onError("Oops! The site you are searching with is down... please try again later or use another site.")
+            }
             return
         }
         if let mimeType = httpResponse!.mimeType, mimeType == "application/json",

@@ -16,7 +16,7 @@ struct PlaceRow: View {
                 .padding(.leading)
                 .lineLimit(1)
                 .layoutPriority(1)
-            Text(place.formattedAddress)
+            Text(place.formattedAddress.joined(separator: ", "))
                 .font(.footnote)
                 .foregroundColor(.gray)
                 .lineLimit(1)

@@ -30,6 +30,9 @@ struct Info: View {
                     Image(systemName: "mappin.and.ellipse").frame(width: 20)
                     Text(place.formattedAddress.joined(separator: "\n"))
                     Spacer()
+                    if isNonEmptyString(getFormattedDistance(place.distance)) {
+                        Text("(\(getFormattedDistance(place.distance)!))")
+                    }
                 }
                 if isNonEmptyString(place.phone) {
                     HStack(alignment: .firstTextBaseline) {
@@ -39,7 +42,6 @@ struct Info: View {
                     }.onTapGesture {
                         if let phoneNumber = getRawPhoneNumber(self.place.phone),
                             let phoneUrl = URL(string: "telprompt://\(phoneNumber)") {
-                            print(phoneNumber)
                             UIApplication.shared.open(phoneUrl, options: [:], completionHandler: nil)
                         }
                     }

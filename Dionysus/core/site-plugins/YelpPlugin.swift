@@ -104,7 +104,7 @@ class YelpPlugin : SitePlugin {
                 formattedAddress: addr,
                 coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
                 postalCode: postalCode,
-                distance: biz["distance"] as? Double,
+                
                 score: score,
                 numOfScores: num,
                 url: biz["url"] as? String,
@@ -112,6 +112,7 @@ class YelpPlugin : SitePlugin {
                 
                 imageUrl: biz["image_url"] as? String,
                 categories: categoryList.map{ $0["title"] as? String }.compactMap{$0},
+                distance: biz["distance"] as? Double,
                 phone: biz["display_phone"] as? String,
                 permanently_closed: biz["is_closed"] as? Bool
             )

@@ -20,11 +20,27 @@ func getCurrentTimestamp() -> String {
 }
 
 func isNonEmptyString(_ str: String?) -> Bool {
-    return str != nil && str!.trimmingCharacters(in: .whitespacesAndNewlines) != ""
+    if let s = str, s.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+        return true
+    }
+    return false
 }
 
 func getRawPhoneNumber(_ str: String?) -> String? {
     return str?.compactMap({ $0.wholeNumberValue?.description}).joined()
+}
+
+func getFormattedDistance(_ meters: Double?) -> String? {
+    if let meters = meters {
+        if meters >= 1000 {
+            return "~\(String(format: "%.1f", meters / 1000))km"
+        }
+        if meters < 50 {
+            return "<50m"
+        }
+        return "~\(Int(round(meters)))m"
+    }
+    return nil
 }
 
 /**

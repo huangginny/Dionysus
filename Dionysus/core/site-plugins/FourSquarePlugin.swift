@@ -44,7 +44,7 @@ class FourSquarePlugin: SitePlugin {
         _searchForPlaces(with: url, successCallbackFunc: successCallbackFunc, errorCallbackFunc: errorCallbackFunc)
     }
     
-    func _searchForPlaces( // FIXME: add categories
+    func _searchForPlaces(
         with url: String,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
@@ -115,8 +115,8 @@ class FourSquarePlugin: SitePlugin {
                 formattedAddress: addr,
                 coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
                 postalCode: postalCode,
-                distance: venue["distance"] as? Double,
-                imageUrl: iconUrl
+                imageUrl: iconUrl,
+                distance: location["distance"] as? Double
             )
         }.compactMap{ $0}
     }
@@ -155,13 +155,14 @@ class FourSquarePlugin: SitePlugin {
             formattedAddress: addr,
             coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
             postalCode: postalCode,
-            distance: venue["distance"] as? Double,
+            
             score: score,
             numOfScores: numOfScores,
             url: url,
             price: price?["tier"] as? Int ?? 0,
             imageUrl: imageUrl,
             categories: categoryList?.map{ $0["name"] as? String }.compactMap{ $0},
+            distance: location["distance"] as? Double,
             phone: contact?["formattedPhone"],
             hours: hours?["status"] as? String,
             open_now: hours?["isOpen"] as? Bool

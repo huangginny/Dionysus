@@ -57,6 +57,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    // This is the NSUserActivity that will be used to restore state when the scene reconnects.
+    /*func stateRestorationActivity(for scene: UIScene) -> NSUserActivity? {
+        return scene.userActivity
+    }*/
 
 }
 

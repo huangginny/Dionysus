@@ -17,7 +17,6 @@ struct PlaceInfoModel : Identifiable {
     let formattedAddress: [String]
     let coordinate: CLLocationCoordinate2D
     let postalCode: String
-    var distance: Double?
     
     // On rating card
     var score: Double?
@@ -28,6 +27,7 @@ struct PlaceInfoModel : Identifiable {
     // Optional
     var imageUrl: String?
     var categories: [String]?
+    var distance: Double?
     var phone: String?
     var hours: String?
     var open_now: Bool?
@@ -90,13 +90,14 @@ class PlaceHolderModel: ObservableObject, Identifiable {
     func _onPlaceFound(results: [PlaceInfoModel], with plugin: SitePlugin) {
         logMessage("Found places for plugin \(plugin.name)")
         // select the correct rating for site, get holder on dictionary and update it
-        let result = getBestMatchByFuzzyDistance(with: defaultPlaceInfoLoader.place!, candidates: results)
-        if result != nil {
-            logMessage("Best match found: \(result!)")
+        if let result = getBestMatchByFuzzyDistance(
+            with: defaultPlaceInfoLoader.place!,
+            candidates: results) {
+            logMessage("Best match found: \(result)")
             DispatchQueue.main.async {
                 self.infoForSite[plugin.name]!.place = result
                 plugin.loadRatingAndDetails(
-                    for: result!,
+                    for: result,
                     successCallbackFunc: self._onLoadRatingComplete,
                     errorCallbackFunc: self._onLoadRatingError
                 )

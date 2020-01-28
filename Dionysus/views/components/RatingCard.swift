@@ -43,6 +43,37 @@ struct ScoreBar: View {
     }
 }
 
+struct YelpScoreBar: View {
+    let score : Double
+    
+    func getImageAssetName() -> String {
+        switch score {
+        case 5.0...:
+            return "regular_5"
+        case 4.5 ..< 5.0:
+            return "regular_4_half"
+        case 4.0 ..< 4.5:
+            return "regular_4"
+        case 3.5 ..< 4.0:
+            return "regular_3_half"
+        case 3.0 ..< 3.5:
+            return "regular_3"
+        case 2.5 ..< 3.0:
+            return "regular_2_half"
+        case 2.0 ..< 2.5:
+            return "regular_2"
+        case 1.5 ..< 2.0:
+            return "regular_1_half"
+        default:
+            return "regular_1"
+        }
+    }
+    
+    var body: some View {
+        Image(getImageAssetName()).resizable().aspectRatio(contentMode: .fit)
+    }
+}
+
 struct RatingCard: View {
     let horizontalPadding = CGFloat(10)
     let loader : InfoLoader
@@ -101,7 +132,9 @@ struct RatingCard: View {
                 VStack {
                     Spacer()
                     HStack {
-                        if visiblePercentage > 0 {
+                        if loader.plugin.name == "Yelp" {
+                            YelpScoreBar(score: loader.place!.score!)
+                        } else if visiblePercentage > 0 {
                             ScoreBar(percentage: visiblePercentage, color: getColor())
                         }
                         HStack(spacing:0) {

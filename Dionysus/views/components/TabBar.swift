@@ -57,8 +57,8 @@ class UITabBarControllerWithDelegate: UITabBarController, UITabBarControllerDele
     
     func tabBarController(_ tabBarController: UITabBarController,
                           didSelect viewController: UIViewController) {
-        if updateSelectedIndex != nil {
-            updateSelectedIndex!(tabBarController.selectedIndex)
+        if let f = updateSelectedIndex {
+            f(tabBarController.selectedIndex)
         }
     }
 }

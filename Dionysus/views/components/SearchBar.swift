@@ -13,8 +13,8 @@ class UISearchFieldDelegate : UIViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        if (onCommit != nil) {
-            onCommit!()
+        if let f = onCommit {
+            f()
         }
         return true
     }

@@ -36,6 +36,12 @@ struct Info: View {
                         Image(systemName: "phone.fill").frame(width: 20.0)
                         Text(place.phone!)
                         Spacer()
+                    }.onTapGesture {
+                        if let phoneNumber = getRawPhoneNumber(self.place.phone),
+                            let phoneUrl = URL(string: "telprompt://\(phoneNumber)") {
+                            print(phoneNumber)
+                            UIApplication.shared.open(phoneUrl, options: [:], completionHandler: nil)
+                        }
                     }
                 }
                 if (place.permanently_closed != nil || place.open_now != nil || isNonEmptyString(place.hours)) {

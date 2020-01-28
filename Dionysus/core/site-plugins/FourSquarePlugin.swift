@@ -97,15 +97,26 @@ class FourSquarePlugin: SitePlugin {
                 let location = venue["location"] as? [String: Any],
                 let lon = location["lng"] as? Double,
                 let lat = location["lat"] as? Double,
-                let addr = location["formattedAddress"] as? [String] else {
+                let addr = location["formattedAddress"] as? [String],
+                let postalCode = location["postalCode"] as? String else {
                     logMessage("Fails to denormalize")
                     return nil
+            }
+            var iconUrl : String?
+            if let categories = venue["categories"] as? [[String: Any]],
+                let primaryCategory = categories.first(where: {($0["primary"] as? Bool ?? false)}),
+                let icon = primaryCategory["icon"] as? [String: String],
+                let prefix = icon["prefix"], let suffix = icon["suffix"] {
+                iconUrl = prefix + "bg_32" + suffix
             }
             return PlaceInfoModel(
                 place_id: place_id,
                 name: name,
                 formattedAddress: addr,
-                coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
+                postalCode: postalCode,
+                distance: venue["distance"] as? Double,
+                imageUrl: iconUrl
             )
         }.compactMap{ $0}
     }
@@ -117,6 +128,7 @@ class FourSquarePlugin: SitePlugin {
             let lon = location["lng"] as? Double,
             let lat = location["lat"] as? Double,
             let addr = location["formattedAddress"] as? [String],
+            let postalCode = location["postalCode"] as? String,
             let url = venue["canonicalUrl"] as? String else {
                 let errorMessage = "Fails to denormalize essential details"
                 logMessage("Fails to denormalize details")
@@ -142,6 +154,8 @@ class FourSquarePlugin: SitePlugin {
             name: name,
             formattedAddress: addr,
             coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
+            postalCode: postalCode,
+            distance: venue["distance"] as? Double,
             score: score,
             numOfScores: numOfScores,
             url: url,

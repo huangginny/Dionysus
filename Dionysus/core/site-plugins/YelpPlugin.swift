@@ -29,7 +29,8 @@ class YelpPlugin : SitePlugin {
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void
     ) {
-        let urlString = baseUrl + "&term=\(name)&location=\(location)"
+        logMessage("")
+        let urlString = baseUrl + "term=\(name)&location=\(location)"
         self._searchForPlacesHelper(
             with: urlString,
             successCallbackFunc: successCallbackFunc,
@@ -43,7 +44,8 @@ class YelpPlugin : SitePlugin {
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void
     ) {
-        let urlString = baseUrl + "&term=\(name)&latitude=\(coordinate.latitude)&longitude=\(coordinate.longitude)"
+        logMessage("")
+        let urlString = baseUrl + "term=\(name)&latitude=\(coordinate.latitude)&longitude=\(coordinate.longitude)"
         self._searchForPlacesHelper(
             with: urlString,
             successCallbackFunc: successCallbackFunc,
@@ -63,6 +65,7 @@ class YelpPlugin : SitePlugin {
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void
     ) {
+        logMessage("URL: \(url)")
         loadUrl(
             urlString: url,
             authentication: "Bearer \(YELP_API_KEY)",
@@ -88,6 +91,7 @@ class YelpPlugin : SitePlugin {
                 let lon = coordinate["longitude"],
                 let lat = coordinate["latitude"],
                 let addr = location["display_address"] as? [String],
+                let postalCode = location["zip_code"] as? String,
                 let score = biz["rating"] as? Double,
                 let num = biz["review_count"] as? Int else {
                     logMessage("Fails to denormalize basic information")
@@ -99,6 +103,8 @@ class YelpPlugin : SitePlugin {
                 name: name,
                 formattedAddress: addr,
                 coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
+                postalCode: postalCode,
+                distance: biz["distance"] as? Double,
                 score: score,
                 numOfScores: num,
                 url: biz["url"] as? String,

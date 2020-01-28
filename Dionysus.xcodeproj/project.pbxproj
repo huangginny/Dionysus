@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -136,7 +136,6 @@
 				8F40F824DC0AD414F78FA462 /* Pods-DionysusTests.debug.xcconfig */,
 				BA50D1B545DEFE20AA771E9A /* Pods-DionysusTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -226,8 +225,8 @@
 				F2FF8C3C23C9A3BF008A638E /* RootView.swift */,
 				F2FF8C3823C9A3BF008A638E /* AppDelegate.swift */,
 				F2FF8C3A23C9A3BF008A638E /* SceneDelegate.swift */,
-				F2FF8C3E23C9A3C9008A638E /* Assets.xcassets */,
 				F2FF8C4323C9A3C9008A638E /* LaunchScreen.storyboard */,
+				F2FF8C3E23C9A3C9008A638E /* Assets.xcassets */,
 				F2FF8C4623C9A3C9008A638E /* Info.plist */,
 				F2FF8C4023C9A3C9008A638E /* Preview Content */,
 				F2D8041023DAB347005D3BCF /* apiKeys.swift */,

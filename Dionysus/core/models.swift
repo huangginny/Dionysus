@@ -16,6 +16,8 @@ struct PlaceInfoModel : Identifiable {
     let name: String
     let formattedAddress: [String]
     let coordinate: CLLocationCoordinate2D
+    let postalCode: String
+    var distance: Double?
     
     // On rating card
     var score: Double?
@@ -88,19 +90,20 @@ class PlaceHolderModel: ObservableObject, Identifiable {
     func _onPlaceFound(results: [PlaceInfoModel], with plugin: SitePlugin) {
         logMessage("Found places for plugin \(plugin.name)")
         // select the correct rating for site, get holder on dictionary and update it
-        for result in results {
-            if areSamePlaces(rating1: result, rating2: defaultPlaceInfoLoader.place!) {
-                DispatchQueue.main.async {
-                    self.infoForSite[plugin.name]!.place = result
-                    plugin.loadRatingAndDetails(
-                        for: result,
-                        successCallbackFunc: self._onLoadRatingComplete,
-                        errorCallbackFunc: self._onLoadRatingError
-                    )
-                }
-                return
+        let result = getBestMatchByFuzzyDistance(with: defaultPlaceInfoLoader.place!, candidates: results)
+        if result != nil {
+            logMessage("Best match found: \(result!)")
+            DispatchQueue.main.async {
+                self.infoForSite[plugin.name]!.place = result
+                plugin.loadRatingAndDetails(
+                    for: result!,
+                    successCallbackFunc: self._onLoadRatingComplete,
+                    errorCallbackFunc: self._onLoadRatingError
+                )
             }
+            return
         }
+        logMessage("No match could be found")
         _onLoadRatingError(errorMessage: "Unable to find this place on \(plugin.name).", plugin: plugin)
     }
     
@@ -141,6 +144,7 @@ let cupboard = PlaceInfoModel(
     name:"The Cupboard Under the Stairs",
     formattedAddress: ["4 Privet Drive", "Little Whinging","Surrey","United Kingdom"],
     coordinate: CLLocationCoordinate2D(latitude: 23.70870, longitude: -23.4567889),
+    postalCode: "SE1 2SW",
     score:1.1,
     numOfScores: 4,
     url: "https://harrypotter.fandom.com/wiki/Cupboard_Under_the_Stairs",
@@ -152,6 +156,7 @@ let ootp = PlaceInfoModel(
     name:"Order of the Phoenix HQ",
     formattedAddress: ["12 Grimmauld Pl", "London"],
     coordinate: CLLocationCoordinate2D(latitude: 23.70870, longitude: -23.4567889),
+    postalCode: "SE1 2SW",
     score:8.8,
     numOfScores: 28,
     url: "https://harrypotter.fandom.com/wiki/Order_of_the_Phoenix",

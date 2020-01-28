@@ -39,7 +39,7 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     var pluginOfPlaceSearchResults : SitePlugin?
     
-    var isLocationAuthorized = false
+    var locationAuthorizedStatus = CLAuthorizationStatus.notDetermined
     var locManager = CLLocationManager()
     var ongoingSearchTerm = ""
     
@@ -65,16 +65,12 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
             return
         }
         isLoading = true
+        loadError = ""
         if location == "" {
             ongoingSearchTerm = name
-            if isLocationAuthorized {
-                locManager.requestLocation()
-            } else {
-                locManager.requestWhenInUseAuthorization()
-            }
+            handleNewAuthorization()
             return
         }
-        loadError = ""
         setting.defaultSitePlugin.searchForPlaces(
             with: name,
             location: location,
@@ -106,13 +102,9 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager,
                          didChangeAuthorization status: CLAuthorizationStatus) {
         logMessage("Authorization changed: \(status.rawValue)")
-        isLocationAuthorized = status == CLAuthorizationStatus.authorizedWhenInUse
-        if isLocationAuthorized && isLoading == true {
-            locManager.requestLocation()
-        } else {
-            // declined authorization
-            ongoingSearchTerm = ""
-            isLoading = false
+        locationAuthorizedStatus = CLAuthorizationStatus.authorizedWhenInUse
+        if isLoading {
+            handleNewAuthorization()
         }
     }
     
@@ -138,5 +130,21 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
         logMessage("\(error)")
         isLoading = false
         loadError = "Cannot retrieve location data from device. Please enter a location in search."
+    }
+    
+    func handleNewAuthorization() {
+        switch locationAuthorizedStatus {
+        case .restricted, .denied:
+            ongoingSearchTerm = ""
+            isLoading = false
+            loadError = "Location services is not enabled. " +
+                "Please either enter a place name or enable your location services in device Settings."
+            break
+        case .authorizedWhenInUse, .authorizedAlways:
+            locManager.requestLocation()
+            break
+        default:
+            locManager.requestWhenInUseAuthorization()
+        }
     }
 }

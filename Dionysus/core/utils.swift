@@ -23,12 +23,41 @@ func isNonEmptyString(_ str: String?) -> Bool {
     return str != nil && str!.trimmingCharacters(in: .whitespacesAndNewlines) != ""
 }
 
-func areSamePlaces(rating1: PlaceInfoModel, rating2: PlaceInfoModel) -> Bool {
-    return true // FIXME : how close should coordinates be to determine sameness?
+func getRawPhoneNumber(_ str: String?) -> String? {
+    return str?.compactMap({ $0.wholeNumberValue?.description}).joined()
 }
 
-func fuzzyMatching(with place: PlaceInfoModel, candidates: [PlaceInfoModel]) {
+/**
+  Algorithm:
+    1. Return the candidate with a matching phone number
+    2. Disregard all places with an unmatching postal code
+    3. If none of the candidates have a matching phone number, return the best candidate using fuzzy matching
+ */
+func getBestMatchByFuzzyDistance(with place: PlaceInfoModel, candidates: [PlaceInfoModel]) -> PlaceInfoModel? {
+    logMessage("Matching places with place: \(place)")
+    if candidates.count == 0 { return nil}
     
+    // Phone matching
+    let originalPhone = getRawPhoneNumber(place.phone)
+    if let originalPhone = originalPhone,
+        let bestCandidate = candidates.first(where: {
+            $0.phone?.suffix(7) == originalPhone.suffix(7) // phone matching, disregard area code
+        })
+    {
+        return bestCandidate
+    }
+    return candidates
+        .filter({$0.postalCode == place.postalCode}) // disregard bad post code
+        .sorted(by: { // get best fuzzy match result
+            getMatchingScore(to: place, current: $0) < getMatchingScore(to: place, current: $1)
+        })
+        .first
+}
+
+func getMatchingScore(to origin: PlaceInfoModel, current: PlaceInfoModel) -> Double {
+    let nameMatching = FUSE.search(current.name, in: origin.name)
+    let addrMatching = FUSE.search(current.formattedAddress[0], in: origin.formattedAddress[0])
+    return (nameMatching?.score ?? 1) + (addrMatching?.score ?? 1) * 2
 }
 
 func loadUrl(
@@ -38,6 +67,7 @@ func loadUrl(
     onError: @escaping(_ errorMessage: String) -> Void
     ) {
     let encodedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? urlString
+    logMessage("Loading URL: \(encodedUrlString)")
     guard let url = URL(string: encodedUrlString) else {
         logMessage("URL \(encodedUrlString) is not a valid url")
         onError("The inputs are invalid. Maybe remove from gibberish from your search term?")

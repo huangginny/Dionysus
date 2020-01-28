@@ -21,6 +21,7 @@ class UISearchFieldDelegate : UIViewController, UITextFieldDelegate {
 }
 
 struct SearchField : UIViewRepresentable {
+    @Binding var isActive: Bool
     var placeholder: String
     var text: Binding<String>
     
@@ -36,6 +37,12 @@ struct SearchField : UIViewRepresentable {
         field.text = text.wrappedValue
         field.autocorrectionType = UITextAutocorrectionType.no
         field.returnKeyType = UIReturnKeyType.search
+        NotificationCenter.default.addObserver(forName: UITextField.textDidBeginEditingNotification, object: field, queue: OperationQueue.main, using: {(notification: Notification) in
+            self.isActive = true
+        })
+        NotificationCenter.default.addObserver(forName: UITextField.textDidEndEditingNotification, object: field, queue: OperationQueue.main, using: {(notification: Notification) in
+            self.isActive = false
+        })
         NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: field, queue: OperationQueue.main, using: _searchFieldDidChange)
         return field
     }
@@ -55,6 +62,8 @@ struct SearchField : UIViewRepresentable {
 struct SearchBar: View {
     @State var name = ""
     @State var location = ""
+    @State private var isNameSearchFieldActive = false
+    @State private var isLocationSearchFieldActive = false
     
     let statusBarHeight: CGFloat
     let onCommit: (String, String)->()
@@ -65,11 +74,13 @@ struct SearchBar: View {
     
     var body: some View {
         let nameSearchField = SearchField(
+            isActive: $isNameSearchFieldActive,
             placeholder: "Enter name",
             text: $name,
             onCommit: onCommitWithNameAndLocation
         )
         let locationSearchField = SearchField(
+            isActive: $isLocationSearchFieldActive,
             placeholder: "Near me",
             text: $location,
             onCommit: onCommitWithNameAndLocation
@@ -90,8 +101,18 @@ struct SearchBar: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .frame(width: 20.0)
-                        .foregroundColor(.gray)
+                        .foregroundColor(isNameSearchFieldActive ? .orange : .gray)
                     nameSearchField
+                    if isNameSearchFieldActive {
+                        Button(action: {
+                            self.name = ""
+                            nameSearchField.text.wrappedValue = ""
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(COLOR_LIGHT_GRAY)
+                                .frame(width: 20.0)
+                        }
+                    }
                 }
                 .padding(3.0)
                 .background(Color.white)
@@ -102,8 +123,18 @@ struct SearchBar: View {
                 HStack {
                     Image(systemName: "mappin")
                         .frame(width: 20.0)
-                        .foregroundColor(.gray)
+                        .foregroundColor(locationSearchField.isActive ? .orange : .gray)
                     locationSearchField
+                    if isLocationSearchFieldActive {
+                        Button(action: {
+                            self.location = ""
+                            locationSearchField.text.wrappedValue = ""
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(COLOR_LIGHT_GRAY)
+                                .frame(width: 20.0)
+                        }
+                    }
                 }
                 .padding(3.0)
                 .background(Color.white)
@@ -114,8 +145,8 @@ struct SearchBar: View {
             }
             .padding(.horizontal)
         }
-        .padding(.top, statusBarHeight + 5)
-        .padding(.bottom, 20)
+        .padding(.top, statusBarHeight + 15)
+        .padding(.bottom, 15)
         .frame(height: 80.0 + statusBarHeight)
         .background(Color.gray)
     }

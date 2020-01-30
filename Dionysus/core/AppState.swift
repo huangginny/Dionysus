@@ -118,7 +118,7 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager,
                          didChangeAuthorization status: CLAuthorizationStatus) {
         logMessage("Authorization changed: \(status.rawValue)")
-        locationAuthorizedStatus = CLAuthorizationStatus.authorizedWhenInUse
+        locationAuthorizedStatus = status
         if isLoading && ongoingSearchTermWithCoordinate != "" {
             requestLocation()
         }

@@ -21,6 +21,7 @@ struct SearchView: View {
             VStack {
                 SearchBar(
                     statusBarHeight: statusBarHeight,
+                    plugin: state.setting.defaultSitePlugin,
                     onCommit: {(name: String, location: String) -> Void in
                         if name == "" {
                             self.showAlert = true

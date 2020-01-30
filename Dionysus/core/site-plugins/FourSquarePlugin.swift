@@ -7,13 +7,13 @@
 //
 
 import Foundation
-import CoreLocation
 import UIKit
 
 class FourSquarePlugin: SitePlugin {
     
     var name: String
     var logo: String
+    var colorCode: String
     var totalScore: Int
     
     let baseUrl = "https://api.foursquare.com/v2/venues/"
@@ -23,6 +23,7 @@ class FourSquarePlugin: SitePlugin {
     required init() {
         name = "FourSquare"
         logo = "4sq-logo"
+        colorCode = "#F94877"
         totalScore = 10
     }
     
@@ -37,7 +38,7 @@ class FourSquarePlugin: SitePlugin {
     
     func searchForPlaces(
         with name: String,
-        coordinate: CLLocationCoordinate2D,
+        coordinate: Coordinate,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
         let url = baseUrl + "search?ll=\(coordinate.latitude),\(coordinate.longitude)&query=\(name)" + authParams
@@ -76,7 +77,7 @@ class FourSquarePlugin: SitePlugin {
                 if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                     let response = json["response"] as? [String: Any],
                     let venue = response["venue"] as? [String: Any] {
-                    let (model, errorMsg) = self._parseDetailsResultToModel(venue: venue)
+                    let (model, errorMsg) = self._parseDetailsResultToModel(venue: venue, original: place)
                     if isNonEmptyString(errorMsg) {
                         errorCallbackFunc(errorMsg, self)
                     } else {
@@ -107,13 +108,13 @@ class FourSquarePlugin: SitePlugin {
                 let primaryCategory = categories.first(where: {($0["primary"] as? Bool ?? false)}),
                 let icon = primaryCategory["icon"] as? [String: String],
                 let prefix = icon["prefix"], let suffix = icon["suffix"] {
-                iconUrl = prefix + "bg_32" + suffix
+                iconUrl = prefix + "bg_64" + suffix
             }
             return PlaceInfoModel(
                 place_id: place_id,
                 name: name,
                 formattedAddress: addr,
-                coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
+                coordinate: Coordinate(latitude: lat, longitude: lon),
                 postalCode: postalCode,
                 imageUrl: iconUrl,
                 distance: location["distance"] as? Double
@@ -121,7 +122,7 @@ class FourSquarePlugin: SitePlugin {
         }.compactMap{ $0}
     }
     
-    func _parseDetailsResultToModel(venue: [String: Any]) -> (PlaceInfoModel?, String) {
+    func _parseDetailsResultToModel(venue: [String: Any], original: PlaceInfoModel) -> (PlaceInfoModel?, String) {
         guard let place_id = venue["id"] as? String,
             let name = venue["name"] as? String,
             let location = venue["location"] as? [String: Any],
@@ -153,7 +154,7 @@ class FourSquarePlugin: SitePlugin {
             place_id: place_id,
             name: name,
             formattedAddress: addr,
-            coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
+            coordinate: Coordinate(latitude: lat, longitude: lon),
             postalCode: postalCode,
             
             score: score,
@@ -162,7 +163,7 @@ class FourSquarePlugin: SitePlugin {
             price: price?["tier"] as? Int ?? 0,
             imageUrl: imageUrl,
             categories: categoryList?.map{ $0["name"] as? String }.compactMap{ $0},
-            distance: location["distance"] as? Double,
+            distance: location["distance"] as? Double ?? original.distance,
             phone: contact?["formattedPhone"],
             hours: hours?["status"] as? String,
             open_now: hours?["isOpen"] as? Bool

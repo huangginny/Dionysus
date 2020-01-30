@@ -66,6 +66,7 @@ struct SearchBar: View {
     @State private var isLocationSearchFieldActive = false
     
     let statusBarHeight: CGFloat
+    let plugin: SitePlugin
     let onCommit: (String, String)->()
     
     func onCommitWithNameAndLocation() {
@@ -75,7 +76,7 @@ struct SearchBar: View {
     var body: some View {
         let nameSearchField = SearchField(
             isActive: $isNameSearchFieldActive,
-            placeholder: "Enter name",
+            placeholder: "Search",
             text: $name,
             onCommit: onCommitWithNameAndLocation
         )
@@ -86,75 +87,85 @@ struct SearchBar: View {
             onCommit: onCommitWithNameAndLocation
         )
         
-        return HStack(alignment: .firstTextBaseline) {
-            Button(action: {
-                // TODO:Go back to root view
-                self.name = ""
-                self.location = ""
-                nameSearchField.text.wrappedValue = ""
-                locationSearchField.text.wrappedValue = ""
-            }) {
-                Image(systemName: "xmark")
-                    .padding(.leading)
-            }.foregroundColor(.white)
-            VStack {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .frame(width: 20.0)
-                        .foregroundColor(isNameSearchFieldActive ? .orange : .gray)
-                    nameSearchField
-                    if isNameSearchFieldActive {
-                        Button(action: {
-                            self.name = ""
-                            nameSearchField.text.wrappedValue = ""
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(COLOR_LIGHT_GRAY)
-                                .frame(width: 20.0)
+        return VStack(spacing: 0) {
+            HStack(alignment: .firstTextBaseline) {
+                Button(action: {
+                    // TODO:Go back to root view
+                    self.name = ""
+                    self.location = ""
+                    nameSearchField.text.wrappedValue = ""
+                    locationSearchField.text.wrappedValue = ""
+                }) {
+                    Image(systemName: "xmark")
+                        .padding(.leading)
+                }.foregroundColor(.white)
+                VStack {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .frame(width: 20.0)
+                            .foregroundColor(isNameSearchFieldActive ? .orange : .gray)
+                        nameSearchField
+                        if isNameSearchFieldActive {
+                            Button(action: {
+                                self.name = ""
+                                nameSearchField.text.wrappedValue = ""
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(COLOR_LIGHT_GRAY)
+                                    .frame(width: 20.0)
+                            }
                         }
                     }
-                }
-                .padding(3.0)
-                .background(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color.white, lineWidth: 5)
-                )
-                HStack {
-                    Image(systemName: "mappin")
-                        .frame(width: 20.0)
-                        .foregroundColor(locationSearchField.isActive ? .orange : .gray)
-                    locationSearchField
-                    if isLocationSearchFieldActive {
-                        Button(action: {
-                            self.location = ""
-                            locationSearchField.text.wrappedValue = ""
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(COLOR_LIGHT_GRAY)
-                                .frame(width: 20.0)
+                    .padding(3.0)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 5)
+                            .stroke(Color.white, lineWidth: 5)
+                    )
+                    HStack {
+                        Image(systemName: "mappin")
+                            .frame(width: 20.0)
+                            .foregroundColor(locationSearchField.isActive ? .orange : .gray)
+                        locationSearchField
+                        if isLocationSearchFieldActive {
+                            Button(action: {
+                                self.location = ""
+                                locationSearchField.text.wrappedValue = ""
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(COLOR_LIGHT_GRAY)
+                                    .frame(width: 20.0)
+                            }
                         }
                     }
+                    .padding(3.0)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 5)
+                            .stroke(Color.white, lineWidth: 5)
+                    )
                 }
-                .padding(3.0)
-                .background(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color.white, lineWidth: 5)
-                )
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
+            .padding(.top, statusBarHeight + 15)
+            .padding(.bottom, 15)
+            .frame(height: 80.0 + statusBarHeight)
+            .background(Color.gray)
+            HStack {
+                Spacer()
+                Text("Search engine brought to you by \(plugin.name)").font(.caption)
+                Image(plugin.logo).resizable().frame(width: 15, height: 15)
+                Spacer()
+            }
+            .frame(minHeight: 20)
+            .background(COLOR_LIGHT_GRAY)
         }
-        .padding(.top, statusBarHeight + 15)
-        .padding(.bottom, 15)
-        .frame(height: 80.0 + statusBarHeight)
-        .background(Color.gray)
     }
 }
 
 struct SearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        SearchBar(statusBarHeight: 20, onCommit:{_,_ in logMessage("Previewing search bar")})
-            .previewLayout(.fixed(width: 300, height: 100))
+        SearchBar(statusBarHeight: 20, plugin: mockSetting.defaultSitePlugin, onCommit:{_,_ in logMessage("Previewing search bar")})
+            .previewLayout(.fixed(width: 300, height: 120))
     }
 }

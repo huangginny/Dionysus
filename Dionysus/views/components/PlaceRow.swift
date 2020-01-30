@@ -15,6 +15,7 @@ struct PlaceRow: View {
             if isNonEmptyString(place.imageUrl) {
                 URLImage(withURL: place.imageUrl!)
                     .frame(width: 50, height: 50)
+                    .clipped()
             }
             VStack {
                 HStack {
@@ -34,6 +35,7 @@ struct PlaceRow: View {
                 .font(.footnote)
                 .foregroundColor(.gray)
                 .lineLimit(1)
+                .padding(.top, 5)
             }
         }
     }

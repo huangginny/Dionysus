@@ -41,12 +41,12 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     var locationAuthorizedStatus = CLAuthorizationStatus.notDetermined
     var locManager = CLLocationManager()
-    var ongoingSearchTerm = ""
+    var ongoingSearchTermWithCoordinate = "" // a value would only exist when searching with coordinate
     
     override init() {
         // read settings from json file
         //self.setting = Setting(defaultSite: "yelp", activeSites: ["4sq", "mock"])
-        self.setting = Setting(defaultSite: "4sq", activeSites: ["4sq", "yelp"])
+        self.setting = Setting(defaultSite: "yelp", activeSites: ["4sq", "yelp"])
         super.init()
         locManager.delegate = self
     }
@@ -67,8 +67,8 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
         isLoading = true
         loadError = ""
         if location == "" {
-            ongoingSearchTerm = name
-            handleNewAuthorization()
+            ongoingSearchTermWithCoordinate = name
+            requestLocation()
             return
         }
         setting.defaultSitePlugin.searchForPlaces(
@@ -77,6 +77,22 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
             successCallbackFunc: _onPlaceSearchComplete,
             errorCallbackFunc: _onPlaceSearchError
         )
+    }
+    
+    func requestLocation() {
+        switch locationAuthorizedStatus {
+        case .restricted, .denied:
+            ongoingSearchTermWithCoordinate = ""
+            isLoading = false
+            loadError = "Location services is not enabled. " +
+                "Please either enter a place name or enable your location services in device Settings."
+            break
+        case .authorizedWhenInUse, .authorizedAlways:
+            locManager.startUpdatingLocation()
+            break
+        default:
+            locManager.requestWhenInUseAuthorization()
+        }
     }
 
     func _onPlaceSearchComplete(places: [PlaceInfoModel], plugin: SitePlugin) {
@@ -103,14 +119,17 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
                          didChangeAuthorization status: CLAuthorizationStatus) {
         logMessage("Authorization changed: \(status.rawValue)")
         locationAuthorizedStatus = CLAuthorizationStatus.authorizedWhenInUse
-        if isLoading {
-            handleNewAuthorization()
+        if isLoading && ongoingSearchTermWithCoordinate != "" {
+            requestLocation()
         }
     }
     
     func locationManager(_ manager: CLLocationManager,
                          didUpdateLocations locations: [CLLocation]) {
         logMessage("\(locations)")
+        if !isLoading || ongoingSearchTermWithCoordinate == "" {
+            return
+        }
         let location = locations.last
         guard let coordinate = location?.coordinate else {
             isLoading = false
@@ -118,33 +137,17 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
             return
         }
         setting.defaultSitePlugin.searchForPlaces(
-            with: ongoingSearchTerm,
-            coordinate: coordinate,
+            with: ongoingSearchTermWithCoordinate,
+            coordinate: Coordinate(latitude: coordinate.latitude, longitude: coordinate.longitude),
             successCallbackFunc: _onPlaceSearchComplete,
             errorCallbackFunc: _onPlaceSearchError
         )
-        ongoingSearchTerm = ""
+        ongoingSearchTermWithCoordinate = ""
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         logMessage("\(error)")
         isLoading = false
         loadError = "Cannot retrieve location data from device. Please enter a location in search."
-    }
-    
-    func handleNewAuthorization() {
-        switch locationAuthorizedStatus {
-        case .restricted, .denied:
-            ongoingSearchTerm = ""
-            isLoading = false
-            loadError = "Location services is not enabled. " +
-                "Please either enter a place name or enable your location services in device Settings."
-            break
-        case .authorizedWhenInUse, .authorizedAlways:
-            locManager.requestLocation()
-            break
-        default:
-            locManager.requestWhenInUseAuthorization()
-        }
     }
 }

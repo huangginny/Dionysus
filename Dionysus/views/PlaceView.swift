@@ -46,7 +46,7 @@ struct Info: View {
                         }
                     }
                 }
-                if (place.permanently_closed != nil || place.open_now != nil || isNonEmptyString(place.hours)) {
+                if (place.permanently_closed == true || place.open_now != nil || isNonEmptyString(place.hours)) {
                     HStack(alignment: .firstTextBaseline) {
                         Image(systemName:  "clock").frame(width: 20)
                         if place.permanently_closed ?? false {

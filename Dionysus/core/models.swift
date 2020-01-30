@@ -10,12 +10,17 @@ import Foundation
 import Combine
 import CoreLocation
 
+struct Coordinate {
+    let latitude: Double
+    let longitude: Double
+}
+
 struct PlaceInfoModel : Identifiable {
     let id = UUID()
     let place_id: String
     let name: String
     let formattedAddress: [String]
-    let coordinate: CLLocationCoordinate2D
+    let coordinate: Coordinate
     let postalCode: String
     
     // On rating card
@@ -144,7 +149,7 @@ let cupboard = PlaceInfoModel(
     place_id: "Cupboard_Under_the_Stairs",
     name:"The Cupboard Under the Stairs",
     formattedAddress: ["4 Privet Drive", "Little Whinging","Surrey","United Kingdom"],
-    coordinate: CLLocationCoordinate2D(latitude: 23.70870, longitude: -23.4567889),
+    coordinate: Coordinate(latitude: 23.70870, longitude: -23.4567889),
     postalCode: "SE1 2SW",
     score:1.1,
     numOfScores: 4,
@@ -156,7 +161,7 @@ let ootp = PlaceInfoModel(
     place_id: "Order_of_the_Phoenix",
     name:"Order of the Phoenix HQ",
     formattedAddress: ["12 Grimmauld Pl", "London"],
-    coordinate: CLLocationCoordinate2D(latitude: 23.70870, longitude: -23.4567889),
+    coordinate: Coordinate(latitude: 23.70870, longitude: -23.4567889),
     postalCode: "SE1 2SW",
     score:8.8,
     numOfScores: 28,

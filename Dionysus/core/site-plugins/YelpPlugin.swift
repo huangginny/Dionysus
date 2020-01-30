@@ -7,12 +7,12 @@
 //
 
 import Foundation
-import CoreLocation
 
 class YelpPlugin : SitePlugin {
     
     var name: String
     var logo: String
+    var colorCode: String
     var totalScore: Int
     
     let baseUrl = "https://api.yelp.com/v3/businesses/search?"
@@ -20,6 +20,7 @@ class YelpPlugin : SitePlugin {
     required init() {
         name = "Yelp"
         logo = "yelp-icon"
+        colorCode = "#D32323"
         totalScore = 5
     }
     
@@ -40,7 +41,7 @@ class YelpPlugin : SitePlugin {
     
     func searchForPlaces(
         with name: String,
-        coordinate: CLLocationCoordinate2D,
+        coordinate: Coordinate,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void
     ) {
@@ -102,7 +103,7 @@ class YelpPlugin : SitePlugin {
                 place_id: place_id,
                 name: name,
                 formattedAddress: addr,
-                coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon),
+                coordinate: Coordinate(latitude: lat, longitude: lon),
                 postalCode: postalCode,
                 
                 score: score,

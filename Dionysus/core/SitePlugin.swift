@@ -16,6 +16,7 @@ protocol SitePlugin {
     
     var name: String { get }
     var logo: String { get }
+    var colorCode: String { get }
     var totalScore: Int { get }
     
     init()
@@ -29,7 +30,7 @@ protocol SitePlugin {
     
     func searchForPlaces(
         with name:String,
-        coordinate: CLLocationCoordinate2D,
+        coordinate: Coordinate,
         successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping(String, SitePlugin) -> Void
     )
@@ -45,11 +46,13 @@ class MockPlugin : SitePlugin {
     
     var name: String
     var logo: String
+    var colorCode: String
     var totalScore: Int
     
     required init() {
         name = "Mock Plugin"
         logo = "mock-plugin-logo"
+        colorCode = "#EB5244"
         totalScore = 10
     }
     
@@ -68,7 +71,7 @@ class MockPlugin : SitePlugin {
     
     func searchForPlaces(
         with name: String,
-        coordinate: CLLocationCoordinate2D,
+        coordinate: Coordinate,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
         

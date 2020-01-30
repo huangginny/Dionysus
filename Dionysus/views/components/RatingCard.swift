@@ -121,10 +121,15 @@ struct RatingCard: View {
                     Text("\(String(format: "%.1f", loader.place!.score!))")
                         .font(
                             .init(Font.system(
-                                size: 48, weight: .regular, design: .default
+                                size: 40, weight: .regular, design: .default
                         )))
                         .lineLimit(1)
-                    Text("/\(String(loader.plugin.totalScore))").lineLimit(1)
+                    Text("/\(String(loader.plugin.totalScore))")
+                        .font(
+                            .init(Font.system(
+                                size: 18, weight: .light, design: .default
+                        )))
+                        .lineLimit(1)
                 }
                 .foregroundColor(getColor())
                 .frame(width:100)
@@ -135,7 +140,7 @@ struct RatingCard: View {
                         if loader.plugin.name == "Yelp" {
                             YelpScoreBar(score: loader.place!.score!)
                         } else if visiblePercentage > 0 {
-                            ScoreBar(percentage: visiblePercentage, color: getColor())
+                            ScoreBar(percentage: visiblePercentage, color: getColorFromHex(loader.plugin.colorCode))
                         }
                         HStack(spacing:0) {
                             Spacer()

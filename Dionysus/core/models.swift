@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import CoreLocation
+import MapKit
 
 struct Coordinate {
     let latitude: Double
@@ -61,11 +62,20 @@ class PlaceHolderModel: ObservableObject, Identifiable {
     
     @Published var infoForSite = [String : InfoLoader]()
     @Published var defaultPlaceInfoLoader : InfoLoader
+    var mapItem : MKMapItem
     let currentSetting : Setting
     
     init(with place: PlaceInfoModel, plugin: SitePlugin, setting: Setting) {
         currentSetting = setting
         defaultPlaceInfoLoader = InfoLoader(plugin: plugin, place: place)
+        let coord = CLLocationCoordinate2D(
+            latitude: place.coordinate.latitude,
+            longitude: place.coordinate.longitude
+        )
+        let placemark = MKPlacemark(coordinate: coord)
+        mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = place.name
+        mapItem.phoneNumber = place.phone
     }
     
     func loadPlaces() {

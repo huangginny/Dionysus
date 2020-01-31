@@ -7,9 +7,11 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct Info: View {
     var place: PlaceInfoModel
+    var mapItem: MKMapItem
     var size: CGSize
     
     var body: some View {
@@ -29,6 +31,9 @@ struct Info: View {
                 HStack(alignment: .firstTextBaseline) {
                     Image(systemName: "mappin.and.ellipse").frame(width: 20)
                     Text(place.formattedAddress.joined(separator: "\n"))
+                        .onTapGesture {
+                            self.mapItem.openInMaps(launchOptions: nil)
+                    }
                     Spacer()
                     if isNonEmptyString(getFormattedDistance(place.distance)) {
                         Text("(\(getFormattedDistance(place.distance)!))")
@@ -81,7 +86,10 @@ struct PlaceView: View {
         GeometryReader { geometry in
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing:0) {
-                    Info(place: self.placeHolder.defaultPlaceInfoLoader.place!, size: geometry.size)
+                    Info(
+                        place: self.placeHolder.defaultPlaceInfoLoader.place!,
+                        mapItem: self.placeHolder.mapItem,
+                        size: geometry.size)
                     RatingCard(loader: self.placeHolder.defaultPlaceInfoLoader)
                     ForEach(Array(self.placeHolder.infoForSite.values), id: \.id) { loader in
                         RatingCard(loader:loader)

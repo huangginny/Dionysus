@@ -27,6 +27,7 @@
 		F2D9AAFD23CF1E07000FF82D /* RatingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AAFC23CF1E07000FF82D /* RatingCard.swift */; };
 		F2D9AAFF23CF1E2A000FF82D /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */; };
 		F2D9AB0123D13AA8000FF82D /* SitePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AB0023D13AA8000FF82D /* SitePlugin.swift */; };
+		F2EBF40C23E4114F00ADB0C1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2EBF40B23E4114F00ADB0C1 /* MapKit.framework */; };
 		F2FF8C3923C9A3BF008A638E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FF8C3823C9A3BF008A638E /* AppDelegate.swift */; };
 		F2FF8C3B23C9A3BF008A638E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FF8C3A23C9A3BF008A638E /* SceneDelegate.swift */; };
 		F2FF8C3D23C9A3BF008A638E /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FF8C3C23C9A3BF008A638E /* RootView.swift */; };
@@ -81,6 +82,7 @@
 		F2D9AAFC23CF1E07000FF82D /* RatingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCard.swift; sourceTree = "<group>"; };
 		F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
 		F2D9AB0023D13AA8000FF82D /* SitePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SitePlugin.swift; sourceTree = "<group>"; };
+		F2EBF40B23E4114F00ADB0C1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F2FF8C3523C9A3BF008A638E /* Dionysus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dionysus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2FF8C3823C9A3BF008A638E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F2FF8C3A23C9A3BF008A638E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F26F237A23D8345100B7B162 /* CoreLocation.framework in Frameworks */,
+				F2EBF40C23E4114F00ADB0C1 /* MapKit.framework in Frameworks */,
 				5E09A569E1EB8A1B7ACF9186 /* Pods_Dionysus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -174,6 +177,7 @@
 		F26F237823D8345100B7B162 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F2EBF40B23E4114F00ADB0C1 /* MapKit.framework */,
 				F26F237923D8345100B7B162 /* CoreLocation.framework */,
 				654D6E37197050FBAC9CE360 /* Pods_Dionysus.framework */,
 				B2127B06C206321A259D5635 /* Pods_Dionysus_DionysusUITests.framework */,

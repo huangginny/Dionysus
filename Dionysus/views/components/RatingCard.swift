@@ -85,16 +85,24 @@ struct RatingCard: View {
             return COLOR_LIGHT_GRAY
         }
         switch actualPercentage {
-        case 0..<40:
-            return Color.red
-        case 40..<60:
-            return Color.orange
-        case 60..<80:
-            return Color.yellow
-        case 80..<100:
-            fallthrough
+        case 90...:
+            return getColorFromHex("#43603a")
+        case 80..<90:
+            return getColorFromHex("#52703d")
+        case 70..<80:
+            return getColorFromHex("#759444")
+        case 60..<70:
+            return getColorFromHex("#94b654")
+        case 50..<60:
+            return getColorFromHex("#98c475")
+        case 40..<50:
+            return getColorFromHex("#8fc6a0")
+        case 30..<40:
+            return getColorFromHex("#8ec5b8")
+        case 20..<30:
+            return getColorFromHex("#b3c1c0")
         default:
-            return Color.init(red: 0, green: 0.6, blue: 0)
+            return getColorFromHex("#c0c0c0")
         }
     }
     
@@ -102,15 +110,17 @@ struct RatingCard: View {
         HStack {
             if loader.isLoading {
                 // Loading
-                ActivityIndicator().padding(.leading, horizontalPadding)
+                Spacer()
+                ActivityIndicator()
                 Text("Loading rating from \(loader.plugin.name)...")
                 Spacer()
                 Image(loader.plugin.logo).resizable()
                     .frame(width: 25, height: 25, alignment: .bottomTrailing)
                     .padding(.trailing, horizontalPadding)
             } else if loader.message != "" {
-                // Place does not exist
-                Text(loader.message).padding(.leading, horizontalPadding)
+                // Place does not exist or has no score
+                Spacer()
+                Text(loader.message)
                 Spacer()
                 Image(loader.plugin.logo).resizable()
                     .frame(width: 25, height: 25, alignment: .bottomTrailing)
@@ -118,13 +128,13 @@ struct RatingCard: View {
             } else {
                 // Exising rating with score
                 HStack(alignment: .bottom, spacing:0) {
-                    Text("\(String(format: "%.1f", loader.place!.score!))")
+                    Text("\(Int(round(visiblePercentage)))")
                         .font(
                             .init(Font.system(
                                 size: 40, weight: .regular, design: .default
                         )))
                         .lineLimit(1)
-                    Text("/\(String(loader.plugin.totalScore))")
+                    Text("%")
                         .font(
                             .init(Font.system(
                                 size: 18, weight: .light, design: .default
@@ -150,7 +160,7 @@ struct RatingCard: View {
                         .frame(width: 60)
                     }.onAppear {
                         let actualPercentage = self.loader.place!.score! / Double(self.loader.plugin.totalScore) * 100
-                        Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { timer in
+                        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
                             self.visiblePercentage = min(self.visiblePercentage + 1, actualPercentage)
                             if (self.visiblePercentage >= actualPercentage) {
                                 timer.invalidate()
@@ -159,18 +169,23 @@ struct RatingCard: View {
                     }
                     Spacer()
                     Divider()
-                    HStack {
+                    HStack(spacing:0) {
+                        Text("\(String(format: "%.1f", loader.place!.score!))" +
+                            " / \(loader.plugin.totalScore)").fontWeight(.semibold)
+                        Text(" by \(loader.place!.numOfScores!) user" +
+                            "\(loader.place!.numOfScores! > 1 ? "s" : "") on ")
                         Spacer()
-                        Text("by \(loader.place!.numOfScores!) user\(loader.place!.numOfScores! > 1 ? "s" : "") on ")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
                         Image(loader.plugin.logo).resizable().frame(width: 25, height: 25, alignment: .bottomTrailing)
                     }
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .lineLimit(1)
                     .padding(.bottom, 10)
                 }
                 .padding(.horizontal, horizontalPadding)
             }
         }
+        
         .padding()
         .onTapGesture {
             if let urlString = self.loader.place?.url {
@@ -181,8 +196,8 @@ struct RatingCard: View {
         .frame(height:150)
         .background(
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white)
-                .shadow(color: COLOR_LIGHT_GRAY, radius: 10)
+                .fill(Color(UIColor.systemBackground))
+                .shadow(color: COLOR_LIGHT_GRAY, radius: 20)
                 .padding()
         )
     }

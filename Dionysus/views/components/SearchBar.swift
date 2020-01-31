@@ -33,8 +33,12 @@ struct SearchField : UIViewRepresentable {
         
         let field = UITextField()
         field.delegate = delegate
-        field.placeholder = placeholder
         field.text = text.wrappedValue
+        field.textColor = UIColor.black
+        field.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
+        )
         field.autocorrectionType = UITextAutocorrectionType.no
         field.returnKeyType = UIReturnKeyType.search
         NotificationCenter.default.addObserver(forName: UITextField.textDidBeginEditingNotification, object: field, queue: OperationQueue.main, using: {(notification: Notification) in
@@ -103,7 +107,11 @@ struct SearchBar: View {
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .frame(width: 20.0)
-                            .foregroundColor(isNameSearchFieldActive ? .orange : .gray)
+                            .foregroundColor(
+                                isNameSearchFieldActive ?
+                                    COLOR_THEME_ORANGE :
+                                    COLOR_THEME_LIME
+                        )
                         nameSearchField
                         if isNameSearchFieldActive {
                             Button(action: {
@@ -111,7 +119,7 @@ struct SearchBar: View {
                                 nameSearchField.text.wrappedValue = ""
                             }) {
                                 Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(COLOR_LIGHT_GRAY)
+                                    .foregroundColor(Color(UIColor.lightGray))
                                     .frame(width: 20.0)
                             }
                         }
@@ -125,7 +133,10 @@ struct SearchBar: View {
                     HStack {
                         Image(systemName: "mappin")
                             .frame(width: 20.0)
-                            .foregroundColor(locationSearchField.isActive ? .orange : .gray)
+                            .foregroundColor(
+                                locationSearchField.isActive ?
+                                    COLOR_THEME_ORANGE :
+                                    COLOR_THEME_LIME)
                         locationSearchField
                         if isLocationSearchFieldActive {
                             Button(action: {
@@ -133,7 +144,7 @@ struct SearchBar: View {
                                 locationSearchField.text.wrappedValue = ""
                             }) {
                                 Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(COLOR_LIGHT_GRAY)
+                                    .foregroundColor(Color(UIColor.lightGray))
                                     .frame(width: 20.0)
                             }
                         }
@@ -148,17 +159,18 @@ struct SearchBar: View {
                 .padding(.horizontal)
             }
             .padding(.top, statusBarHeight + 15)
-            .padding(.bottom, 15)
+            .padding(.bottom, 20)
             .frame(height: 80.0 + statusBarHeight)
-            .background(Color.gray)
+            .background(COLOR_THEME_LIME)
             HStack {
                 Spacer()
-                Text("Search engine brought to you by \(plugin.name)").font(.caption)
+                Text("Search engine brought to you by \(plugin.name)")
+                    .font(.caption).foregroundColor(.white)
                 Image(plugin.logo).resizable().frame(width: 15, height: 15)
                 Spacer()
             }
             .frame(minHeight: 20)
-            .background(COLOR_LIGHT_GRAY)
+            .background(COLOR_THEME_GREEN)
         }
     }
 }

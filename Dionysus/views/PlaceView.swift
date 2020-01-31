@@ -68,7 +68,7 @@ struct Info: View {
                 }
             }
             .padding()
-            .background(Color.white.opacity(0.8))
+            .background(Color(UIColor.systemBackground).opacity(0.8))
         }
     }
 }

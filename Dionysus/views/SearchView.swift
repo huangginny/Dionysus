@@ -12,11 +12,29 @@ import Combine
 struct SearchView: View {
     @ObservedObject var state: AppState
     @State private var showAlert = false
+    @State private var keyboardHeight = 0.0
     
     let statusBarHeight: CGFloat
     
     var body: some View {
         UITableView.appearance().tableFooterView = UIView()
+        NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillShowNotification,
+            object: nil,
+            queue: OperationQueue.main,
+            using: { (notification: Notification) in
+                if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                    let keyboardRectangle = keyboardFrame.cgRectValue
+                    self.keyboardHeight = Double(keyboardRectangle.height)
+                }
+        })
+        NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillHideNotification,
+            object: nil,
+            queue: OperationQueue.main,
+            using: { (notification: Notification) in
+                self.keyboardHeight = 0
+            })
         return NavigationView {
             VStack {
                 SearchBar(
@@ -40,17 +58,22 @@ struct SearchView: View {
                     Text(state.loadError).padding()
                     Spacer()
                 } else {
-                    List(self.state.placeSearchResults) { result in
-                        NavigationLink(destination:
-                            PlaceView(
-                                placeHolder: PlaceHolderModel(
-                                    with: result,
-                                    plugin: self.state.pluginOfPlaceSearchResults!,
-                                    setting: self.state.setting
-                            ))
-                        ) {
-                            PlaceRow(place: result)
-                        }
+                    GeometryReader { geometry in
+                        List(self.state.placeSearchResults) { result in
+                            NavigationLink(destination:
+                                PlaceView(
+                                    placeHolder: PlaceHolderModel(
+                                        with: result,
+                                        plugin: self.state.pluginOfPlaceSearchResults!,
+                                        setting: self.state.setting
+                                ))
+                            ) {
+                                PlaceRow(place: result)
+                            }
+                        }.frame(height:
+                            geometry.size.height - CGFloat(self.keyboardHeight) + self.statusBarHeight
+                        )
+                        Spacer()
                     }
                 }
             }

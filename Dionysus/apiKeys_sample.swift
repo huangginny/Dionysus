@@ -8,11 +8,15 @@
 
 import Foundation
 
-/** Yelp */
+/**
+ Yelp 
+*/
 let YELP_CLIENT_ID = ""
 let YELP_API_KEY = ""
 
-/** 4sq*/
+/**
+ 4sq
+*/
 let FOURSQUARE_CLIENT_ID = ""
 let FOURSQUARE_CLIENT_SECRET = ""
 let FOURSQUARE_VERSION = "20200124"

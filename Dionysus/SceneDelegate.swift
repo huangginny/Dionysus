@@ -14,11 +14,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
         let appState = AppState()
         
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
+            window.tintColor = UIColor(named: "tintColor")
             let statusBarHeight =  window.windowScene?.statusBarManager?.statusBarFrame.height ?? 20
             let rootView = RootView(state: appState, statusBarHeight: statusBarHeight)
             window.rootViewController = UIHostingController(rootView: rootView)

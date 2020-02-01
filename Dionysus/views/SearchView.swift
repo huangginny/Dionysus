@@ -62,13 +62,9 @@ struct SearchView: View {
                         List(self.state.placeSearchResults) { result in
                             NavigationLink(destination:
                                 PlaceView(
-                                    placeHolder: PlaceHolderModel(
-                                        with: result,
-                                        plugin: self.state.pluginOfPlaceSearchResults!,
-                                        setting: self.state.setting
-                                ))
+                                    placeHolder: result)
                             ) {
-                                PlaceRow(place: result)
+                                PlaceRow(place: result.defaultPlaceInfoLoader.place!)
                             }
                         }.frame(height:
                             geometry.size.height - CGFloat(self.keyboardHeight) + self.statusBarHeight

@@ -33,7 +33,7 @@ struct Setting {
 class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     @Published var setting : Setting
-    @Published var placeSearchResults: [PlaceInfoModel] = []
+    @Published var placeSearchResults: [PlaceHolderModel] = []
     @Published var isLoading = false
     @Published var loadError = ""
     
@@ -46,7 +46,7 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     override init() {
         // read settings from json file
         //self.setting = Setting(defaultSite: "yelp", activeSites: ["4sq", "mock"])
-        self.setting = Setting(defaultSite: "yelp", activeSites: ["4sq", "yelp"])
+        self.setting = Setting(defaultSite: "4sq", activeSites: ["4sq", "yelp"])
         super.init()
         locManager.delegate = self
     }
@@ -98,7 +98,7 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     func _onPlaceSearchComplete(places: [PlaceInfoModel], plugin: SitePlugin) {
         logMessage("Searching completed with \(places)")
         DispatchQueue.main.async {
-            self.placeSearchResults = places
+            self.placeSearchResults = places.map{ PlaceHolderModel(with: $0, plugin: plugin, setting: self.setting)}
             self.pluginOfPlaceSearchResults = plugin
             self.isLoading = false
         }

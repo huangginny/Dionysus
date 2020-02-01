@@ -16,8 +16,7 @@ struct Coordinate {
     let longitude: Double
 }
 
-struct PlaceInfoModel : Identifiable {
-    let id = UUID()
+struct PlaceInfoModel {
     let place_id: String
     let name: String
     let formattedAddress: [String]

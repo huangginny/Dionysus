@@ -35,15 +35,15 @@ struct RootView: View {
                 )
             )
         ])
-            /**Text("Settings...")
-                .font(.title)
-                .tabItem {
-                    VStack {
-                        Image(systemName: "gear")
-                        Text("Settings")
-                    }
+        /**Text("Settings...")
+            .font(.title)
+            .tabItem {
+                VStack {
+                    Image(systemName: "gear")
+                    Text("Settings")
                 }
-                .tag(1)
+            }
+            .tag(1)
         }*/
     }
 }

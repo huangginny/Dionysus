@@ -9,17 +9,17 @@ struct TabBar: View {
     var viewControllers: [UIHostingController<AnyView>]
     @State var selection = 0
 
-    init(_ tabs: [Tab], selection: Int) {
+    init(_ tabs: [Tab]) {
         self.viewControllers = tabs.map {
             let host = UIHostingController(rootView: $0.view)
             host.tabBarItem = $0.barItem
             return host
         }
-        self.selection = selection
     }
 
     var body: some View {
-        TabBarController(controllers: viewControllers, selection: $selection).edgesIgnoringSafeArea(.bottom)
+        TabBarController(controllers: viewControllers, selection: $selection)
+            .edgesIgnoringSafeArea(selection == 0 ? .vertical : .bottom)
     }
 
     struct Tab {
@@ -36,18 +36,19 @@ struct TabBar: View {
 struct TabBarController: UIViewControllerRepresentable {
     
     var controllers: [UIViewController]
-    var selection: Binding<Int>
+    @Binding var selection: Int
 
     func makeUIViewController(context: Context) -> UITabBarController {
         let tabBarController = UITabBarControllerWithDelegate()
-        tabBarController.updateSelectedIndex = { self.selection.wrappedValue = $0 }
+        tabBarController.delegate = tabBarController
+        tabBarController.updateSelectedIndex = { self.selection = $0 }
         tabBarController.viewControllers = controllers
-        tabBarController.selectedIndex = selection.wrappedValue
+        tabBarController.selectedIndex = selection
         return tabBarController
     }
     
     func updateUIViewController(_ uiViewController: UITabBarController, context: UIViewControllerRepresentableContext<TabBarController>) {
-        uiViewController.selectedIndex = selection.wrappedValue
+        uiViewController.selectedIndex = selection
         return
     }
 }

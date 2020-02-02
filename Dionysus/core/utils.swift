@@ -33,13 +33,11 @@ func getRawPhoneNumber(_ str: String?) -> String? {
 
 func getFormattedDistance(_ meters: Double?) -> String? {
     if let meters = meters {
-        if meters >= 1000 {
-            return "~\(String(format: "%.1f", meters / 1000))km"
-        }
-        if meters < 50 {
-            return "<50m"
-        }
-        return "~\(Int(round(meters)))m"
+        let measurement = Measurement(value: meters, unit: UnitLength.meters)
+        let measurementFormatter = MeasurementFormatter()
+        measurementFormatter.numberFormatter.maximumFractionDigits = 1
+        let distanceStr = measurementFormatter.string(from: measurement)
+        return "~\(distanceStr)"
     }
     return nil
 }

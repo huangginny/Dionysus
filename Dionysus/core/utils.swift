@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 
 func logMessage(_ message: String, fileName: String = #file, functionName: String = #function) {
     print("[DYONYSUS] | \(getCurrentTimestamp()) - \(fileName.components(separatedBy: "/").last ?? "") - \(functionName) \(message)")
@@ -40,6 +41,10 @@ func getFormattedDistance(_ meters: Double?) -> String? {
         return "~\(distanceStr)"
     }
     return nil
+}
+
+func getScreenWidth() -> Int {
+    return Int(ceil(UIScreen.main.bounds.width))
 }
 
 // Reference: https://www.iosapptemplates.com/blog/swift-programming/convert-hex-colors-to-uicolor-swift-4
@@ -81,7 +86,9 @@ func getBestMatchByFuzzyDistance(with place: PlaceInfoModel, candidates: [PlaceI
         return bestCandidate
     }
     return candidates
-        .filter({$0.postalCode == place.postalCode}) // disregard bad post code
+        .filter({$0.postalCode == nil
+            || place.postalCode == nil
+            || $0.postalCode == place.postalCode}) // disregard bad post code
         .sorted(by: { // get best fuzzy match result
             getMatchingScore(to: place, current: $0) < getMatchingScore(to: place, current: $1)
         })

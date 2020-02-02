@@ -45,8 +45,8 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     override init() {
         // read settings from json file
-        //self.setting = Setting(defaultSite: "yelp", activeSites: ["4sq", "mock"])
-        self.setting = Setting(defaultSite: "4sq", activeSites: ["4sq", "yelp"])
+        self.setting = Setting(defaultSite: "google", activeSites: ["yelp", "4sq"])
+        //self.setting = Setting(defaultSite: "4sq", activeSites: ["4sq", "yelp", "google"])
         super.init()
         locManager.delegate = self
     }

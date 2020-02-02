@@ -60,7 +60,13 @@ class YelpPlugin : SitePlugin {
         for place: PlaceInfoModel,
         successCallbackFunc: @escaping (PlaceInfoModel, SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
-        successCallbackFunc(place, self)
+        if let _ = place.score, let _ = place.numOfScores {
+            logMessage("Score exists")
+            successCallbackFunc(place, self)
+        } else {
+            logMessage("Score does not exist for place \(place)")
+            errorCallbackFunc("This place is not rated yet.", self)
+        }
     }
     
     func _searchForPlacesHelper(
@@ -94,9 +100,7 @@ class YelpPlugin : SitePlugin {
                 let lon = coordinate["longitude"],
                 let lat = coordinate["latitude"],
                 let addr = location["display_address"] as? [String],
-                let postalCode = location["zip_code"] as? String,
-                let score = biz["rating"] as? Double,
-                let num = biz["review_count"] as? Int else {
+                let postalCode = location["zip_code"] as? String else {
                     logMessage("Fails to denormalize basic information")
                     return nil
             }
@@ -108,8 +112,8 @@ class YelpPlugin : SitePlugin {
                 coordinate: Coordinate(latitude: lat, longitude: lon),
                 postalCode: postalCode,
                 
-                score: score,
-                numOfScores: num,
+                score: biz["rating"] as? Double,
+                numOfScores: biz["review_count"] as? Int,
                 url: biz["url"] as? String,
                 price: (biz["price"] as? String)?.count ?? 0,
                 

@@ -11,8 +11,8 @@ import MapKit
 
 struct Info: View {
     var place: PlaceInfoModel
-    var mapItem: MKMapItem
     var size: CGSize
+    var onTapAddress: () -> ()
     
     var body: some View {
         VStack {
@@ -21,10 +21,10 @@ struct Info: View {
                     .frame(width: size.width, height: CGFloat(PHOTO_HEIGHT), alignment: .top)
             }
             VStack {
-                if place.categories != nil && place.categories!.count > 0 {
+                if place.categories.count > 0 {
                     HStack(alignment: .firstTextBaseline) {
                         Image(systemName: "list.bullet.below.rectangle").frame(width: 20)
-                        Text(place.categories!.joined(separator: ", "))
+                        Text(place.categories.joined(separator: ", "))
                         Spacer()
                     }
                 }
@@ -32,7 +32,7 @@ struct Info: View {
                     Image(systemName: "mappin.and.ellipse").frame(width: 20)
                     Text(place.formattedAddress.joined(separator: "\n"))
                         .onTapGesture {
-                            self.mapItem.openInMaps(launchOptions: nil)
+                            self.onTapAddress()
                     }
                     Spacer()
                     if isNonEmptyString(getFormattedDistance(place.distance)) {
@@ -88,8 +88,17 @@ struct PlaceView: View {
                 VStack(spacing:0) {
                     Info(
                         place: self.placeHolder.defaultPlaceInfoLoader.place!,
-                        mapItem: self.placeHolder.mapItem,
-                        size: geometry.size)
+                        size: geometry.size,
+                        onTapAddress: self.placeHolder.defaultPlaceInfoLoader.plugin.name == "Google" ?
+                            {
+                                if let urlStr = self.placeHolder.defaultPlaceInfoLoader.place?.url,
+                                    let url = URL(string: urlStr) {
+                                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                }
+                            } : {
+                                self.placeHolder.mapItem.openInMaps(launchOptions: nil)
+                            }
+                    )
                     RatingCard(loader: self.placeHolder.defaultPlaceInfoLoader)
                     ForEach(Array(self.placeHolder.infoForSite.values), id: \.id) { loader in
                         RatingCard(loader:loader)

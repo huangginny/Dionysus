@@ -13,7 +13,8 @@ import Fuse
 let NAME_TO_SITE_PLUGIN: [String: SitePlugin.Type] = [
     "mock": MockPlugin.self,
     "yelp": YelpPlugin.self,
-    "4sq": FourSquarePlugin.self
+    "4sq": FourSquarePlugin.self,
+    "google": GooglePlugin.self,
 ]
 let TIMEOUT_VALUE = 10
 let PHOTO_HEIGHT = 240

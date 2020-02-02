@@ -21,7 +21,7 @@ struct PlaceInfoModel {
     let name: String
     let formattedAddress: [String]
     let coordinate: Coordinate
-    let postalCode: String
+    var postalCode: String?
     
     // On rating card
     var score: Double?
@@ -31,7 +31,7 @@ struct PlaceInfoModel {
     
     // Optional
     var imageUrl: String?
-    var categories: [String]?
+    var categories = [String]()
     var distance: Double?
     var phone: String?
     var hours: String?

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import UIKit
 
 class FourSquarePlugin: SitePlugin {
     
@@ -150,7 +149,7 @@ class FourSquarePlugin: SitePlugin {
         if let bestPhoto = venue["bestPhoto"] as? [String: Any],
             let prefix = bestPhoto["prefix"] as? String,
             let suffix = bestPhoto["suffix"] as? String {
-            imageUrl = "\(prefix)width\(Int(ceil(UIScreen.main.bounds.width)))\(suffix)"
+            imageUrl = "\(prefix)width\(getScreenWidth())\(suffix)"
         }
         return (PlaceInfoModel(
             place_id: place_id,
@@ -164,7 +163,7 @@ class FourSquarePlugin: SitePlugin {
             url: url,
             price: price?["tier"] as? Int ?? 0,
             imageUrl: imageUrl,
-            categories: categoryList?.map{ $0["name"] as? String }.compactMap{ $0},
+            categories: categoryList?.map{ $0["name"] as? String }.compactMap{ $0} ?? [String](),
             distance: location["distance"] as? Double ?? original.distance,
             phone: contact?["formattedPhone"],
             hours: hours?["status"] as? String,

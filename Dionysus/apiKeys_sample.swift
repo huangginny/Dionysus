@@ -20,3 +20,13 @@ let YELP_API_KEY = ""
 let FOURSQUARE_CLIENT_ID = ""
 let FOURSQUARE_CLIENT_SECRET = ""
 let FOURSQUARE_VERSION = "20200124"
+
+/**
+ Google
+ */
+let GOOGLE_API_KEY = ""
+
+/**
+ Zomato
+ */
+let ZOMATO_API_KEY = ""

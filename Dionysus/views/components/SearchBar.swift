@@ -165,7 +165,7 @@ struct SearchBar: View {
             HStack {
                 Spacer()
                 if !plugin.attributionHasText {
-                    Text("Search engine powered by")
+                    Text("Search engine powered by").font(.footnote)
                 }
                 Image(plugin.attribution)
                 Spacer()

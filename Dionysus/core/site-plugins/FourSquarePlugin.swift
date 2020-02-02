@@ -12,7 +12,8 @@ import UIKit
 class FourSquarePlugin: SitePlugin {
     
     var name: String
-    var logo: String
+    var attribution: String
+    var attributionHasText: Bool
     var colorCode: String
     var totalScore: Int
     
@@ -22,7 +23,8 @@ class FourSquarePlugin: SitePlugin {
     
     required init() {
         name = "FourSquare"
-        logo = "4sq-logo"
+        attribution = "powered-by-4sq"
+        attributionHasText = true
         colorCode = "#F94877"
         totalScore = 10
     }

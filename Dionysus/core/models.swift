@@ -181,3 +181,4 @@ let ootp = PlaceInfoModel(
 )
 let cupboards = PlaceHolderModel(with: cupboard, plugin: mockSetting.defaultSitePlugin, setting: mockSetting)
 var unrated = InfoLoader(plugin: mockSetting.defaultSitePlugin, place: nil)
+var rated = InfoLoader(plugin: mockSetting.defaultSitePlugin, place: ootp)

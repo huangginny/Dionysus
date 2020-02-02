@@ -15,7 +15,8 @@ import CoreLocation
 protocol SitePlugin {
     
     var name: String { get }
-    var logo: String { get }
+    var attribution: String { get }
+    var attributionHasText: Bool { get }
     var colorCode: String { get }
     var totalScore: Int { get }
     
@@ -45,13 +46,15 @@ protocol SitePlugin {
 class MockPlugin : SitePlugin {
     
     var name: String
-    var logo: String
+    var attribution: String
+    var attributionHasText: Bool
     var colorCode: String
     var totalScore: Int
     
     required init() {
         name = "Mock Plugin"
-        logo = "mock-plugin-logo"
+        attribution = "mock-plugin-logo"
+        attributionHasText = false
         colorCode = "#EB5244"
         totalScore = 10
     }

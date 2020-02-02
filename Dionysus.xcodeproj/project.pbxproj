@@ -27,6 +27,7 @@
 		F2D9AAFD23CF1E07000FF82D /* RatingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AAFC23CF1E07000FF82D /* RatingCard.swift */; };
 		F2D9AAFF23CF1E2A000FF82D /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */; };
 		F2D9AB0123D13AA8000FF82D /* SitePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AB0023D13AA8000FF82D /* SitePlugin.swift */; };
+		F2E0050123E655D400C89DE4 /* GooglePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E0050023E655D400C89DE4 /* GooglePlugin.swift */; };
 		F2EBF40C23E4114F00ADB0C1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2EBF40B23E4114F00ADB0C1 /* MapKit.framework */; };
 		F2FF8C3923C9A3BF008A638E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FF8C3823C9A3BF008A638E /* AppDelegate.swift */; };
 		F2FF8C3B23C9A3BF008A638E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FF8C3A23C9A3BF008A638E /* SceneDelegate.swift */; };
@@ -82,6 +83,7 @@
 		F2D9AAFC23CF1E07000FF82D /* RatingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCard.swift; sourceTree = "<group>"; };
 		F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
 		F2D9AB0023D13AA8000FF82D /* SitePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SitePlugin.swift; sourceTree = "<group>"; };
+		F2E0050023E655D400C89DE4 /* GooglePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlugin.swift; sourceTree = "<group>"; };
 		F2EBF40B23E4114F00ADB0C1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F2FF8C3523C9A3BF008A638E /* Dionysus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dionysus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2FF8C3823C9A3BF008A638E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 			children = (
 				F26F237423D80E2A00B7B162 /* YelpPlugin.swift */,
 				F2D8041423DBD452005D3BCF /* FourSquarePlugin.swift */,
+				F2E0050023E655D400C89DE4 /* GooglePlugin.swift */,
 			);
 			path = "site-plugins";
 			sourceTree = "<group>";
@@ -520,6 +523,7 @@
 				F2D9AAFF23CF1E2A000FF82D /* PlaceView.swift in Sources */,
 				F28FB14023CC0512006EE676 /* SearchBar.swift in Sources */,
 				F2FF8C3D23C9A3BF008A638E /* RootView.swift in Sources */,
+				F2E0050123E655D400C89DE4 /* GooglePlugin.swift in Sources */,
 				F20C905523C9B5E200761AA8 /* models.swift in Sources */,
 				F28FB14223CC0540006EE676 /* PlaceRow.swift in Sources */,
 			);

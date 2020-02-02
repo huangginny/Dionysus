@@ -37,7 +37,7 @@ struct ScoreBar: View {
     var body: some View {
         HStack(spacing:1) {
             ForEach([0,20,40,60,80], id: \.self) { cuePoint in
-                self.getStrokeForPercentage(cuePoint: cuePoint).frame(height:15)
+                self.getStrokeForPercentage(cuePoint: cuePoint).frame(height:20)
             }
         }
     }
@@ -108,36 +108,42 @@ struct RatingCard: View {
     
     var body: some View {
         HStack {
+            Spacer()
             if loader.isLoading {
                 // Loading
-                Spacer()
-                ActivityIndicator()
-                Text("Loading rating from \(loader.plugin.name)...")
-                Spacer()
-                Image(loader.plugin.logo).resizable()
-                    .frame(width: 25, height: 25, alignment: .bottomTrailing)
-                    .padding(.trailing, horizontalPadding)
+                ActivityIndicator().padding(.leading, horizontalPadding)
+                if !loader.plugin.attributionHasText {
+                    Text("Loading place...")
+                }
+                Image(loader.plugin.attribution)
             } else if loader.message != "" {
                 // Place does not exist or has no score
-                Spacer()
-                Text(loader.message)
-                Spacer()
-                Image(loader.plugin.logo).resizable()
-                    .frame(width: 25, height: 25, alignment: .bottomTrailing)
-                    .padding(.trailing, horizontalPadding)
+                if loader.plugin.attributionHasText {
+                    VStack {
+                        Text(loader.message)
+                        Image(loader.plugin.attribution).padding(.trailing)
+                    }
+                } else {
+                    HStack {
+                        Spacer()
+                        Text(loader.message)
+                        Spacer()
+                        Image(loader.plugin.attribution).padding(.trailing)
+                    }
+                }
             } else {
                 // Exising rating with score
                 HStack(alignment: .bottom, spacing:0) {
                     Text("\(Int(round(visiblePercentage)))")
                         .font(
                             .init(Font.system(
-                                size: 40, weight: .regular, design: .default
+                                size: 48, weight: .regular, design: .default
                         )))
                         .lineLimit(1)
                     Text("%")
                         .font(
                             .init(Font.system(
-                                size: 18, weight: .light, design: .default
+                                size: 22, weight: .light, design: .default
                         )))
                         .lineLimit(1)
                 }
@@ -145,47 +151,57 @@ struct RatingCard: View {
                 .frame(width:100)
                 .padding(.leading, horizontalPadding)
                 VStack {
-                    Spacer()
-                    HStack {
+                    VStack(alignment: .leading) {
+                        Spacer()
                         if loader.plugin.name == "Yelp" {
-                            YelpScoreBar(score: loader.place!.score!)
+                            YelpScoreBar(score: loader.place!.score!).padding(.bottom, 5)
                         } else if visiblePercentage > 0 {
-                            ScoreBar(percentage: visiblePercentage, color: getColorFromHex(loader.plugin.colorCode))
+                            ScoreBar(
+                                percentage: visiblePercentage,
+                                color: getColorFromHex(loader.plugin.colorCode)
+                            ).padding(.bottom, 10)
                         }
                         HStack(spacing:0) {
+                            Text("\(String(format: "%.1f", loader.place!.score!)) " +
+                                "/ \(loader.plugin.totalScore)").fontWeight(.semibold)
+                            Text(" by \(loader.place!.numOfScores!) user" +
+                            (loader.place!.numOfScores! > 1 ? "s" : ""))
+                            Spacer()
+                            Text("·")
                             Spacer()
                             Text(String(repeating: "$", count: loader.place!.price))
-                            .padding(0)
+                                .font(.callout)
                         }
-                        .frame(width: 60)
-                    }.onAppear {
-                        let actualPercentage = self.loader.place!.score! / Double(self.loader.plugin.totalScore) * 100
-                        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-                            self.visiblePercentage = min(self.visiblePercentage + 1, actualPercentage)
-                            if (self.visiblePercentage >= actualPercentage) {
-                                timer.invalidate()
-                            }
-                        }
-                    }
-                    Spacer()
-                    Divider()
-                    HStack(spacing:0) {
-                        Text("\(String(format: "%.1f", loader.place!.score!))" +
-                            " / \(loader.plugin.totalScore)").fontWeight(.semibold)
-                        Text(" by \(loader.place!.numOfScores!) user" +
-                            "\(loader.place!.numOfScores! > 1 ? "s" : "") on ")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .lineLimit(1)
                         Spacer()
-                        Image(loader.plugin.logo).resizable().frame(width: 25, height: 25, alignment: .bottomTrailing)
                     }
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .lineLimit(1)
-                    .padding(.bottom, 10)
+                    Divider()
+                    Spacer()
+                    HStack(alignment: .center) {
+                        if !self.loader.plugin.attributionHasText {
+                            Text("Powered by").font(.callout)
+                        }
+                        Image(self.loader.plugin.attribution)
+                            .aspectRatio(contentMode: .fit)
+                    }
+                    .padding(.bottom)
+                    .frame(maxHeight:30)
                 }
                 .padding(.horizontal, horizontalPadding)
+                .onAppear {
+                    let actualPercentage = self.loader.place!.score! / Double(self.loader.plugin.totalScore) * 100
+                    Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+                        self.visiblePercentage = min(self.visiblePercentage + 1, actualPercentage)
+                        if (self.visiblePercentage >= actualPercentage) {
+                            timer.invalidate()
+                        }
+                    }
+                }
             }
+            Spacer()
         }
-        
         .padding()
         .onTapGesture {
             if let urlString = self.loader.place?.url {
@@ -193,7 +209,7 @@ struct RatingCard: View {
                 UIApplication.shared.open(url)
             }
         }
-        .frame(height:150)
+        .frame(height:160)
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color(UIColor.systemBackground))
@@ -208,12 +224,10 @@ struct RatingCard_Previews: PreviewProvider {
     static var previews: some View {
         unrated.isLoading = false
         unrated.message = "I am unrated"
+        rated.isLoading = false
         return VStack {
             RatingCard(loader: InfoLoader(plugin: mockSetting.defaultSitePlugin, place: nil))
-            RatingCard(loader: InfoLoader(
-                plugin: mockSetting.defaultSitePlugin,
-                place: ootp)
-            )
+            RatingCard(loader: rated)
             RatingCard(loader: unrated)
         }
         //.previewLayout(.fixed(width:375, height:100))

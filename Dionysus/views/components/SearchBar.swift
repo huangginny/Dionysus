@@ -164,14 +164,15 @@ struct SearchBar: View {
             .background(COLOR_THEME_LIME)
             HStack {
                 Spacer()
-                Text("Search engine brought to you by \(plugin.name)")
-                    .font(.caption).foregroundColor(.white)
-                Image(plugin.logo).resizable().frame(width: 15, height: 15)
+                if !plugin.attributionHasText {
+                    Text("Search engine powered by")
+                }
+                Image(plugin.attribution)
                 Spacer()
             }
-            .frame(minHeight: 20)
+            .frame(minHeight: 20, idealHeight: 20)
             .background(COLOR_THEME_GREEN)
-        }
+        }.environment(\.colorScheme, .dark)
     }
 }
 

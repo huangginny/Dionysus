@@ -11,7 +11,8 @@ import Foundation
 class YelpPlugin : SitePlugin {
     
     var name: String
-    var logo: String
+    var attribution: String
+    var attributionHasText: Bool
     var colorCode: String
     var totalScore: Int
     
@@ -19,7 +20,8 @@ class YelpPlugin : SitePlugin {
     
     required init() {
         name = "Yelp"
-        logo = "yelp-icon"
+        attribution = "yelp-icon"
+        attributionHasText = false
         colorCode = "#D32323"
         totalScore = 5
     }

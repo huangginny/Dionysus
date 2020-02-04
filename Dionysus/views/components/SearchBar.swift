@@ -72,6 +72,7 @@ struct SearchBar: View {
     let statusBarHeight: CGFloat
     let plugin: SitePlugin
     let onCommit: (String, String)->()
+    let onClose: ()->()
     
     func onCommitWithNameAndLocation() {
         onCommit(name, location)
@@ -99,6 +100,7 @@ struct SearchBar: View {
                     self.location = ""
                     nameSearchField.text.wrappedValue = ""
                     locationSearchField.text.wrappedValue = ""
+                    self.onClose()
                 }) {
                     Image(systemName: "xmark")
                         .padding(.leading)
@@ -172,13 +174,18 @@ struct SearchBar: View {
             }
             .frame(minHeight: 20, idealHeight: 20)
             .background(COLOR_THEME_GREEN)
-        }.environment(\.colorScheme, .dark)
+        }
+        .environment(\.colorScheme, .dark)
     }
 }
 
 struct SearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        SearchBar(statusBarHeight: 20, plugin: mockSetting.defaultSitePlugin, onCommit:{_,_ in logMessage("Previewing search bar")})
+        SearchBar(
+            statusBarHeight: 20,
+            plugin: mockSetting.defaultSitePlugin,
+            onCommit:{_,_ in logMessage("Previewing search bar")},
+            onClose:{print("Previewing on close")})
             .previewLayout(.fixed(width: 300, height: 120))
     }
 }

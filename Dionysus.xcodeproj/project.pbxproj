@@ -13,6 +13,8 @@
 		F20C905523C9B5E200761AA8 /* models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C905423C9B5E200761AA8 /* models.swift */; };
 		F20C905823C9C67B00761AA8 /* utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C905723C9C67B00761AA8 /* utils.swift */; };
 		F20C905A23C9C8FC00761AA8 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C905923C9C8FC00761AA8 /* AppState.swift */; };
+		F25D106523E8768B008B887C /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25D106423E8768B008B887C /* MainView.swift */; };
+		F25D106723E93808008B887C /* DiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25D106623E93808008B887C /* DiceView.swift */; };
 		F26F237123D6B88100B7B162 /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237023D6B88000B7B162 /* URLImage.swift */; };
 		F26F237323D6E5D900B7B162 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237223D6E5D900B7B162 /* ActivityIndicator.swift */; };
 		F26F237523D80E2A00B7B162 /* YelpPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237423D80E2A00B7B162 /* YelpPlugin.swift */; };
@@ -69,6 +71,8 @@
 		F20C905423C9B5E200761AA8 /* models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = models.swift; sourceTree = "<group>"; };
 		F20C905723C9C67B00761AA8 /* utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = utils.swift; sourceTree = "<group>"; };
 		F20C905923C9C8FC00761AA8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		F25D106423E8768B008B887C /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		F25D106623E93808008B887C /* DiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceView.swift; sourceTree = "<group>"; };
 		F26F237023D6B88000B7B162 /* URLImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
 		F26F237223D6E5D900B7B162 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		F26F237423D80E2A00B7B162 /* YelpPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpPlugin.swift; sourceTree = "<group>"; };
@@ -150,6 +154,8 @@
 				F28FB13E23CC0504006EE676 /* components */,
 				F28FB13C23CC0499006EE676 /* SearchView.swift */,
 				F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */,
+				F25D106423E8768B008B887C /* MainView.swift */,
+				F25D106623E93808008B887C /* DiceView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -507,9 +513,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2D9AAFD23CF1E07000FF82D /* RatingCard.swift in Sources */,
+				F25D106523E8768B008B887C /* MainView.swift in Sources */,
 				F2D8041523DBD452005D3BCF /* FourSquarePlugin.swift in Sources */,
 				F2B9EC9623DE106600F27F11 /* TabBar.swift in Sources */,
 				F20C905A23C9C8FC00761AA8 /* AppState.swift in Sources */,
+				F25D106723E93808008B887C /* DiceView.swift in Sources */,
 				F20C905823C9C67B00761AA8 /* utils.swift in Sources */,
 				F28FB13D23CC0499006EE676 /* SearchView.swift in Sources */,
 				F26F237323D6E5D900B7B162 /* ActivityIndicator.swift in Sources */,
@@ -693,6 +701,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Dionysus/Preview Content\"";
 				DEVELOPMENT_TEAM = 7UB5DXWDYP;
 				ENABLE_PREVIEWS = YES;
@@ -701,7 +710,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = huangginny.Dionysus;
 				PRODUCT_NAME = Dionysus;
 				PROVISIONING_PROFILE_SPECIFIER = "ios-development-provisioning-profile";
@@ -717,6 +726,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Dionysus/Preview Content\"";
 				DEVELOPMENT_TEAM = 7UB5DXWDYP;
 				ENABLE_PREVIEWS = YES;
@@ -725,7 +735,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = huangginny.Dionysus;
 				PRODUCT_NAME = Dionysus;
 				PROVISIONING_PROFILE_SPECIFIER = "ios-development-provisioning-profile";

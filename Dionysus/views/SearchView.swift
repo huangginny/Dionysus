@@ -11,10 +11,10 @@ import Combine
 
 struct SearchView: View {
     @ObservedObject var state: AppState
+    let statusBarHeight: CGFloat
+    
     @State private var showAlert = false
     @State private var keyboardHeight = 0.0
-    
-    let statusBarHeight: CGFloat
     
     var body: some View {
         UITableView.appearance().tableFooterView = UIView()
@@ -46,16 +46,22 @@ struct SearchView: View {
                             return
                         }
                         self.state.onSearchButtonClicked(with: name, location: location)
+                    },
+                    onClose: {
+                        logMessage("Closing search view")
+                        self.state.isPlaceSearchLoading = false
+                        self.state.placeSearchResults = [PlaceHolderModel]()
+                        self.state.currentView = DionysusView.none
                     }
                 )
-                if state.isLoading {
+                if state.isPlaceSearchLoading {
                     HStack {
                         ActivityIndicator()
                         Text("Looking up your places...")
                     }.padding()
                     Spacer()
-                } else if isNonEmptyString(state.loadError) {
-                    Text(state.loadError).padding()
+                } else if isNonEmptyString(state.placeSearchLoadError) {
+                    Text(state.placeSearchLoadError).padding()
                     Spacer()
                 } else {
                     GeometryReader { geometry in

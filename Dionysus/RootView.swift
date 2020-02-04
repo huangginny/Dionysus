@@ -16,7 +16,7 @@ struct RootView: View {
     var body: some View {
         TabBar([
             TabBar.Tab(
-                view: SearchView(state: state, statusBarHeight: statusBarHeight),
+                view: MainView(state: state, statusBarHeight: statusBarHeight),
                 barItem: UITabBarItem(
                     title: "Search",
                     image: UIImage(systemName: "magnifyingglass"),

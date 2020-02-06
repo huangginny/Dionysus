@@ -1,4 +1,4 @@
-# Dionysa
+# Dionysus
 Like Dionysus, this app has the God's eye view of all digestibles you can search for.
 
 ## Terms of Use & Privacy Policy
@@ -6,7 +6,7 @@ This Application may collect and use User location Data in order to provide loca
 
 Most browsers and devices provide tools to opt out from this feature by default. If explicit authorization has been provided, the User’s location data may be tracked by this Application.
 
-This Application uses [the Google Maps API(s) and includes Google Maps feature and content. Use of Google Maps features and content is subject to the then-current versions of the [Google Maps/Google Earth Additional Terms of Service](https://maps.google.com/help/terms_maps.html), and [Google Privacy Policy](https://www.google.com/policies/privacy/)
+This Application uses the Google Maps API(s) and includes Google Maps feature and content. Use of Google Maps features and content is subject to the then-current versions of the [Google Maps/Google Earth Additional Terms of Service](https://maps.google.com/help/terms_maps.html), and [Google Privacy Policy](https://www.google.com/policies/privacy/)
 
 ## Roadmap for Dionysus v1.1
 1. Add filters and sort
@@ -17,4 +17,8 @@ This Application uses [the Google Maps API(s) and includes Google Maps feature a
 Please open an issue in the project [Github repository](https://github.com/huangginny/Dionysa/issues) or tweet to [@ginnyzr7](https://twitter.com/ginnyzr7).
 
 ## Contribution
-To be written
+
+Your contribution is highly appreciated! Please check out this [contribution guide](https://github.com/huangginny/Dionysa/blob/master/CONTRIBUTING.md) for information on how to develop and test Dionysus locally.
+
+#### Current list of contributers
+- Ginny Huang

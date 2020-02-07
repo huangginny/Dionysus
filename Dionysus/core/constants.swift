@@ -20,6 +20,7 @@ let TIMEOUT_VALUE = 10
 let PHOTO_HEIGHT = 240
 let FUSE = Fuse(maxPatternLength: 64, tokenize: true)
 let POWERS_OF_2 = [1,2,4,8,16,32,64,128,256,512]
+let DICE_TIMEOUT_VALUE = 3.0 //in seconds
 
 /**
  Colors, palette from https://colorpalettes.net/color-palette-4013/

@@ -10,9 +10,10 @@ import SwiftUI
 
 struct DiceView: View {
     @ObservedObject var state: AppState
-    @State var label = "Rolling the Dice..."
+    @State var label = "God is still making a decision..."
     @State var diceNumber = 1
     @State var diceColor = Color("tintColor")
+    @State var timeElapsed = 0.0
     var body: some View {
         VStack(spacing:0) {
             HStack {
@@ -34,29 +35,36 @@ struct DiceView: View {
             Divider()
             if state.isDiceRolling {
                 Spacer()
-                Text("\(diceNumber)")
-                    .font(
-                        .init(Font.system(
-                            size: 96, weight: .regular, design: .default
-                    )))
-                    .foregroundColor(Color(UIColor.systemBackground))
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundColor(diceColor)
-                            .padding()
-                            .frame(width: 250, height: 250)
-                    )
-                    .onAppear {
-                        Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
-                            let idxNum = Int.random(in: 0 ..< 10)
-                            let idxCo = Int.random(in: 0 ..< 5)
-                            self.diceNumber = POWERS_OF_2[idxNum]
-                            self.diceColor = [COLOR_LIGHT_GRAY, COLOR_THEME_LIME, COLOR_THEME_GREEN, COLOR_THEME_ORANGE, COLOR_THEME_RED][idxCo]
-                            if !self.state.isDiceRolling {
-                                timer.invalidate()
+                if self.timeElapsed >= DICE_TIMEOUT_VALUE {
+                    ActivityIndicator()
+                } else {
+                    Text("\(diceNumber)")
+                        .font(
+                            .init(Font.system(
+                                size: 96, weight: .regular, design: .default
+                        )))
+                        .foregroundColor(Color(UIColor.systemBackground))
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .foregroundColor(diceColor)
+                                .padding()
+                                .frame(width: 250, height: 250)
+                        )
+                        .onAppear {
+                            if self.timeElapsed == 0 {
+                                Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
+                                    let idxNum = Int.random(in: 0 ..< 10)
+                                    let idxCo = Int.random(in: 0 ..< 5)
+                                    self.diceNumber = POWERS_OF_2[idxNum]
+                                    self.diceColor = [COLOR_LIGHT_GRAY, COLOR_THEME_LIME, COLOR_THEME_GREEN, COLOR_THEME_ORANGE, COLOR_THEME_RED][idxCo]
+                                    self.timeElapsed += 0.05
+                                    if !self.state.isDiceRolling || self.timeElapsed >= DICE_TIMEOUT_VALUE {
+                                        timer.invalidate()
+                                    }
+                                }
                             }
                         }
-                    }
+                }
                 Spacer()
             } else if isNonEmptyString(state.diceRollError) {
                 Spacer()

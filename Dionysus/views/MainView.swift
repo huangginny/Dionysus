@@ -48,7 +48,7 @@ struct MainView: View {
                 MainViewButton(label: "Search", action: {
                     self.state.currentView = DionysusView.search
                 })
-                MainViewButton(label: "Roll the Dice!", action: {
+                MainViewButton(label: "God's Pick", action: {
                     self.state.currentView = DionysusView.roll
                     self.state.isDiceRolling = true
                     self.state.onDiceRollClicked()

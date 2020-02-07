@@ -108,8 +108,6 @@ struct PlaceView: View {
                 .frame(width: geometry.size.width)
             }
         }
-        .animation(.linear(duration: 1.0))
-        .transition(.move(edge: .bottom))
         .onAppear {
             if !self.searched {
                 self.placeHolder.loadPlaces()

@@ -7,6 +7,7 @@ target 'Dionysus' do
 
   # Pods for Dionysus
   pod 'Fuse', :git => 'https://github.com/krisk/fuse-swift.git'
+  pod "MarkdownView"
 
   target 'DionysusTests' do
     inherit! :search_paths

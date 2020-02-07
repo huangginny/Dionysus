@@ -15,6 +15,8 @@
 		F20C905A23C9C8FC00761AA8 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C905923C9C8FC00761AA8 /* AppState.swift */; };
 		F25D106523E8768B008B887C /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25D106423E8768B008B887C /* MainView.swift */; };
 		F25D106723E93808008B887C /* DiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25D106623E93808008B887C /* DiceView.swift */; };
+		F25D106923EBF0FF008B887C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F25D106823EBF0FF008B887C /* README.md */; };
+		F25D106B23EBF3D9008B887C /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25D106A23EBF3D9008B887C /* AboutView.swift */; };
 		F26F237123D6B88100B7B162 /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237023D6B88000B7B162 /* URLImage.swift */; };
 		F26F237323D6E5D900B7B162 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237223D6E5D900B7B162 /* ActivityIndicator.swift */; };
 		F26F237523D80E2A00B7B162 /* YelpPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237423D80E2A00B7B162 /* YelpPlugin.swift */; };
@@ -73,6 +75,8 @@
 		F20C905923C9C8FC00761AA8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		F25D106423E8768B008B887C /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		F25D106623E93808008B887C /* DiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceView.swift; sourceTree = "<group>"; };
+		F25D106823EBF0FF008B887C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		F25D106A23EBF3D9008B887C /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		F26F237023D6B88000B7B162 /* URLImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
 		F26F237223D6E5D900B7B162 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		F26F237423D80E2A00B7B162 /* YelpPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpPlugin.swift; sourceTree = "<group>"; };
@@ -156,6 +160,7 @@
 				F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */,
 				F25D106423E8768B008B887C /* MainView.swift */,
 				F25D106623E93808008B887C /* DiceView.swift */,
+				F25D106A23EBF3D9008B887C /* AboutView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -211,6 +216,7 @@
 		F2FF8C2C23C9A3BF008A638E = {
 			isa = PBXGroup;
 			children = (
+				F25D106823EBF0FF008B887C /* README.md */,
 				F2FF8C3723C9A3BF008A638E /* Dionysus */,
 				F2FF8C4E23C9A3CA008A638E /* DionysusTests */,
 				F2FF8C5923C9A3CA008A638E /* DionysusUITests */,
@@ -382,6 +388,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F25D106923EBF0FF008B887C /* README.md in Resources */,
 				F2FF8C4523C9A3C9008A638E /* LaunchScreen.storyboard in Resources */,
 				F2FF8C4223C9A3C9008A638E /* Preview Assets.xcassets in Resources */,
 				F2FF8C3F23C9A3C9008A638E /* Assets.xcassets in Resources */,
@@ -525,6 +532,7 @@
 				F2FF8C3923C9A3BF008A638E /* AppDelegate.swift in Sources */,
 				F26F237123D6B88100B7B162 /* URLImage.swift in Sources */,
 				F26F237723D8129700B7B162 /* constants.swift in Sources */,
+				F25D106B23EBF3D9008B887C /* AboutView.swift in Sources */,
 				F2FF8C3B23C9A3BF008A638E /* SceneDelegate.swift in Sources */,
 				F2D9AB0123D13AA8000FF82D /* SitePlugin.swift in Sources */,
 				F26F237523D80E2A00B7B162 /* YelpPlugin.swift in Sources */,

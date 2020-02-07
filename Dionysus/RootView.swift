@@ -12,6 +12,7 @@ import UIKit
 struct RootView: View {
     @ObservedObject var state: AppState
     let statusBarHeight : CGFloat
+    @State var aboutViewHeight = UIScreen.main.bounds.height
  
     var body: some View {
         TabBar([
@@ -24,9 +25,8 @@ struct RootView: View {
                 )
             ),
             TabBar.Tab(
-                view: VStack{
-                    Text("About Author")
-                    Spacer()
+                view: ScrollView {
+                    AboutView(height: $aboutViewHeight)
                 },
                 barItem: UITabBarItem(
                     title: "About",

@@ -70,7 +70,10 @@ struct SearchView: View {
                                 PlaceView(
                                     placeHolder: result)
                             ) {
-                                PlaceRow(place: result.defaultPlaceInfoLoader.place!)
+                                PlaceRow(
+                                    place: result.defaultPlaceInfoLoader.place!,
+                                    pluginName: result.defaultPlaceInfoLoader.plugin.name
+                                )
                             }
                         }.frame(height:
                             geometry.size.height - CGFloat(self.keyboardHeight) + self.statusBarHeight

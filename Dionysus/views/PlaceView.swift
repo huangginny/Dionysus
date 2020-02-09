@@ -25,9 +25,8 @@ struct Info: View {
             }
             HStack(alignment: .firstTextBaseline) {
                 Image(systemName: "mappin.and.ellipse").frame(width: 20)
-                Text(place.formattedAddress.joined(separator: "\n"))
-                    .onTapGesture {
-                        self.onTapAddress()
+                Button(action: { self.onTapAddress() }) {
+                    Text(place.formattedAddress.joined(separator: "\n"))
                 }
                 Spacer()
                 if isNonEmptyString(getFormattedDistance(place.distance)) {
@@ -37,13 +36,15 @@ struct Info: View {
             if isNonEmptyString(place.phone) {
                 HStack(alignment: .firstTextBaseline) {
                     Image(systemName: "phone.fill").frame(width: 20.0)
-                    Text(place.phone!)
-                    Spacer()
-                }.onTapGesture {
-                    if let phoneNumber = getRawPhoneNumber(self.place.phone),
-                        let phoneUrl = URL(string: "telprompt://\(phoneNumber)") {
-                        UIApplication.shared.open(phoneUrl, options: [:], completionHandler: nil)
+                    Button(action: {
+                        if let phoneNumber = getRawPhoneNumber(self.place.phone),
+                            let phoneUrl = URL(string: "telprompt://\(phoneNumber)") {
+                            UIApplication.shared.open(phoneUrl, options: [:], completionHandler: nil)
+                        }
+                    }) {
+                        Text(place.phone!)
                     }
+                    Spacer()
                 }
             }
             if (place.permanently_closed == true || place.open_now != nil || isNonEmptyString(place.hours)) {
@@ -83,6 +84,7 @@ struct PlaceView: View {
                     if self.placeHolder.loadComplete && isNonEmptyString(self.placeHolder.defaultPlaceInfoLoader.place?.imageUrl) {
                         URLImage(withURL: self.placeHolder.defaultPlaceInfoLoader.place!.imageUrl!)
                             .frame(width: geometry.size.width, height: CGFloat(PHOTO_HEIGHT), alignment: .top)
+                            .transition(.move(edge: .top))
                     }
                     Info(
                         place: self.placeHolder.defaultPlaceInfoLoader.place!,
@@ -104,6 +106,7 @@ struct PlaceView: View {
                     Spacer()
                 }
                 .frame(width: geometry.size.width)
+                .animation(.easeInOut)
             }
         }
         .onAppear {

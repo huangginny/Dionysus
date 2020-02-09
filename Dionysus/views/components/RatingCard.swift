@@ -127,6 +127,7 @@ struct RatingCard: View {
                 .foregroundColor(getColor())
                 .frame(width:100)
                 .padding(.leading, horizontalPadding)
+                .animation(.none)
                 VStack {
                     VStack(alignment: .leading) {
                         Spacer()
@@ -136,7 +137,7 @@ struct RatingCard: View {
                             ScoreBar(
                                 percentage: visiblePercentage,
                                 color: getColorFromHex(loader.plugin.colorCode)
-                            ).padding(.bottom, 10)
+                            ).padding(.bottom, 10).animation(.none)
                         }
                         HStack(spacing:0) {
                             Text("\(String(format: "%.1f", loader.place!.score!)) " +

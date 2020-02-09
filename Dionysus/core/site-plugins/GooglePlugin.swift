@@ -141,6 +141,11 @@ class GooglePlugin : SitePlugin {
             postalCode = postalCodeComponent["long_name"] as? String
         }
         
+        var message = "This place is not rated yet."
+        if let score = original.score, round(score) > 0 {
+            message = ""
+        }
+        
         return (PlaceInfoModel(
             place_id: original.place_id,
             name: original.name,
@@ -154,6 +159,6 @@ class GooglePlugin : SitePlugin {
             imageUrl: imageUrl,
             open_now: original.open_now,
             permanently_closed: result["permanently_closed"] as? Bool
-        ), "")
+        ), message)
     }
 }

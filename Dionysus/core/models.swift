@@ -64,6 +64,8 @@ class PlaceHolderModel: ObservableObject, Identifiable {
     var mapItem : MKMapItem
     let currentSetting : Setting
     
+    @Published var loadComplete = false
+    
     init(with place: PlaceInfoModel, plugin: SitePlugin, setting: Setting) {
         currentSetting = setting
         defaultPlaceInfoLoader = InfoLoader(plugin: plugin, place: place)
@@ -94,7 +96,7 @@ class PlaceHolderModel: ObservableObject, Identifiable {
                     successCallbackFunc: _onPlaceFound,
                     errorCallbackFunc: {(errorMessage: String, plugin: SitePlugin) -> Void in
                         self.infoForSite[plugin.name]!.message = errorMessage
-                        self.infoForSite[plugin.name]!.isLoading = false
+                        self._completeLoading(for: plugin.name)
                     }
                 );
             }
@@ -127,11 +129,10 @@ class PlaceHolderModel: ObservableObject, Identifiable {
         DispatchQueue.main.async {
             if plugin.name == self.defaultPlaceInfoLoader.plugin.name {
                 self.defaultPlaceInfoLoader.place = result
-                self.defaultPlaceInfoLoader.isLoading = false
-                return
+            } else {
+                self.infoForSite[plugin.name]!.place = result
             }
-            self.infoForSite[plugin.name]!.place = result
-            self.infoForSite[plugin.name]!.isLoading = false
+            self._completeLoading(for: plugin.name)
         }
     }
     
@@ -141,11 +142,24 @@ class PlaceHolderModel: ObservableObject, Identifiable {
         DispatchQueue.main.async {
             if plugin.name == self.defaultPlaceInfoLoader.plugin.name {
                 self.defaultPlaceInfoLoader.message = errorMessage
-                self.defaultPlaceInfoLoader.isLoading = false
-                return
+            } else {
+                self.infoForSite[plugin.name]!.message = errorMessage
             }
-            self.infoForSite[plugin.name]!.message = errorMessage
-            self.infoForSite[plugin.name]!.isLoading = false
+            self._completeLoading(for: plugin.name)
+        }
+    }
+    
+    func _completeLoading(for pluginName: String) {
+        if pluginName == self.defaultPlaceInfoLoader.plugin.name {
+            self.defaultPlaceInfoLoader.isLoading = false
+        } else {
+            self.infoForSite[pluginName]!.isLoading = false
+        }
+        let loaders = Array(self.infoForSite.values).filter({$0.isLoading})
+        if loaders.count == 0 && !self.defaultPlaceInfoLoader.isLoading {
+            DispatchQueue.main.async {
+                self.loadComplete = true
+            }
         }
     }
 }

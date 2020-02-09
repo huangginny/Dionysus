@@ -16,65 +16,59 @@ struct Info: View {
     
     var body: some View {
         VStack {
-            if isNonEmptyString(place.imageUrl) {
-                URLImage(withURL: place.imageUrl!)
-                    .frame(width: size.width, height: CGFloat(PHOTO_HEIGHT), alignment: .top)
+            if place.categories.count > 0 {
+                HStack(alignment: .firstTextBaseline) {
+                    Image(systemName: "list.bullet.below.rectangle").frame(width: 20)
+                    Text(place.categories.joined(separator: ", "))
+                    Spacer()
+                }
             }
-            VStack {
-                if place.categories.count > 0 {
-                    HStack(alignment: .firstTextBaseline) {
-                        Image(systemName: "list.bullet.below.rectangle").frame(width: 20)
-                        Text(place.categories.joined(separator: ", "))
-                        Spacer()
+            HStack(alignment: .firstTextBaseline) {
+                Image(systemName: "mappin.and.ellipse").frame(width: 20)
+                Text(place.formattedAddress.joined(separator: "\n"))
+                    .onTapGesture {
+                        self.onTapAddress()
+                }
+                Spacer()
+                if isNonEmptyString(getFormattedDistance(place.distance)) {
+                    Text("(\(getFormattedDistance(place.distance)!))")
+                }
+            }
+            if isNonEmptyString(place.phone) {
+                HStack(alignment: .firstTextBaseline) {
+                    Image(systemName: "phone.fill").frame(width: 20.0)
+                    Text(place.phone!)
+                    Spacer()
+                }.onTapGesture {
+                    if let phoneNumber = getRawPhoneNumber(self.place.phone),
+                        let phoneUrl = URL(string: "telprompt://\(phoneNumber)") {
+                        UIApplication.shared.open(phoneUrl, options: [:], completionHandler: nil)
                     }
                 }
+            }
+            if (place.permanently_closed == true || place.open_now != nil || isNonEmptyString(place.hours)) {
                 HStack(alignment: .firstTextBaseline) {
-                    Image(systemName: "mappin.and.ellipse").frame(width: 20)
-                    Text(place.formattedAddress.joined(separator: "\n"))
-                        .onTapGesture {
-                            self.onTapAddress()
+                    Image(systemName:  "clock").frame(width: 20)
+                    if place.permanently_closed ?? false {
+                        Text("Permanently closed").fontWeight(.bold).foregroundColor(.red)
+                    } else {
+                        if place.open_now != nil {
+                            if place.open_now ?? false {
+                                Text("Open").fontWeight(.bold).foregroundColor(.green)
+                            } else {
+                                Text("Closed").fontWeight(.bold).foregroundColor(.red)
+                            }
+                        }
+                        if isNonEmptyString(place.hours) {
+                            Text(place.hours!)
+                        }
                     }
                     Spacer()
-                    if isNonEmptyString(getFormattedDistance(place.distance)) {
-                        Text("(\(getFormattedDistance(place.distance)!))")
-                    }
-                }
-                if isNonEmptyString(place.phone) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Image(systemName: "phone.fill").frame(width: 20.0)
-                        Text(place.phone!)
-                        Spacer()
-                    }.onTapGesture {
-                        if let phoneNumber = getRawPhoneNumber(self.place.phone),
-                            let phoneUrl = URL(string: "telprompt://\(phoneNumber)") {
-                            UIApplication.shared.open(phoneUrl, options: [:], completionHandler: nil)
-                        }
-                    }
-                }
-                if (place.permanently_closed == true || place.open_now != nil || isNonEmptyString(place.hours)) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Image(systemName:  "clock").frame(width: 20)
-                        if place.permanently_closed ?? false {
-                            Text("Permanently closed").fontWeight(.bold).foregroundColor(.red)
-                        } else {
-                            if place.open_now != nil {
-                                if place.open_now ?? false {
-                                    Text("Open").fontWeight(.bold).foregroundColor(.green)
-                                } else {
-                                    Text("Closed").fontWeight(.bold).foregroundColor(.red)
-                                }
-                            }
-                            if isNonEmptyString(place.hours) {
-                                Text(place.hours!)
-                            }
-                        }
-                        Spacer()
-                    }
                 }
             }
-            .padding()
-            .background(Color(UIColor.systemBackground).opacity(0.8))
         }
+        .padding()
+        .background(Color(UIColor.systemBackground).opacity(0.8))
     }
 }
 
@@ -86,6 +80,10 @@ struct PlaceView: View {
         GeometryReader { geometry in
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing:0) {
+                    if self.placeHolder.loadComplete && isNonEmptyString(self.placeHolder.defaultPlaceInfoLoader.place?.imageUrl) {
+                        URLImage(withURL: self.placeHolder.defaultPlaceInfoLoader.place!.imageUrl!)
+                            .frame(width: geometry.size.width, height: CGFloat(PHOTO_HEIGHT), alignment: .top)
+                    }
                     Info(
                         place: self.placeHolder.defaultPlaceInfoLoader.place!,
                         size: geometry.size,

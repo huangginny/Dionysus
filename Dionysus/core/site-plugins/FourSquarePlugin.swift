@@ -93,7 +93,7 @@ class FourSquarePlugin: SitePlugin {
     }
     
     func _parseSearchResultToModels(venues: [[String: Any]]) -> [PlaceInfoModel] {
-        return venues.map { (venue: [String: Any]) -> PlaceInfoModel? in
+        return venues.compactMap { (venue: [String: Any]) -> PlaceInfoModel? in
             guard let place_id = venue["id"] as? String,
                 let name = venue["name"] as? String,
                 let location = venue["location"] as? [String: Any],
@@ -120,7 +120,7 @@ class FourSquarePlugin: SitePlugin {
                 imageUrl: iconUrl,
                 distance: location["distance"] as? Double
             )
-        }.compactMap{ $0}
+        }
     }
     
     func _parseDetailsResultToModel(venue: [String: Any], original: PlaceInfoModel) -> (PlaceInfoModel?, String) {
@@ -163,7 +163,7 @@ class FourSquarePlugin: SitePlugin {
             url: url,
             price: price?["tier"] as? Int ?? 0,
             imageUrl: imageUrl,
-            categories: categoryList?.map{ $0["name"] as? String }.compactMap{ $0} ?? [String](),
+            categories: categoryList?.compactMap{ $0["name"] as? String } ?? [String](),
             distance: location["distance"] as? Double ?? original.distance,
             phone: contact?["formattedPhone"],
             hours: hours?["status"] as? String,

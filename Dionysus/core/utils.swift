@@ -135,7 +135,7 @@ func loadUrl(
             }
             return
         }
-        if let mimeType = httpResponse!.mimeType, mimeType == "application/json",
+        if let mimeType = httpResponse?.mimeType, mimeType == "application/json",
             let data = data {
             onSuccess(data)
         }

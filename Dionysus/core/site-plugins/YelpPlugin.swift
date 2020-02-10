@@ -115,7 +115,7 @@ class YelpPlugin : SitePlugin {
     }
     
     func _parseJsonToModels(jsonList: [[String: Any]]) -> [PlaceInfoModel] {
-        return jsonList.map { (biz: [String: Any]) -> PlaceInfoModel? in
+        return jsonList.compactMap { (biz: [String: Any]) -> PlaceInfoModel? in
             guard let place_id = biz["id"] as? String,
                 let name = biz["name"] as? String,
                 let location = biz["location"] as? [String: Any],
@@ -141,12 +141,12 @@ class YelpPlugin : SitePlugin {
                 price: (biz["price"] as? String)?.count ?? 0,
                 
                 imageUrl: biz["image_url"] as? String,
-                categories: categoryList.map{ $0["title"] as? String }.compactMap{$0},
+                categories: categoryList.compactMap{ $0["title"] as? String },
                 distance: biz["distance"] as? Double,
                 phone: biz["display_phone"] as? String,
                 permanently_closed: biz["is_closed"] as? Bool
             )
-        }.compactMap{ $0}
+        }
     }
 }
 

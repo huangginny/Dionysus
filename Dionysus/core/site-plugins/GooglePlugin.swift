@@ -89,7 +89,7 @@ class GooglePlugin : SitePlugin {
     }
     
     func _parseSearchResultsToModels(jsonList: [[String: Any]]) -> [PlaceInfoModel] {
-        return jsonList.map { (result: [String: Any]) -> PlaceInfoModel? in
+        return jsonList.compactMap { (result: [String: Any]) -> PlaceInfoModel? in
             guard let place_id = result["place_id"] as? String,
                 let name = result["name"] as? String,
                 let formattedAddress = result["formatted_address"] as? String,
@@ -118,7 +118,7 @@ class GooglePlugin : SitePlugin {
                 imageUrl: result["icon"] as? String,
                 open_now: isOpen
             )
-        }.compactMap{ $0}
+        }
     }
     
     func _parseDetailsResultToModel(result: [String: Any], original: PlaceInfoModel) -> (PlaceInfoModel?, String) {

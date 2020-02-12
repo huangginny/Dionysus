@@ -10,8 +10,8 @@
 		0781249505AC36482CD0C291 /* Pods_DionysusTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8305D69C8748772A71D18B4 /* Pods_DionysusTests.framework */; };
 		5E09A569E1EB8A1B7ACF9186 /* Pods_Dionysus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 654D6E37197050FBAC9CE360 /* Pods_Dionysus.framework */; };
 		E0192FE51FADE0167873A689 /* Pods_Dionysus_DionysusUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2127B06C206321A259D5635 /* Pods_Dionysus_DionysusUITests.framework */; };
-		F20C905523C9B5E200761AA8 /* models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C905423C9B5E200761AA8 /* models.swift */; };
-		F20C905823C9C67B00761AA8 /* utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C905723C9C67B00761AA8 /* utils.swift */; };
+		F20C905523C9B5E200761AA8 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C905423C9B5E200761AA8 /* Models.swift */; };
+		F20C905823C9C67B00761AA8 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C905723C9C67B00761AA8 /* Utils.swift */; };
 		F20C905A23C9C8FC00761AA8 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C905923C9C8FC00761AA8 /* AppState.swift */; };
 		F25D106523E8768B008B887C /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25D106423E8768B008B887C /* MainView.swift */; };
 		F25D106723E93808008B887C /* DiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25D106623E93808008B887C /* DiceView.swift */; };
@@ -20,13 +20,13 @@
 		F26F237123D6B88100B7B162 /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237023D6B88000B7B162 /* URLImage.swift */; };
 		F26F237323D6E5D900B7B162 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237223D6E5D900B7B162 /* ActivityIndicator.swift */; };
 		F26F237523D80E2A00B7B162 /* YelpPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237423D80E2A00B7B162 /* YelpPlugin.swift */; };
-		F26F237723D8129700B7B162 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237623D8129700B7B162 /* constants.swift */; };
+		F26F237723D8129700B7B162 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F237623D8129700B7B162 /* Constants.swift */; };
 		F26F237A23D8345100B7B162 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26F237923D8345100B7B162 /* CoreLocation.framework */; };
 		F28FB13D23CC0499006EE676 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FB13C23CC0499006EE676 /* SearchView.swift */; };
 		F28FB14023CC0512006EE676 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FB13F23CC0512006EE676 /* SearchBar.swift */; };
 		F28FB14223CC0540006EE676 /* PlaceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FB14123CC0540006EE676 /* PlaceRow.swift */; };
+		F29CF6C423F3AB9300171D46 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29CF6C323F3AB9300171D46 /* APIKeys.swift */; };
 		F2B9EC9623DE106600F27F11 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B9EC9523DE106600F27F11 /* TabBar.swift */; };
-		F2D8041123DAB347005D3BCF /* apiKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D8041023DAB347005D3BCF /* apiKeys.swift */; };
 		F2D8041523DBD452005D3BCF /* FourSquarePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D8041423DBD452005D3BCF /* FourSquarePlugin.swift */; };
 		F2D9AAFD23CF1E07000FF82D /* RatingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AAFC23CF1E07000FF82D /* RatingCard.swift */; };
 		F2D9AAFF23CF1E2A000FF82D /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */; };
@@ -70,8 +70,8 @@
 		BA50D1B545DEFE20AA771E9A /* Pods-DionysusTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DionysusTests.release.xcconfig"; path = "Target Support Files/Pods-DionysusTests/Pods-DionysusTests.release.xcconfig"; sourceTree = "<group>"; };
 		D8305D69C8748772A71D18B4 /* Pods_DionysusTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DionysusTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E016F03CC0C2F9F23928F107 /* Pods-Dionysus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Dionysus.debug.xcconfig"; path = "Target Support Files/Pods-Dionysus/Pods-Dionysus.debug.xcconfig"; sourceTree = "<group>"; };
-		F20C905423C9B5E200761AA8 /* models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = models.swift; sourceTree = "<group>"; };
-		F20C905723C9C67B00761AA8 /* utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = utils.swift; sourceTree = "<group>"; };
+		F20C905423C9B5E200761AA8 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		F20C905723C9C67B00761AA8 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		F20C905923C9C8FC00761AA8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		F25D106423E8768B008B887C /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		F25D106623E93808008B887C /* DiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceView.swift; sourceTree = "<group>"; };
@@ -80,13 +80,13 @@
 		F26F237023D6B88000B7B162 /* URLImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
 		F26F237223D6E5D900B7B162 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		F26F237423D80E2A00B7B162 /* YelpPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpPlugin.swift; sourceTree = "<group>"; };
-		F26F237623D8129700B7B162 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
+		F26F237623D8129700B7B162 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F26F237923D8345100B7B162 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F28FB13C23CC0499006EE676 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		F28FB13F23CC0512006EE676 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		F28FB14123CC0540006EE676 /* PlaceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceRow.swift; sourceTree = "<group>"; };
+		F29CF6C323F3AB9300171D46 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		F2B9EC9523DE106600F27F11 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
-		F2D8041023DAB347005D3BCF /* apiKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = apiKeys.swift; sourceTree = "<group>"; };
 		F2D8041423DBD452005D3BCF /* FourSquarePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourSquarePlugin.swift; sourceTree = "<group>"; };
 		F2D9AAFC23CF1E07000FF82D /* RatingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCard.swift; sourceTree = "<group>"; };
 		F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
@@ -179,11 +179,11 @@
 			isa = PBXGroup;
 			children = (
 				F20C905323C9B28200761AA8 /* site-plugins */,
-				F20C905423C9B5E200761AA8 /* models.swift */,
-				F20C905723C9C67B00761AA8 /* utils.swift */,
+				F20C905423C9B5E200761AA8 /* Models.swift */,
+				F20C905723C9C67B00761AA8 /* Utils.swift */,
 				F20C905923C9C8FC00761AA8 /* AppState.swift */,
 				F2D9AB0023D13AA8000FF82D /* SitePlugin.swift */,
-				F26F237623D8129700B7B162 /* constants.swift */,
+				F26F237623D8129700B7B162 /* Constants.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -248,7 +248,7 @@
 				F2FF8C3E23C9A3C9008A638E /* Assets.xcassets */,
 				F2FF8C4623C9A3C9008A638E /* Info.plist */,
 				F2FF8C4023C9A3C9008A638E /* Preview Content */,
-				F2D8041023DAB347005D3BCF /* apiKeys.swift */,
+				F29CF6C323F3AB9300171D46 /* APIKeys.swift */,
 			);
 			path = Dionysus;
 			sourceTree = "<group>";
@@ -524,14 +524,14 @@
 				F2D8041523DBD452005D3BCF /* FourSquarePlugin.swift in Sources */,
 				F2B9EC9623DE106600F27F11 /* TabBar.swift in Sources */,
 				F20C905A23C9C8FC00761AA8 /* AppState.swift in Sources */,
+				F29CF6C423F3AB9300171D46 /* APIKeys.swift in Sources */,
 				F25D106723E93808008B887C /* DiceView.swift in Sources */,
-				F20C905823C9C67B00761AA8 /* utils.swift in Sources */,
+				F20C905823C9C67B00761AA8 /* Utils.swift in Sources */,
 				F28FB13D23CC0499006EE676 /* SearchView.swift in Sources */,
 				F26F237323D6E5D900B7B162 /* ActivityIndicator.swift in Sources */,
-				F2D8041123DAB347005D3BCF /* apiKeys.swift in Sources */,
 				F2FF8C3923C9A3BF008A638E /* AppDelegate.swift in Sources */,
 				F26F237123D6B88100B7B162 /* URLImage.swift in Sources */,
-				F26F237723D8129700B7B162 /* constants.swift in Sources */,
+				F26F237723D8129700B7B162 /* Constants.swift in Sources */,
 				F25D106B23EBF3D9008B887C /* AboutView.swift in Sources */,
 				F2FF8C3B23C9A3BF008A638E /* SceneDelegate.swift in Sources */,
 				F2D9AB0123D13AA8000FF82D /* SitePlugin.swift in Sources */,
@@ -540,7 +540,7 @@
 				F28FB14023CC0512006EE676 /* SearchBar.swift in Sources */,
 				F2FF8C3D23C9A3BF008A638E /* RootView.swift in Sources */,
 				F2E0050123E655D400C89DE4 /* GooglePlugin.swift in Sources */,
-				F20C905523C9B5E200761AA8 /* models.swift in Sources */,
+				F20C905523C9B5E200761AA8 /* Models.swift in Sources */,
 				F28FB14223CC0540006EE676 /* PlaceRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -5,7 +5,7 @@ We'd love to include ratings from more different platforms, and I hope you will 
 ## Before you Build
 
 1. Run `pod install` to install required dependencies
-2. Rename "apiKeys_sample.swift" to "apiKeys.swift"
+2. Rename "APIKeys_sample.swift" to "APIKeys.swift"
 3. Override the hardcoded settings in "core/AppState.swift"
 	- In `AppState.init`, change default plugin to "mock" and active plugin to "\[mock\]" so that no API credentials would be needed
 	- Sample data could be found at the bottom of "core/models.swift"
@@ -13,8 +13,8 @@ We'd love to include ratings from more different platforms, and I hope you will 
 
 ## Adding a New Rating Platform
 
-1. Add the required API keys to "apiKeys.swift"
-2. Create variables for the required API keys in "apiKeys_sample.swift" and set them to empty string
+1. Add the required API keys to "APIKeys.swift"
+2. Create variables for the required API keys in "APIKeys_sample.swift" and set them to empty string
 3. Add the attribution logo to "Assets.xcassets." Make sure the height of the image does not exceed 30px - **the app does not resize the logo accordingly** to comply with [Google Places API display requirements](https://developers.google.com/places/web-service/policies)
 4. Create a new class under "core/plugins" folder
 5. The class should implement "SitePlugin" protocol. Variables should be initialized in `required init` constructor. Use `logMessage(_: String)` for logging purposes.

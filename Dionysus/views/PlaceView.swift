@@ -114,7 +114,7 @@ struct PlaceView: View {
             .edgesIgnoringSafeArea(.all)
         }
         .onAppear {
-            if !self.searched {
+            if !self.searched && !self.placeHolder.loadComplete {
                 self.placeHolder.loadPlaces()
                 self.searched = true
             }

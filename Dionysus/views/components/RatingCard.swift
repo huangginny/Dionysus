@@ -37,7 +37,7 @@ struct ScoreBar: View {
     var body: some View {
         HStack(spacing:1) {
             ForEach([0,20,40,60,80], id: \.self) { cuePoint in
-                self.getStrokeForPercentage(cuePoint: cuePoint).frame(height:20)
+                self.getStrokeForPercentage(cuePoint: Double(cuePoint)).frame(height:20)
             }
         }
     }

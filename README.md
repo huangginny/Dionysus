@@ -9,16 +9,16 @@ Most browsers and devices provide tools to opt out from this feature by default.
 This Application uses the Google Maps API(s) and includes Google Maps feature and content. Use of Google Maps features and content is subject to the then-current versions of the [Google Maps/Google Earth Additional Terms of Service](https://maps.google.com/help/terms_maps.html), and [Google Privacy Policy](https://www.google.com/policies/privacy/)
 
 ### Compatibility
-Minimum supported version: iOS 13.2, iPhone only in portrait mode
+Minimum supported version: iOS 13.2+, iPhone only in portrait mode
 
 ### External Dependencies
 - Fuse: For fuzzy matching to identify the same place across platforms
 - MarkdownView: Render markdown in Swift
 
-### Roadmap for Dionysus v1.1
+### Future Roadmap
 1. Add filters and sort in both Search and God's Pick
 2. Support more rating platforms, e.g., Zomato and OpenTable
-3. Allow user to select default rating platform for search in "Settings"
+3. Allow user to select default rating platform for search in "Settings" (won't happen unless 5+ platforms)
 
 ### Feedbacks and Suggestions
 Please open an issue in the project [Github repository](https://github.com/huangginny/Dionysa/issues) or tweet to [@ginnyzr7](https://twitter.com/ginnyzr7).

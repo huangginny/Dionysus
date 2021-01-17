@@ -78,36 +78,40 @@ struct PlaceView: View {
     @State var searched = false
     
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing:0) {
-                    if self.placeHolder.loadComplete && isNonEmptyString(self.placeHolder.defaultPlaceInfoLoader.place?.imageUrl) {
-                        URLImage(withURL: self.placeHolder.defaultPlaceInfoLoader.place!.imageUrl!)
-                            .frame(width: geometry.size.width, height: CGFloat(PHOTO_HEIGHT), alignment: .top)
-                            .transition(.move(edge: .top))
-                    }
-                    Info(
-                        place: self.placeHolder.defaultPlaceInfoLoader.place!,
-                        size: geometry.size,
-                        onTapAddress: self.placeHolder.defaultPlaceInfoLoader.plugin.name == "Google" ?
-                            {
-                                if let urlStr = self.placeHolder.defaultPlaceInfoLoader.place?.url,
-                                    let url = URL(string: urlStr) {
-                                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        GeometryReader { geoSafeArea in // https://stackoverflow.com/questions/64280447/scrollview-navigationview-animation-glitch-swiftui
+            GeometryReader { geometry in
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing:0) {
+                        if self.placeHolder.loadComplete && isNonEmptyString(self.placeHolder.defaultPlaceInfoLoader.place?.imageUrl) {
+                            URLImage(withURL: self.placeHolder.defaultPlaceInfoLoader.place!.imageUrl!)
+                                .frame(width: geometry.size.width, height: CGFloat(PHOTO_HEIGHT), alignment: .top)
+                        }
+                        Info(
+                            place: self.placeHolder.defaultPlaceInfoLoader.place!,
+                            size: geometry.size,
+                            onTapAddress: self.placeHolder.defaultPlaceInfoLoader.plugin.name == "Google" ?
+                                {
+                                    if let urlStr = self.placeHolder.defaultPlaceInfoLoader.place?.url,
+                                        let url = URL(string: urlStr) {
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    }
+                                } : {
+                                    self.placeHolder.mapItem.openInMaps(launchOptions: nil)
                                 }
-                            } : {
-                                self.placeHolder.mapItem.openInMaps(launchOptions: nil)
-                            }
-                    )
-                    RatingCard(loader: self.placeHolder.defaultPlaceInfoLoader)
-                    ForEach(Array(self.placeHolder.infoForSite.values), id: \.id) { loader in
-                        RatingCard(loader:loader)
+                        )
+                        RatingCard(loader: self.placeHolder.defaultPlaceInfoLoader)
+                        ForEach(Array(self.placeHolder.infoForSite.values), id: \.id) { loader in
+                            RatingCard(loader:loader)
+                        }
+                        .frame(width: geometry.size.width)
                     }
-                    Spacer()
+                    .padding(.top, geoSafeArea.safeAreaInsets.top)
+                    .padding(.bottom, geoSafeArea.safeAreaInsets.bottom)
+                    .padding(.leading, geoSafeArea.safeAreaInsets.leading)
+                    .padding(.trailing, geoSafeArea.safeAreaInsets.trailing)
                 }
-                .frame(width: geometry.size.width)
-                .animation(.easeInOut)
             }
+            .edgesIgnoringSafeArea(.all)
         }
         .onAppear {
             if !self.searched {

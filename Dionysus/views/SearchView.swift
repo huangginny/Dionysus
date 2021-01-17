@@ -64,21 +64,16 @@ struct SearchView: View {
                     Text(state.placeSearchLoadError).padding()
                     Spacer()
                 } else {
-                    GeometryReader { geometry in
-                        List(self.state.placeSearchResults) { result in
-                            NavigationLink(destination:
-                                PlaceView(
-                                    placeHolder: result)
-                            ) {
-                                PlaceRow(
-                                    place: result.defaultPlaceInfoLoader.place!,
-                                    pluginName: result.defaultPlaceInfoLoader.plugin.name
-                                )
-                            }
-                        }.frame(height:
-                            geometry.size.height - CGFloat(self.keyboardHeight) + self.statusBarHeight
-                        )
-                        Spacer()
+                    List(self.state.placeSearchResults) { result in
+                        NavigationLink(destination:
+                            PlaceView(
+                                placeHolder: result)
+                        ) {
+                            PlaceRow(
+                                place: result.defaultPlaceInfoLoader.place!,
+                                pluginName: result.defaultPlaceInfoLoader.plugin.name
+                            )
+                        }
                     }
                 }
             }

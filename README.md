@@ -1,4 +1,3 @@
-# Dionysus
 Like Dionysus, this app has the God's eye view of all digestibles you can search for.
 
 ### Terms of Use & Privacy Policy

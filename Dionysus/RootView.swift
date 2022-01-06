@@ -25,26 +25,14 @@ struct RootView: View {
                 )
             ),
             TabBar.Tab(
-                view: ScrollView {
-                    AboutView(height: $aboutViewHeight)
-                },
+                view: MoreItemsNavigationView(),
                 barItem: UITabBarItem(
-                    title: "About",
-                    image: UIImage(systemName: "info.circle"),
-                    tag: 2
+                    title: "More",
+                    image: UIImage(systemName: "list.bullet"),
+                    tag: 1
                 )
             )
         ])
-        /**Text("Settings...")
-            .font(.title)
-            .tabItem {
-                VStack {
-                    Image(systemName: "gear")
-                    Text("Settings")
-                }
-            }
-            .tag(1)
-        }*/
     }
 }
 

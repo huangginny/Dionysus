@@ -9,14 +9,14 @@
 import SwiftUI
 import MarkdownView
 
-struct AboutView : UIViewRepresentable {
+struct SwiftUIMarkDownView : UIViewRepresentable {
     
     @Binding var height : CGFloat
     
-    func makeUIView(context: UIViewRepresentableContext<AboutView>) -> MarkdownView {
+    func makeUIView(context: UIViewRepresentableContext<SwiftUIMarkDownView>) -> MarkdownView {
         logMessage("Start initializing markdown")
         let mdv = MarkdownView()
-        mdv.isScrollEnabled = true
+        mdv.isScrollEnabled = false
         mdv.onTouchLink = { (request: URLRequest) -> Bool in
             if let url = request.url {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -36,11 +36,28 @@ struct AboutView : UIViewRepresentable {
         return mdv
     }
     
-    func updateUIView(_ uiView: MarkdownView, context: UIViewRepresentableContext<AboutView>) {
+    func updateUIView(_ uiView: MarkdownView, context: UIViewRepresentableContext<SwiftUIMarkDownView>) {
         logMessage("")
     }
     
     typealias UIViewType = MarkdownView
+}
+
+struct AboutView : View {
+    @Binding var height : CGFloat
+    @Environment(\.colorScheme) var colorScheme
+    var body: some View {
+        let view = ScrollView {
+            SwiftUIMarkDownView(height: $height)
+                .padding(.top, 10)
+                .navigationTitle("About Dionysus")
+                .navigationBarTitleDisplayMode(.large)
+        }
+        if (colorScheme == .dark) {
+            return AnyView(view.colorInvert())
+        }
+        return AnyView(view)
+    }
 }
 
 struct AboutView_Previews: PreviewProvider {

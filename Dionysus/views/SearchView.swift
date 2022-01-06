@@ -74,7 +74,7 @@ struct SearchView: View {
                                 pluginName: result.defaultPlaceInfoLoader.plugin.name
                             )
                         }
-                    }
+                    }.listStyle(.inset)
                 }
             }
             .edgesIgnoringSafeArea(.top)

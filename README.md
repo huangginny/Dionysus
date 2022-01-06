@@ -21,7 +21,7 @@ Minimum supported version: iOS 13.2+, iPhone only in portrait mode
 3. Allow user to select default rating platform for search in "Settings" (won't happen unless 5+ platforms)
 
 ### Feedbacks and Suggestions
-Please open an issue in the project [Github repository](https://github.com/huangginny/Dionysa/issues) or tweet to [@ginnyzr7](https://twitter.com/ginnyzr7).
+Please open an issue in the project [Github repository](https://github.com/huangginny/Dionysa/issues) or tweet to [@ginsterrific](https://twitter.com/ginsterrific).
 
 ### Contribution
 

@@ -16,7 +16,7 @@ struct AboutView : UIViewRepresentable {
     func makeUIView(context: UIViewRepresentableContext<AboutView>) -> MarkdownView {
         logMessage("Start initializing markdown")
         let mdv = MarkdownView()
-        mdv.isScrollEnabled = false
+        mdv.isScrollEnabled = true
         mdv.onTouchLink = { (request: URLRequest) -> Bool in
             if let url = request.url {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)

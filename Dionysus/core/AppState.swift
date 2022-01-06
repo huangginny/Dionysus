@@ -54,14 +54,14 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     var locManager = CLLocationManager()
     
     override init() {
-        // read settings from json file
+        // read settings from user defaults
         self.setting = Setting(defaultSite: "yelp", activeSites: ["yelp", "4sq", "google"])
         super.init()
         locManager.delegate = self
     }
     
     deinit {
-        // save settings to json
+        // save settings (in user defaults?)
     }
     
     func onSubmitSettingChange(defaultSite: String, activeSites: [String]) {

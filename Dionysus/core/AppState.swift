@@ -14,7 +14,7 @@ enum DionysusView { case none, search, roll }
 
 class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     
-    @Published var setting : Setting
+    @Published var setting : PluginSetting
     @Published var currentView = DionysusView.none
     
     // Search
@@ -35,17 +35,13 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     override init() {
         // read settings from user defaults
-        self.setting = Setting(defaultSite: "yelp", activeSites: ["yelp", "4sq", "google"])
+        self.setting = PluginSetting()
         super.init()
         locManager.delegate = self
     }
     
     deinit {
         // save settings (in user defaults?)
-    }
-    
-    func onSubmitSettingChange(defaultSite: String, activeSites: [String]) {
-        setting = Setting(defaultSite: defaultSite, activeSites: activeSites)
     }
     
     func onSearchButtonClicked(with name:String, location:String) {
@@ -90,7 +86,7 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
             break
         case .authorizedWhenInUse, .authorizedAlways:
-            locManager.startUpdatingLocation()
+            locManager.requestLocation()
             break
         default:
             locManager.requestWhenInUseAuthorization()
@@ -142,10 +138,10 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
 /**
     CLLocationManagerExtension protocol methods
  */
-    func locationManager(_ manager: CLLocationManager,
-                         didChangeAuthorization status: CLAuthorizationStatus) {
-        logMessage("Authorization changed: \(status.rawValue)")
-        locationAuthorizedStatus = status
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        locationAuthorizedStatus = manager.authorizationStatus
+        logMessage("Authorization changed: \(locationAuthorizedStatus.rawValue)")
         if (isPlaceSearchLoading && ongoingSearchTermWithCoordinate != "") || isDiceRolling {
             requestLocation()
         }
@@ -161,8 +157,8 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
                 diceRollError = "Cannot retrieve location data from device."
                 return
             }
-            let idx = Int.random(in: 0 ..< setting.activeSitePlugins.count)
-            setting.activeSitePlugins[idx].searchForPlaces(
+            let idx = Int.random(in: 0 ..< setting.defaultAndActivePlugins.count)
+            setting.defaultAndActivePlugins[idx].searchForPlaces(
                 with: "Restaurants",
                 coordinate: Coordinate(latitude: coordinate.latitude, longitude: coordinate.longitude),
                 successCallbackFunc: _onPlaceSearchComplete,

@@ -61,12 +61,13 @@ class PlaceHolderModel: ObservableObject, Identifiable {
     
     @Published var infoForSite = [String : InfoLoader]()
     @Published var defaultPlaceInfoLoader : InfoLoader
+    @Published var topImage : URLImage?
     var mapItem : MKMapItem
-    let currentSetting : Setting
+    let currentSetting : PluginSetting
     
     @Published var loadComplete = false
     
-    init(with place: PlaceInfoModel, plugin: SitePlugin, setting: Setting) {
+    init(with place: PlaceInfoModel, plugin: SitePlugin, setting: PluginSetting) {
         currentSetting = setting
         defaultPlaceInfoLoader = InfoLoader(plugin: plugin, place: place)
         let coord = CLLocationCoordinate2D(
@@ -87,7 +88,7 @@ class PlaceHolderModel: ObservableObject, Identifiable {
             errorCallbackFunc: _onLoadRatingError
         );
         let defaultPlace = defaultPlaceInfoLoader.place
-        for p in currentSetting.activeSitePlugins {
+        for p in currentSetting.defaultAndActivePlugins {
             if p.name != defaultPlaceInfoLoader.plugin.name {
                 infoForSite[p.name] = InfoLoader(plugin: p, place: nil)
                 p.searchForPlaces(
@@ -159,6 +160,9 @@ class PlaceHolderModel: ObservableObject, Identifiable {
         if loaders.count == 0 && !self.defaultPlaceInfoLoader.isLoading {
             DispatchQueue.main.async {
                 self.loadComplete = true
+                if let imageUrl = self.defaultPlaceInfoLoader.place?.imageUrl {
+                    self.topImage = URLImage(withURL: imageUrl)
+                }
             }
         }
     }
@@ -167,7 +171,7 @@ class PlaceHolderModel: ObservableObject, Identifiable {
 /**
  Preview and debug helpers
  */
-let mockSetting = Setting(defaultSite: "mock", activeSites: [])
+let mockSetting = PluginSetting(isMock: true)
 let cupboard = PlaceInfoModel(
     place_id: "Cupboard_Under_the_Stairs",
     name:"The Cupboard Under the Stairs",

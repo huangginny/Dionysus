@@ -9,24 +9,62 @@
 import Foundation
 import Combine
 
-class Setting: ObservableObject {
+class PluginSetting: ObservableObject {
     @Published var defaultSitePlugin : SitePlugin
+    @Published var activeSitePlugins = [SitePlugin]()
+    var defaultAndActivePlugins: [SitePlugin] {
+        return [defaultSitePlugin] + activeSitePlugins
+    }
     
-    var defaultSite : String
-    // TODO: should be published once inactive plugins are supported.
-    var activeSitePlugins = [SitePlugin]()
-    
-    init(defaultSite : String, activeSites: [String]) {
-        self.defaultSite = defaultSite
-        self.defaultSitePlugin = NAME_TO_SITE_PLUGIN[defaultSite]!.init()
+    init(isMock: Bool) {
+        var defaultSite: String?;
+        if (isMock) {
+            defaultSite = "Mock Plugin"
+        } else {
+            let standardUserDefault = UserDefaults.standard
+            defaultSite = standardUserDefault.object(forKey: "defaultSite") as? String
+            if (defaultSite == nil) {
+                defaultSite = "Yelp"
+                standardUserDefault.set(defaultSite, forKey: "defaultSite")
+            }
+        }
+        self.defaultSitePlugin = NAME_TO_SITE_PLUGIN[defaultSite!]!.init()
         
-        var updatedSitePlugins = [self.defaultSitePlugin]
+        var updatedSitePlugins = [SitePlugin]()
+        let activeSites = NAME_TO_SITE_PLUGIN.keys
         for name in activeSites {
-            if name != defaultSite {
+            if name != defaultSite && name != "Mock Plugin" {
                 let plugin = NAME_TO_SITE_PLUGIN[name]!.init()
                 updatedSitePlugins.append(plugin)
             }
         }
         self.activeSitePlugins = updatedSitePlugins
+    }
+    
+    convenience init() {
+        self.init(isMock: false)
+    }
+    
+    func updateDefaultSitePlugin(_ pluginName: String) {
+        if (pluginName == self.defaultSitePlugin.name) {
+            return
+        }
+        let eligibleKeys = self.defaultAndActivePlugins.map { $0.name }
+        if (!eligibleKeys.contains(pluginName)) {
+            return
+        }
+        
+        var newDefaultPlugin = self.defaultSitePlugin;
+        var newActivePlugins = [SitePlugin]()
+        for plugin in self.defaultAndActivePlugins {
+            if pluginName == plugin.name {
+                newDefaultPlugin = plugin
+            } else {
+                newActivePlugins.append(plugin)
+            }
+        }
+        self.defaultSitePlugin = newDefaultPlugin
+        self.activeSitePlugins = newActivePlugins
+        UserDefaults.standard.set(pluginName, forKey: "defaultSite")
     }
 }

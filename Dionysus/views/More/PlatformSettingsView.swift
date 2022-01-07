@@ -8,40 +8,71 @@
 
 import SwiftUI
 
+let DEFAULT_PLATFORM_DESC = """
+The default platform is used to search for places.
+For example, if your default platform is Yelp, \
+the list of search results would be provided by Yelp.
+"""
+
+struct PlatformSettingsCell: View {
+    var plugin: SitePlugin
+    var body: some View {
+        HStack {
+            Image(plugin.attribution)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding(.vertical, 5)
+                .frame(height: 35)
+            Text(plugin.name)
+        }
+    }
+}
+
 struct MakeDefaultButton: View {
+    var setting: PluginSetting
+    var pluginName: String
     var body: some View {
         Button("Make Default") {
-            print("This is default now")
+            setting.updateDefaultSitePlugin(pluginName)
         }
     }
 }
 
 struct PlatformSettingsView: View {
+    @ObservedObject var setting: PluginSetting
     var body: some View {
         List {
-            Section(header: Text("Default Platform")) {
-                Text("google")
+            Section(
+                header: Text("Default Platform"),
+                footer: Text(DEFAULT_PLATFORM_DESC)
+            ) {
+                PlatformSettingsCell(plugin: setting.defaultSitePlugin)
             }
             Section(header: Text("Active Platforms")) {
-                ForEach(0..<3) { platform in
+                ForEach(setting.activeSitePlugins, id: \.name) { plugin in
                     if #available(iOS 15.0, *) {
-                        Text("Yelp").swipeActions(edge: .trailing) {
-                            MakeDefaultButton().tint(COLOR_THEME_ORANGE)
+                        PlatformSettingsCell(plugin: plugin)
+                            .swipeActions(edge: .trailing) {
+                            MakeDefaultButton(
+                                setting: setting,
+                                pluginName: plugin.name
+                            ).tint(COLOR_THEME_ORANGE)
                         }
                     } else {
                         Menu {
-                            MakeDefaultButton()
+                            MakeDefaultButton(setting: setting, pluginName: plugin.name)
                         } label: {
-                            Text("Yelp")
+                            PlatformSettingsCell(plugin: plugin)
                         }
                     }
                     
                 }
             }
-            // We don't have enough platforms yet so let's just make every platform active
-            /*Section(header: Text("Other Platforms")) {
-                
-            }*/
+            /**
+             TODO: We don't have enough platforms yet so let's just make every platform active
+             Section(header: Text("Other Platforms")) {
+            }
+             */
         }
         .listStyle(.grouped)
         .navigationTitle("Platform Settings")
@@ -51,6 +82,6 @@ struct PlatformSettingsView: View {
 
 struct PlatformSettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        PlatformSettingsView()
+        PlatformSettingsView(setting: previewState.setting)
     }
 }

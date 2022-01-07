@@ -78,13 +78,18 @@ struct PlaceView: View {
     @State var searched = false
     
     var body: some View {
-        GeometryReader { geoSafeArea in // https://stackoverflow.com/questions/64280447/scrollview-navigationview-animation-glitch-swiftui
+        GeometryReader { geoSafeArea in
+            // https://stackoverflow.com/questions/64280447/scrollview-navigationview-animation-glitch-swiftui
             GeometryReader { geometry in
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing:0) {
-                        if self.placeHolder.loadComplete && isNonEmptyString(self.placeHolder.defaultPlaceInfoLoader.place?.imageUrl) {
-                            URLImage(withURL: self.placeHolder.defaultPlaceInfoLoader.place!.imageUrl!)
-                                .frame(width: geometry.size.width, height: CGFloat(PHOTO_HEIGHT), alignment: .top)
+                        if self.placeHolder.loadComplete && (self.placeHolder.topImage != nil) {
+                            self.placeHolder.topImage
+                                .frame(
+                                    width: geometry.size.width,
+                                    height: CGFloat(PHOTO_HEIGHT),
+                                    alignment: .top
+                                )
                         }
                         Info(
                             place: self.placeHolder.defaultPlaceInfoLoader.place!,

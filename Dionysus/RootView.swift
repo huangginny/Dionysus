@@ -25,7 +25,7 @@ struct RootView: View {
                 )
             ),
             TabBar.Tab(
-                view: MoreItemsNavigationView(),
+                view: MoreItemsNavigationView(state: state),
                 barItem: UITabBarItem(
                     title: "More",
                     image: UIImage(systemName: "list.bullet"),

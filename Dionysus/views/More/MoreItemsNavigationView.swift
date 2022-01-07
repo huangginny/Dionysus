@@ -9,11 +9,12 @@
 import SwiftUI
 
 struct MoreItemsNavigationView: View {
+    @ObservedObject var state: AppState
     @State var aboutViewHeight = UIScreen.main.bounds.height
     var body: some View {
         NavigationView {
             List {
-                NavigationLink(destination: PlatformSettingsView()) {
+                NavigationLink(destination: PlatformSettingsView(setting: state.setting)) {
                     Text("Platform Settings")
                 }
                 NavigationLink(destination: AboutView(height: $aboutViewHeight)) {
@@ -39,6 +40,6 @@ struct MoreItemsNavigationView: View {
 
 struct MoreItemsNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        MoreItemsNavigationView()
+        MoreItemsNavigationView(state: previewState)
     }
 }

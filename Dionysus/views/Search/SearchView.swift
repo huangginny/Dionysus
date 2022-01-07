@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import Combine
 
 struct SearchView: View {
     @ObservedObject var state: AppState
@@ -66,8 +65,7 @@ struct SearchView: View {
                 } else {
                     List(self.state.placeSearchResults) { result in
                         NavigationLink(destination:
-                            PlaceView(
-                                placeHolder: result)
+                            PlaceView(placeHolder: result)
                         ) {
                             PlaceRow(
                                 place: result.defaultPlaceInfoLoader.place!,

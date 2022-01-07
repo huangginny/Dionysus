@@ -13,6 +13,7 @@ class YelpPlugin : SitePlugin {
     var name: String
     var attribution: String
     var attributionHasText: Bool
+    var faviconUrl: String
     var colorCode: String
     var totalScore: Int
     
@@ -22,6 +23,7 @@ class YelpPlugin : SitePlugin {
         name = "Yelp"
         attribution = "yelp-icon"
         attributionHasText = false
+        faviconUrl = "https://www.yelp.com/favicon.ico"
         colorCode = "#D32323"
         totalScore = 5
     }

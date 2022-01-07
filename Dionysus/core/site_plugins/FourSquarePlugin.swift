@@ -13,6 +13,7 @@ class FourSquarePlugin: SitePlugin {
     var name: String
     var attribution: String
     var attributionHasText: Bool
+    var faviconUrl: String
     var colorCode: String
     var totalScore: Int
     
@@ -24,6 +25,7 @@ class FourSquarePlugin: SitePlugin {
         name = "FourSquare"
         attribution = "powered-by-4sq"
         attributionHasText = true
+        faviconUrl = "https://foursquare.com/favicon.ico"
         colorCode = "#F94877"
         totalScore = 10
     }

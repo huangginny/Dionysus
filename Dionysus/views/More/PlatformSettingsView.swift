@@ -18,11 +18,9 @@ struct PlatformSettingsCell: View {
     var plugin: SitePlugin
     var body: some View {
         HStack {
-            Image(plugin.attribution)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            URLImage(withURL: plugin.faviconUrl)
                 .padding(.vertical, 5)
-                .frame(height: 35)
+                .frame(width: 25, height: 25)
             Text(plugin.name)
         }
     }

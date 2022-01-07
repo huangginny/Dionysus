@@ -13,6 +13,7 @@ class GooglePlugin : SitePlugin {
     var name: String
     var attribution: String
     var attributionHasText: Bool
+    var faviconUrl: String
     var colorCode: String
     var totalScore: Int
     
@@ -22,6 +23,7 @@ class GooglePlugin : SitePlugin {
         name = "Google"
         attribution = "powered-by-google"
         attributionHasText = true
+        faviconUrl = "https://www.google.com/favicon.ico"
         colorCode = "#4285f4"
         totalScore = 5
     }

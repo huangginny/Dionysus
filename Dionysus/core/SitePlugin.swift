@@ -17,6 +17,7 @@ protocol SitePlugin {
     var name: String { get }
     var attribution: String { get }
     var attributionHasText: Bool { get }
+    var faviconUrl: String { get }
     var colorCode: String { get }
     var totalScore: Int { get }
     
@@ -48,6 +49,7 @@ class MockPlugin : SitePlugin {
     var name: String
     var attribution: String
     var attributionHasText: Bool
+    var faviconUrl: String
     var colorCode: String
     var totalScore: Int
     
@@ -55,6 +57,7 @@ class MockPlugin : SitePlugin {
         name = "Mock Plugin"
         attribution = "mock-plugin-logo"
         attributionHasText = false
+        faviconUrl = "https://github.com/favicon.ico"
         colorCode = "#EB5244"
         totalScore = 10
     }

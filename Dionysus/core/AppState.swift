@@ -10,26 +10,6 @@ import Foundation
 import Combine
 import CoreLocation
 
-struct Setting {
-    var defaultSite : String
-    var defaultSitePlugin : SitePlugin
-    var activeSitePlugins = [SitePlugin]()
-    
-    init(defaultSite : String, activeSites: [String]) {
-        self.defaultSite = defaultSite
-        self.defaultSitePlugin = NAME_TO_SITE_PLUGIN[defaultSite]!.init()
-        
-        var updatedSitePlugins = [self.defaultSitePlugin]
-        for name in activeSites {
-            if name != defaultSite {
-                let plugin = NAME_TO_SITE_PLUGIN[name]!.init()
-                updatedSitePlugins.append(plugin)
-            }
-        }
-        self.activeSitePlugins = updatedSitePlugins
-    }
-}
-
 enum DionysusView { case none, search, roll }
 
 class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {

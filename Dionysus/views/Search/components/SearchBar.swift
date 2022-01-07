@@ -95,7 +95,6 @@ struct SearchBar: View {
         return VStack(spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
                 Button(action: {
-                    // TODO:Go back to root view
                     self.name = ""
                     self.location = ""
                     nameSearchField.text.wrappedValue = ""

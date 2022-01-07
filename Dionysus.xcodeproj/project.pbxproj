@@ -159,32 +159,27 @@
 		F20C905223C9B27500761AA8 /* views */ = {
 			isa = PBXGroup;
 			children = (
-				F28FB13E23CC0504006EE676 /* components */,
-				F28FB13C23CC0499006EE676 /* SearchView.swift */,
-				F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */,
-				F25D106423E8768B008B887C /* MainView.swift */,
-				F25D106623E93808008B887C /* DiceView.swift */,
-				F25D106A23EBF3D9008B887C /* AboutView.swift */,
-				F286D92E278690A8009628E6 /* PlatformSettingsView.swift */,
-				F2DA47A92786A4FD0058B4AD /* MoreItemsNavigationView.swift */,
+				F2DA47AC2787F6450058B4AD /* More */,
+				F2DA47AB2787F61C0058B4AD /* Search */,
+				F28FB13E23CC0504006EE676 /* common_components */,
 			);
 			path = views;
 			sourceTree = "<group>";
 		};
-		F20C905323C9B28200761AA8 /* site-plugins */ = {
+		F20C905323C9B28200761AA8 /* site_plugins */ = {
 			isa = PBXGroup;
 			children = (
 				F26F237423D80E2A00B7B162 /* YelpPlugin.swift */,
 				F2D8041423DBD452005D3BCF /* FourSquarePlugin.swift */,
 				F2E0050023E655D400C89DE4 /* GooglePlugin.swift */,
 			);
-			path = "site-plugins";
+			path = site_plugins;
 			sourceTree = "<group>";
 		};
 		F20C905623C9C65D00761AA8 /* core */ = {
 			isa = PBXGroup;
 			children = (
-				F20C905323C9B28200761AA8 /* site-plugins */,
+				F20C905323C9B28200761AA8 /* site_plugins */,
 				F20C905423C9B5E200761AA8 /* Models.swift */,
 				F20C905723C9C67B00761AA8 /* Utils.swift */,
 				F20C905923C9C8FC00761AA8 /* AppState.swift */,
@@ -206,15 +201,43 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F28FB13E23CC0504006EE676 /* components */ = {
+		F28FB13E23CC0504006EE676 /* common_components */ = {
+			isa = PBXGroup;
+			children = (
+				F26F237023D6B88000B7B162 /* URLImage.swift */,
+				F26F237223D6E5D900B7B162 /* ActivityIndicator.swift */,
+			);
+			path = common_components;
+			sourceTree = "<group>";
+		};
+		F2DA47AB2787F61C0058B4AD /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				F2DA47AD2787F69C0058B4AD /* components */,
+				F28FB13C23CC0499006EE676 /* SearchView.swift */,
+				F2D9AAFE23CF1E2A000FF82D /* PlaceView.swift */,
+				F25D106423E8768B008B887C /* MainView.swift */,
+				F25D106623E93808008B887C /* DiceView.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		F2DA47AC2787F6450058B4AD /* More */ = {
+			isa = PBXGroup;
+			children = (
+				F25D106A23EBF3D9008B887C /* AboutView.swift */,
+				F286D92E278690A8009628E6 /* PlatformSettingsView.swift */,
+				F2DA47A92786A4FD0058B4AD /* MoreItemsNavigationView.swift */,
+			);
+			path = More;
+			sourceTree = "<group>";
+		};
+		F2DA47AD2787F69C0058B4AD /* components */ = {
 			isa = PBXGroup;
 			children = (
 				F28FB13F23CC0512006EE676 /* SearchBar.swift */,
 				F28FB14123CC0540006EE676 /* PlaceRow.swift */,
 				F2D9AAFC23CF1E07000FF82D /* RatingCard.swift */,
-				F26F237023D6B88000B7B162 /* URLImage.swift */,
-				F26F237223D6E5D900B7B162 /* ActivityIndicator.swift */,
-				F2B9EC9523DE106600F27F11 /* TabBar.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -248,6 +271,7 @@
 				F20C905623C9C65D00761AA8 /* core */,
 				F20C905223C9B27500761AA8 /* views */,
 				F2FF8C3C23C9A3BF008A638E /* RootView.swift */,
+				F2B9EC9523DE106600F27F11 /* TabBar.swift */,
 				F2FF8C3823C9A3BF008A638E /* AppDelegate.swift */,
 				F2FF8C3A23C9A3BF008A638E /* SceneDelegate.swift */,
 				F2FF8C4323C9A3C9008A638E /* LaunchScreen.storyboard */,

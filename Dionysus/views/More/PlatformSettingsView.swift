@@ -47,7 +47,10 @@ struct PlatformSettingsView: View {
                 PlatformSettingsCell(plugin: setting.defaultSitePlugin)
             }
             Section(header: Text("Active Platforms")) {
-                ForEach(setting.activeSitePlugins, id: \.name) { plugin in
+                ForEach(
+                    setting.activeSitePlugins.sorted(by: { $0.name < $1.name }),
+                    id: \.name
+                ) { plugin in
                     if #available(iOS 15.0, *) {
                         PlatformSettingsCell(plugin: plugin)
                             .swipeActions(edge: .trailing) {

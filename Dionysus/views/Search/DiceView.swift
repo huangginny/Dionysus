@@ -29,7 +29,7 @@ struct DiceView: View {
                 Spacer()
                 Text(label).font(.headline)
                 Spacer()
-            }
+            } // TODO: replace with navigation bar with X button.
             .padding(.horizontal)
             .frame(width: CGFloat(getScreenWidth()), height:50)
             Divider()

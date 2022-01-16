@@ -10,6 +10,7 @@ import SwiftUI
 
 struct SearchView: View {
     @ObservedObject var state: AppState
+    // observe setting as well
     let statusBarHeight: CGFloat
     
     @State private var showAlert = false
@@ -36,7 +37,7 @@ struct SearchView: View {
             })
         return NavigationView {
             VStack {
-                SearchBar(
+                SearchBar( // TODO: need to re-read default plugin after coming back from another tab
                     statusBarHeight: statusBarHeight,
                     plugin: state.setting.defaultSitePlugin,
                     onCommit: {(name: String, location: String) -> Void in

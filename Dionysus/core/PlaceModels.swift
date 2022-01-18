@@ -94,6 +94,7 @@ class PlaceHolderModel: ObservableObject, Identifiable {
                 infoForSite[p.name] = InfoLoader(plugin: p, place: nil)
                 p.searchForPlaces(
                     with: defaultPlace!.name,
+                    filter: Filter(category: nil), // TODO: change when filter is implemented
                     coordinate: defaultPlace!.coordinate,
                     successCallbackFunc: _onPlaceFound,
                     errorCallbackFunc: {(errorMessage: String, plugin: SitePlugin) -> Void in

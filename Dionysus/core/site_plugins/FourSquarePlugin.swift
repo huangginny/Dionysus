@@ -32,19 +32,23 @@ class FourSquarePlugin: SitePlugin {
     
     func searchForPlaces(
         with name: String,
+        filter: Filter,
         location: String,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
-        let url = baseUrl + "search?near=\(location)&query=\(name)" + authParams
+            let url = baseUrl + "search?near=\(location)&query=\(name)&categories=" +
+                "\(_stringFromCategory(filter.category))" + authParams
         _searchForPlaces(with: url, successCallbackFunc: successCallbackFunc, errorCallbackFunc: errorCallbackFunc)
     }
     
     func searchForPlaces(
         with name: String,
+        filter: Filter,
         coordinate: Coordinate,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
-        let url = baseUrl + "search?ll=\(coordinate.latitude),\(coordinate.longitude)&query=\(name)" + authParams
+        let url = baseUrl + "search?ll=\(coordinate.latitude),\(coordinate.longitude)&query=\(name)" +
+            "\(_stringFromCategory(filter.category))" + authParams
         _searchForPlaces(with: url, successCallbackFunc: successCallbackFunc, errorCallbackFunc: errorCallbackFunc)
     }
     
@@ -92,6 +96,27 @@ class FourSquarePlugin: SitePlugin {
             },
             onError: {(errorMsg: String) -> Void in errorCallbackFunc(errorMsg, self)}
         )
+    }
+    
+    func _stringFromCategory(_ category: Category?) -> String {
+        // https://developer.foursquare.com/docs/categories
+        guard let cat = category else { return "" }
+        switch cat {
+        case .anything:
+            return "13000"
+        case .breakfast:
+            return "13001,13002,13028,13052,13053,13054,13065"
+        case .lunch:
+            return "13037,13052,13053,13054,13065"
+        case .dinner:
+            return "13037,13052,13053,13054,13065"
+        case .cafe:
+            return "13032"
+        case .dessert:
+            return "13040"
+        case .nightlife:
+            return "13003,13029,13038,13050"
+        }
     }
     
     func _parseSearchResultToModels(venues: [[String: Any]]) -> [PlaceInfoModel] {

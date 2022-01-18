@@ -26,7 +26,7 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     // Dice
     @Published var diceResult: PlaceHolderModel?
-    @Published var isDiceRolling = false
+    @Published var diceCategory: Category? = nil
     @Published var diceRollError = ""
     
     // Location
@@ -58,16 +58,17 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
         setting.defaultSitePlugin.searchForPlaces(
             with: name,
+            filter: Filter(category: .anything),// TODO: change when filter is implemented
             location: location,
             successCallbackFunc: _onPlaceSearchComplete,
             errorCallbackFunc: _onPlaceSearchError
         )
     }
     
-    func onDiceRollClicked() {
+    func onDiceRollClicked(category: Category) {
         logMessage("Rolling dice...")
-        self.currentView = DionysusView.roll;
-        isDiceRolling = true
+        self.currentView = DionysusView.roll
+        diceCategory = category
         requestLocation()
     }
     
@@ -80,8 +81,8 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
                 placeSearchLoadError = "Location services is not enabled. " +
                     "Please either enter a place name or enable your location services in device Settings."
             }
-            if isDiceRolling {
-                isDiceRolling = false
+            if diceCategory != nil {
+                diceCategory = nil
                 diceRollError = "Location services is not enabled. " +
                     "Please enable your location services in device Settings to roll the dice."
             }
@@ -103,14 +104,14 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
                 self.isPlaceSearchLoading = false
             }
         }
-        if self.isDiceRolling {
+        if self.diceCategory != nil {
             let idx = places.count > 0 ? Int.random(in: 0 ..< places.count) : -1
             if idx == -1 {
                 requestLocation() // roll dice again
             } else {
                 DispatchQueue.main.async {
                     self.diceResult = PlaceHolderModel(with: places[idx], plugin: plugin, setting: self.setting)
-                    self.isDiceRolling = false
+                    self.diceCategory = nil
                 }
             }
         }
@@ -128,9 +129,9 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func _onDiceRollError(errorMessage: String, plugin: SitePlugin) {
         logMessage(errorMessage)
-        if self.isDiceRolling {
+        if self.diceCategory != nil {
             DispatchQueue.main.async {
-                self.isDiceRolling = false
+                self.diceCategory = nil
                 self.diceRollError = errorMessage
             }
         }
@@ -143,24 +144,28 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         locationAuthorizedStatus = manager.authorizationStatus
         logMessage("Authorization changed: \(locationAuthorizedStatus.rawValue)")
-        if (isPlaceSearchLoading && ongoingSearchTermWithCoordinate != "") || isDiceRolling {
+        if (isPlaceSearchLoading && ongoingSearchTermWithCoordinate != "") ||
+            diceCategory != nil {
             requestLocation()
         }
     }
     
-    func locationManager(_ manager: CLLocationManager,
-                         didUpdateLocations locations: [CLLocation]) {
+    func locationManager(
+        _ manager: CLLocationManager,
+        didUpdateLocations locations: [CLLocation]
+    ) {
         logMessage("\(locations)")
         let location = locations.last
-        if isDiceRolling {
+        if diceCategory != nil {
             guard let coordinate = location?.coordinate else {
-                isDiceRolling = false
+                diceCategory = nil
                 diceRollError = "Cannot retrieve location data from device."
                 return
             }
             let idx = Int.random(in: 0 ..< setting.defaultAndActivePlugins.count)
             setting.defaultAndActivePlugins[idx].searchForPlaces(
-                with: "Restaurants",
+                with: "",
+                filter: Filter(category: diceCategory),
                 coordinate: Coordinate(latitude: coordinate.latitude, longitude: coordinate.longitude),
                 successCallbackFunc: _onPlaceSearchComplete,
                 errorCallbackFunc: _onDiceRollError
@@ -173,6 +178,7 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
             setting.defaultSitePlugin.searchForPlaces(
                 with: ongoingSearchTermWithCoordinate,
+                filter: Filter(category: .anything), // TODO: change when filter is implemented
                 coordinate: Coordinate(latitude: coordinate.latitude, longitude: coordinate.longitude),
                 successCallbackFunc: _onPlaceSearchComplete,
                 errorCallbackFunc: _onPlaceSearchError
@@ -187,8 +193,8 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
             isPlaceSearchLoading = false
             placeSearchLoadError = "Cannot retrieve location data from device. Please enter a location in search."
         }
-        if isDiceRolling {
-            isDiceRolling = false
+        if diceCategory != nil {
+            diceCategory = nil
             diceRollError = "Cannot retrieve location data from device."
         }
     }

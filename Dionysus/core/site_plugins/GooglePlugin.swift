@@ -28,19 +28,33 @@ class GooglePlugin : SitePlugin {
         totalScore = 5
     }
     
-    func searchForPlaces(with name: String, location: String, successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void, errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
+    func searchForPlaces(
+        with name: String,
+        filter: Filter,
+        location: String,
+        successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
+        errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
         logMessage("")
-        let url = "\(BASE_URL_SEARCH)query=\(name) \(location)"
+            let url = "\(BASE_URL_SEARCH)query=\(name) \(location)&type=\(_typeFromCategory(filter.category))"
         _searchForPlacesHelper(with: url, successCallbackFunc: successCallbackFunc, errorCallbackFunc: errorCallbackFunc)
     }
     
-    func searchForPlaces(with name: String, coordinate: Coordinate, successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void, errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
+    func searchForPlaces(
+        with name: String,
+        filter: Filter,
+        coordinate: Coordinate,
+        successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
+        errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
         logMessage("")
-        let url = "\(BASE_URL_SEARCH)query=\(name)&location=\(coordinate.latitude),\(coordinate.longitude)&radius=1600"
+        let url = "\(BASE_URL_SEARCH)query=\(name)&location=\(coordinate.latitude),\(coordinate.longitude)" +
+            "&radius=1600&type=\(_typeFromCategory(filter.category))"
         _searchForPlacesHelper(with: url, successCallbackFunc: successCallbackFunc, errorCallbackFunc: errorCallbackFunc)
     }
     
-    func loadRatingAndDetails(for place: PlaceInfoModel, successCallbackFunc: @escaping (PlaceInfoModel, SitePlugin) -> Void, errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
+    func loadRatingAndDetails(
+        for place: PlaceInfoModel,
+        successCallbackFunc: @escaping (PlaceInfoModel, SitePlugin) -> Void,
+        errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {
         guard let _ = place.score, let _ = place.numOfScores else {
             errorCallbackFunc("This place is not rated yet", self)
             return
@@ -88,6 +102,21 @@ class GooglePlugin : SitePlugin {
             },
             onError: {(errorMsg: String) -> Void in errorCallbackFunc(errorMsg, self)}
         )
+    }
+    
+    func _typeFromCategory(_ category: Category?) -> String {
+        // https://developers.google.com/maps/documentation/places/web-service/supported_types
+        guard let cat = category else { return "" }
+        switch cat {
+        case .cafe:
+            return "cafe"
+        case .dessert:
+            return "bakery"
+        case .nightlife:
+            return "bar"
+        default:
+            return "restaurant"
+        }
     }
     
     func _parseSearchResultsToModels(jsonList: [[String: Any]]) -> [PlaceInfoModel] {

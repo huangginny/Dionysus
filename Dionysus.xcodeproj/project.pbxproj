@@ -26,6 +26,7 @@
 		F28FB13D23CC0499006EE676 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FB13C23CC0499006EE676 /* SearchView.swift */; };
 		F28FB14023CC0512006EE676 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FB13F23CC0512006EE676 /* SearchBar.swift */; };
 		F28FB14223CC0540006EE676 /* PlaceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28FB14123CC0540006EE676 /* PlaceRow.swift */; };
+		F292660627967641008A23D9 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F292660527967640008A23D9 /* Filter.swift */; };
 		F29CF6C423F3AB9300171D46 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29CF6C323F3AB9300171D46 /* APIKeys.swift */; };
 		F2B9EC9623DE106600F27F11 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B9EC9523DE106600F27F11 /* TabBar.swift */; };
 		F2D8041523DBD452005D3BCF /* FourSquarePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D8041423DBD452005D3BCF /* FourSquarePlugin.swift */; };
@@ -89,6 +90,7 @@
 		F28FB13C23CC0499006EE676 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		F28FB13F23CC0512006EE676 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		F28FB14123CC0540006EE676 /* PlaceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceRow.swift; sourceTree = "<group>"; };
+		F292660527967640008A23D9 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		F29CF6C323F3AB9300171D46 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		F2B9EC9523DE106600F27F11 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		F2D8041423DBD452005D3BCF /* FourSquarePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourSquarePlugin.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				F2D9AB0023D13AA8000FF82D /* SitePlugin.swift */,
 				F26F237623D8129700B7B162 /* Constants.swift */,
 				F2DA47AF2787F7E80058B4AD /* SettingsModel.swift */,
+				F292660527967640008A23D9 /* Filter.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -577,6 +580,7 @@
 				F2FF8C3D23C9A3BF008A638E /* RootView.swift in Sources */,
 				F2E0050123E655D400C89DE4 /* GooglePlugin.swift in Sources */,
 				F20C905523C9B5E200761AA8 /* PlaceModels.swift in Sources */,
+				F292660627967641008A23D9 /* Filter.swift in Sources */,
 				F28FB14223CC0540006EE676 /* PlaceRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

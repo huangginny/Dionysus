@@ -10,7 +10,7 @@ import SwiftUI
 
 struct DiceView: View {
     @ObservedObject var state: AppState
-    @State var label = "God is still making a decision..."
+    @State var label = "Dionysus is still deciding..."
     @State var diceNumber = 1
     @State var diceColor = Color("tintColor")
     @State var timeElapsed = 0.0
@@ -21,7 +21,7 @@ struct DiceView: View {
                     logMessage("Closing dice view")
                     self.state.diceResult = nil
                     self.state.diceRollError = ""
-                    self.state.isDiceRolling = false
+                    self.state.diceCategory = nil
                     self.state.currentView = DionysusView.none
                 }) {
                     Image(systemName: "xmark")
@@ -33,7 +33,7 @@ struct DiceView: View {
             .padding(.horizontal)
             .frame(width: CGFloat(getScreenWidth()), height:50)
             Divider()
-            if state.isDiceRolling {
+            if state.diceCategory != nil {
                 Spacer()
                 if self.timeElapsed >= DICE_TIMEOUT_VALUE {
                     ActivityIndicator()
@@ -58,7 +58,7 @@ struct DiceView: View {
                                     self.diceNumber = POWERS_OF_2[idxNum]
                                     self.diceColor = [COLOR_LIGHT_GRAY, COLOR_THEME_LIME, COLOR_THEME_GREEN, COLOR_THEME_ORANGE, COLOR_THEME_RED][idxCo]
                                     self.timeElapsed += 0.05
-                                    if !self.state.isDiceRolling || self.timeElapsed >= DICE_TIMEOUT_VALUE {
+                                    if self.state.diceCategory == nil || self.timeElapsed >= DICE_TIMEOUT_VALUE {
                                         timer.invalidate()
                                     }
                                 }

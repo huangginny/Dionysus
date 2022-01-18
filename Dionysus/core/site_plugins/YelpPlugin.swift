@@ -53,12 +53,14 @@ class YelpPlugin : SitePlugin {
     
     func searchForPlaces(
         with name: String,
+        filter: Filter,
         location: String,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void
     ) {
         logMessage("")
-        let urlString = baseUrl + "term=\(name)&location=\(location)"
+        let urlString = baseUrl + "term=\(name)&location=\(location)" +
+            "&categories=\(_stringFromCategory(filter.category))"
         self._searchForPlacesHelper(
             with: urlString,
             successCallbackFunc: successCallbackFunc,
@@ -68,12 +70,14 @@ class YelpPlugin : SitePlugin {
     
     func searchForPlaces(
         with name: String,
+        filter: Filter,
         coordinate: Coordinate,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void
     ) {
         logMessage("")
-        let urlString = baseUrl + "term=\(name)&latitude=\(coordinate.latitude)&longitude=\(coordinate.longitude)"
+        let urlString = baseUrl + "term=\(name)&latitude=\(coordinate.latitude)&longitude=" +
+            "\(coordinate.longitude)&categories=\(_stringFromCategory(filter.category))"
         self._searchForPlacesHelper(
             with: urlString,
             successCallbackFunc: successCallbackFunc,
@@ -114,6 +118,28 @@ class YelpPlugin : SitePlugin {
             },
             onError: {(errorMsg: String) -> Void in errorCallbackFunc(errorMsg, self)}
         )
+    }
+    
+    func _stringFromCategory(_ category: Category?) -> String {
+        // https://www.yelp.com/developers/documentation/v3/all_category_list
+        guard let cat = category else { return "" }
+        switch cat {
+        case .anything:
+            return "food,restaurants"
+        case .breakfast:
+            return "baguettes,breakfast_brunch,bagels,bakeries,gourmet"
+        case .lunch:
+            return "restaurants,bento,poke,gourmet"
+        case .dinner:
+            return "restaurants,poke,gourmet"
+        case .cafe:
+            return "coffeeshops,breweries,coffee,cakeshop,tea,baguettes,bakeries,bubbletea"
+        case .dessert:
+            return "chimneycakes,churros,cupcakes,shavedsnow,sugarshacks" +
+                "desserts,donuts,gelato,icecream,jpsweets,cakeshop,shavedice"
+        case .nightlife:
+            return "nightlife,beer_and_wine,breweries,wineries"
+        }
     }
     
     func _parseJsonToModels(jsonList: [[String: Any]]) -> [PlaceInfoModel] {

@@ -18,10 +18,11 @@ struct DiceButton: View {
     @ObservedObject var state: AppState
     let icon : String
     let label : String
+    let category : Category
     let length = (UIScreen.main.bounds.width - 40) / 3
     var body: some View {
         Button(action: {
-            self.state.onDiceRollClicked()
+            self.state.onDiceRollClicked(category: category)
         }) {
             VStack {
                 Text(icon).font(.system(size: 50))
@@ -94,14 +95,14 @@ struct MainView: View {
                         .foregroundColor(Color(UIColor.darkGray))
                     VStack(spacing:0) {
                         HStack(spacing:0) {
-                            DiceButton(state: state, icon: "🥞", label: "Breakfast")
-                            DiceButton(state: state, icon: "🍱", label: "Lunch")
-                            DiceButton(state: state, icon: "🍝", label: "Dinner")
+                            DiceButton(state: state, icon: "🥞", label: "Breakfast", category: .breakfast)
+                            DiceButton(state: state, icon: "🍱", label: "Lunch", category: .lunch)
+                            DiceButton(state: state, icon: "🍝", label: "Dinner", category: .dinner)
                         }
                         HStack(spacing:0) {
-                            DiceButton(state: state, icon: "☕️", label: "Cafe")
-                            DiceButton(state: state, icon: "🍦", label: "Dessert")
-                            DiceButton(state: state, icon: "🍻", label: "Nightlife")
+                            DiceButton(state: state, icon: "☕️", label: "Cafe", category: .cafe)
+                            DiceButton(state: state, icon: "🍦", label: "Dessert", category: .dessert)
+                            DiceButton(state: state, icon: "🍻", label: "Nightlife", category: .nightlife)
                         }
                     }
                     .frame(
@@ -109,7 +110,7 @@ struct MainView: View {
                     )
                     .padding(.horizontal)
                     Button(action:{
-                        self.state.onDiceRollClicked();
+                        self.state.onDiceRollClicked(category: .anything);
                     }) {
                         HStack {
                             Spacer()

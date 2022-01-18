@@ -25,6 +25,7 @@ protocol SitePlugin {
             
     func searchForPlaces(
         with name:String,
+        filter: Filter,
         location: String,
         successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping(String, SitePlugin) -> Void
@@ -32,6 +33,7 @@ protocol SitePlugin {
     
     func searchForPlaces(
         with name:String,
+        filter: Filter,
         coordinate: Coordinate,
         successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping(String, SitePlugin) -> Void
@@ -64,6 +66,7 @@ class MockPlugin : SitePlugin {
     
     func searchForPlaces(
         with name:String,
+        filter: Filter,
         location: String,
         successCallbackFunc: @escaping([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping(String, SitePlugin) -> Void) {
@@ -77,6 +80,7 @@ class MockPlugin : SitePlugin {
     
     func searchForPlaces(
         with name: String,
+        filter: Filter,
         coordinate: Coordinate,
         successCallbackFunc: @escaping ([PlaceInfoModel], SitePlugin) -> Void,
         errorCallbackFunc: @escaping (String, SitePlugin) -> Void) {

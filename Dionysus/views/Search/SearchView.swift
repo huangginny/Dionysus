@@ -12,6 +12,7 @@ struct SearchView: View {
     @ObservedObject var state: AppState
     // observe setting as well
     let statusBarHeight: CGFloat
+    let searchBarNamespace: Namespace.ID
     
     @State private var showAlert = false
     @State private var keyboardHeight = 0.0
@@ -53,8 +54,11 @@ struct SearchView: View {
                         self.state.placeSearchResults = [PlaceHolderModel]()
                         self.state.currentView = DionysusView.none
                     }
+                ).matchedGeometryEffect(
+                    id: "searchBarId",
+                    in: searchBarNamespace
                 )
-                if state.isPlaceSearchLoading {
+            if state.isPlaceSearchLoading {
                     HStack {
                         ActivityIndicator()
                         Text("Looking up your places...")
@@ -87,7 +91,8 @@ struct SearchView: View {
 }
 
 struct SearchView_Previews: PreviewProvider {
+    @Namespace static var ns
     static var previews: some View {
-        SearchView(state: previewState, statusBarHeight: 20)
+        SearchView(state: previewState, statusBarHeight: 20, searchBarNamespace: ns)
     }
 }

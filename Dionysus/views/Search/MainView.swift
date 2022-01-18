@@ -8,67 +8,66 @@
 
 import SwiftUI
 
-func buttonAction() {}
-
-struct DiceButton: View {
-    let icon : String
-    let label : String
-    let length : CGFloat
-    var body: some View {
-        VStack {
-            Text(icon).font(.system(size: 50))
-            Text(label).font(.footnote)
-        }.frame(width: length, height: length)
+struct SearchBarButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
     }
 }
 
-struct MainViewButton: View {
-    
+struct DiceButton: View {
+    @ObservedObject var state: AppState
+    let icon : String
     let label : String
-    let action : ()->()
-    
+    let length = (UIScreen.main.bounds.width - 40) / 3
     var body: some View {
-        Button(action: action) {
-            Text(label).font(.title).padding(.vertical)
-                .frame(width: 300, height: 100)
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color(UIColor.systemBackground).opacity(0.7))
-                        .shadow(color: Color(UIColor.systemBackground), radius: 20)
-                        .padding()
-                )
-        }.padding(.vertical)
+        Button(action: {
+            self.state.onDiceRollClicked()
+        }) {
+            VStack {
+                Text(icon).font(.system(size: 50))
+                Text(label).font(.footnote)
+            }
+        }
+        .accentColor(Color(UIColor.darkGray))
+        .frame(width: length, height: length)
     }
 }
 
 struct MainView: View {
     @ObservedObject var state: AppState
     let statusBarHeight : CGFloat
+    @Namespace var searchBarNamesapce
         
     var body: some View {
+        UINavigationBar.setAnimationsEnabled(false)
         switch state.currentView {
         case .search:
             return AnyView(SearchView(
                 state: self.state,
-                statusBarHeight: self.statusBarHeight
-            ))
+                statusBarHeight: self.statusBarHeight,
+                searchBarNamespace: searchBarNamesapce
+            )).id("SearchView")
         case .roll:
             return AnyView(
                 DiceView(state: self.state)
-            )
+            ).id("DiceView")
         default:
             return AnyView(
-                GeometryReader { geometry in
-                    VStack {
+                VStack {
+                    Spacer()
+                    Button(action:{
+                        withAnimation(.linear(duration: 0.5)) {
+                            self.state.currentView = DionysusView.search
+                        }
+                    }) {
                         VStack {
                             Spacer()
-                            Button(action:buttonAction) {
-                                HStack {
-                                    Image(systemName: "magnifyingglass").foregroundColor(COLOR_THEME_LIME)
-                                    Text("What can Dionysus get you?").foregroundColor(.gray)
-                                    Spacer()
-                                }.font(.title3)
+                            HStack {
+                                Image(systemName: "magnifyingglass").foregroundColor(COLOR_THEME_LIME)
+                                Text("What can Dionysus get you?").foregroundColor(.gray)
+                                Spacer()
                             }
+                            .font(.title3)
                             .padding(25)
                             .frame(height:80)
                             .background(
@@ -77,50 +76,60 @@ struct MainView: View {
                                     .shadow(color: Color(UIColor.systemGray), radius: 10)
                                     .padding(15)
                             )
+                            .matchedGeometryEffect(id: "searchBarId", in: searchBarNamesapce)
                             Spacer()
-                        }.background(
-                            Image(uiImage: UIImage(named: "AppIcon") ?? UIImage())
-                                .resizable()
-                                .padding()
-                                .edgesIgnoringSafeArea(.vertical)
-                                .scaledToFill()
-                        )
-                        VStack(spacing:0) {
-                            Text("or let Dionysus pick you a ...").font(.footnote)
-                            HStack(spacing:0) {
-                                DiceButton(icon: "🥞", label: "Breakfast", length: geometry.size.width / 3 - 20)
-                                DiceButton(icon: "🍱", label: "Lunch", length: geometry.size.width / 3 - 20)
-                                DiceButton(icon: "🍲", label: "Dinner", length: geometry.size.width / 3 - 20)
-                            }
-                            HStack(spacing:0) {
-                                DiceButton(icon: "☕️", label: "Cafe", length: geometry.size.width / 3 - 20)
-                                DiceButton(icon: "🍦", label: "Dessert", length: geometry.size.width / 3 - 20)
-                                DiceButton(icon: "🍻", label: "Nightlife", length: geometry.size.width / 3 - 20)
-                            }
                         }
-                        .frame(
-                            height: geometry.size.width * 2 / 3
-                        ).padding()
-                        Button(action:buttonAction) {
-                            HStack {
-                                Spacer()
-                                Image(systemName: "dice.fill")
-                                Text("Dionysus's Lucky Place")
-                                Spacer()
-                            }
+                    }
+                    .buttonStyle(SearchBarButtonStyle())
+                    .background(
+                        Image(uiImage: UIImage(named: "AppIcon") ?? UIImage())
+                            .resizable()
+                            .padding()
+                            .edgesIgnoringSafeArea(.vertical)
+                            .scaledToFill()
+                    )
+                    Spacer()
+                    Text("or let Dionysus pick you a ...")
+                        .font(.footnote)
+                        .foregroundColor(Color(UIColor.darkGray))
+                    VStack(spacing:0) {
+                        HStack(spacing:0) {
+                            DiceButton(state: state, icon: "🥞", label: "Breakfast")
+                            DiceButton(state: state, icon: "🍱", label: "Lunch")
+                            DiceButton(state: state, icon: "🍝", label: "Dinner")
                         }
-                        .accentColor(.white)
-                        .padding(25)
-                        .frame(height:80)
-                        .background(
-                            Rectangle()
-                                .fill(COLOR_THEME_LIME)
-                                .padding(EdgeInsets(top: 15, leading: 30, bottom: 15, trailing: 30))
-                        )
-                        Spacer()
-                    }.preferredColorScheme(.light)
+                        HStack(spacing:0) {
+                            DiceButton(state: state, icon: "☕️", label: "Cafe")
+                            DiceButton(state: state, icon: "🍦", label: "Dessert")
+                            DiceButton(state: state, icon: "🍻", label: "Nightlife")
+                        }
+                    }
+                    .frame(
+                        height: (UIScreen.main.bounds.width - 40) * 2 / 3
+                    )
+                    .padding(.horizontal)
+                    Button(action:{
+                        self.state.onDiceRollClicked();
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "dice.fill")
+                            Text("Dionysus's Lucky Place")
+                            Spacer()
+                        }
+                    }
+                    .accentColor(.white)
+                    .padding(25)
+                    .frame(height:80)
+                    .background(
+                        Rectangle()
+                            .fill(COLOR_THEME_LIME)
+                            .padding(EdgeInsets(top: 15, leading: 30, bottom: 15, trailing: 30))
+                    )
+                    .padding(.bottom)
                 }
-            )
+                .preferredColorScheme(.light)
+            ).id("MainView")
         }
     }
 }

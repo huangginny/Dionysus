@@ -66,6 +66,7 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func onDiceRollClicked() {
         logMessage("Rolling dice...")
+        self.currentView = DionysusView.roll;
         isDiceRolling = true
         requestLocation()
     }

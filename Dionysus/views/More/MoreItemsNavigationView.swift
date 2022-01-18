@@ -33,6 +33,7 @@ struct MoreItemsNavigationView: View {
                     }
                 }
             }
+            .onAppear { UINavigationBar.setAnimationsEnabled(true) }
             .navigationBarTitleDisplayMode(.inline)
         }
     }

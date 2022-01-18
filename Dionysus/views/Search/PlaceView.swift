@@ -119,6 +119,7 @@ struct PlaceView: View {
             .edgesIgnoringSafeArea(.all)
         }
         .onAppear {
+            UINavigationBar.setAnimationsEnabled(true)
             if !self.searched && !self.placeHolder.loadComplete {
                 self.placeHolder.loadPlaces()
                 self.searched = true

@@ -48,6 +48,9 @@ struct SearchField : UIViewRepresentable {
             self.isActive = false
         })
         NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: field, queue: OperationQueue.main, using: _searchFieldDidChange)
+        if (self.isActive) {
+            field.becomeFirstResponder();
+        }
         return field
     }
     
@@ -66,7 +69,7 @@ struct SearchField : UIViewRepresentable {
 struct SearchBar: View {
     @State var name = ""
     @State var location = ""
-    @State private var isNameSearchFieldActive = false
+    @State private var isNameSearchFieldActive = true
     @State private var isLocationSearchFieldActive = false
     
     let statusBarHeight: CGFloat
@@ -95,11 +98,13 @@ struct SearchBar: View {
         return VStack(spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
                 Button(action: {
-                    self.name = ""
-                    self.location = ""
-                    nameSearchField.text.wrappedValue = ""
-                    locationSearchField.text.wrappedValue = ""
-                    self.onClose()
+                    withAnimation(.easeOut(duration:0.5)) {
+                        self.name = ""
+                        self.location = ""
+                        nameSearchField.text.wrappedValue = ""
+                        locationSearchField.text.wrappedValue = ""
+                        self.onClose()
+                    }
                 }) {
                     Image(systemName: "xmark")
                         .padding(.leading)
@@ -179,12 +184,13 @@ struct SearchBar: View {
 }
 
 struct SearchBar_Previews: PreviewProvider {
+    @Namespace static var ns
     static var previews: some View {
         SearchBar(
             statusBarHeight: 20,
             plugin: mockSetting.defaultSitePlugin,
             onCommit:{_,_ in logMessage("Previewing search bar")},
-            onClose:{print("Previewing on close")})
-            .previewLayout(.fixed(width: 300, height: 120))
+            onClose:{print("Previewing on close")}
+        ).previewLayout(.fixed(width: 300, height: 120))
     }
 }

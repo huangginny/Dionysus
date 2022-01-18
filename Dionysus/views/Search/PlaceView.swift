@@ -76,6 +76,7 @@ struct Info: View {
 struct PlaceView: View {
     @ObservedObject var placeHolder : PlaceHolderModel
     @State var searched = false
+    @State var topImage:URLImage? = nil
     
     var body: some View {
         GeometryReader { geoSafeArea in
@@ -83,13 +84,12 @@ struct PlaceView: View {
             GeometryReader { geometry in
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing:0) {
-                        if self.placeHolder.loadComplete && (self.placeHolder.topImage != nil) {
-                            self.placeHolder.topImage
-                                .frame(
-                                    width: geometry.size.width,
-                                    height: CGFloat(PHOTO_HEIGHT),
-                                    alignment: .top
-                                )
+                        if (topImage != nil) {
+                            topImage.frame(
+                                width: geometry.size.width,
+                                height: CGFloat(PHOTO_HEIGHT),
+                                alignment: .top
+                            )
                         }
                         Info(
                             place: self.placeHolder.defaultPlaceInfoLoader.place!,
@@ -117,12 +117,19 @@ struct PlaceView: View {
                 }
             }
             .edgesIgnoringSafeArea(.all)
+            .transition(.move(edge: .top))
+            .animation(.easeIn(duration: 0.2))
         }
         .onAppear {
             UINavigationBar.setAnimationsEnabled(true)
             if !self.searched && !self.placeHolder.loadComplete {
                 self.placeHolder.loadPlaces()
                 self.searched = true
+            }
+        }
+        .onReceive(placeHolder.$topImage) { image in
+            if (image != nil) {
+                self.topImage = image
             }
         }
         .navigationBarTitle(placeHolder.defaultPlaceInfoLoader.place!.name)

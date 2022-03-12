@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SearchView: View {
     @ObservedObject var state: AppState
-    // observe setting as well
+    @ObservedObject var setting: PluginSetting
     let statusBarHeight: CGFloat
     let searchBarNamespace: Namespace.ID
     
@@ -38,7 +38,7 @@ struct SearchView: View {
             })
         return NavigationView {
             VStack {
-                SearchBar( // TODO: need to re-read default plugin after coming back from another tab
+                SearchBar(
                     statusBarHeight: statusBarHeight,
                     plugin: state.setting.defaultSitePlugin,
                     onCommit: {(name: String, location: String) -> Void in
@@ -58,7 +58,7 @@ struct SearchView: View {
                     id: "searchBarId",
                     in: searchBarNamespace
                 )
-            if state.isPlaceSearchLoading {
+                if state.isPlaceSearchLoading {
                     HStack {
                         ActivityIndicator()
                         Text("Looking up your places...")
@@ -77,7 +77,16 @@ struct SearchView: View {
                                 pluginName: result.defaultPlaceInfoLoader.plugin.name
                             )
                         }
-                    }.listStyle(.inset)
+                    }
+                    .listStyle(.inset)
+                    .onAppear {
+                        if (self.state.placeSearchResults.count > 0) {
+                            let pluginDisplayed = self.state.placeSearchResults[0].defaultPlaceInfoLoader.plugin
+                            if (pluginDisplayed.name != state.setting.defaultSitePlugin.name) {
+                                self.state.placeSearchResults = [PlaceHolderModel]()
+                            }
+                        }
+                    }
                 }
             }
             .edgesIgnoringSafeArea(.top)
@@ -93,6 +102,11 @@ struct SearchView: View {
 struct SearchView_Previews: PreviewProvider {
     @Namespace static var ns
     static var previews: some View {
-        SearchView(state: previewState, statusBarHeight: 20, searchBarNamespace: ns)
+        SearchView(
+            state: previewState,
+            setting: previewState.setting,
+            statusBarHeight: 20,
+            searchBarNamespace: ns
+        )
     }
 }

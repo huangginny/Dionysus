@@ -34,14 +34,9 @@ class AppState: NSObject, ObservableObject, CLLocationManagerDelegate {
     var locManager = CLLocationManager()
     
     override init() {
-        // read settings from user defaults
         self.setting = PluginSetting()
         super.init()
         locManager.delegate = self
-    }
-    
-    deinit {
-        // save settings (in user defaults?)
     }
     
     func onSearchButtonClicked(with name:String, location:String) {

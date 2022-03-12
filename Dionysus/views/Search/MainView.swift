@@ -45,6 +45,7 @@ struct MainView: View {
         case .search:
             return AnyView(SearchView(
                 state: self.state,
+                setting: self.state.setting,
                 statusBarHeight: self.statusBarHeight,
                 searchBarNamespace: searchBarNamesapce
             )).id("SearchView")
